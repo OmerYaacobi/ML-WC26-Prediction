@@ -70,6 +70,20 @@ class FootballAPIClient:
             
         return data
     
+    def search_team_id(self, team_name):
+        """Searches the API for a specific national team to get their ID."""
+        params = {"search": team_name}
+        data = self._make_request("teams", params=params)
+        
+        if data:
+            # Ensure we only grab the 'National' team to avoid local clubs with similar names
+            for item in data:
+                if item["team"]["national"] == True:
+                    return item["team"]["id"]
+                    
+        print(f"Could not find a national team ID for '{team_name}'")
+        return None
+    
     def get_team_squad(self, team_id):
         """Fetches the current roster/squad for a specific team."""
         params = {"team": team_id}
@@ -96,13 +110,40 @@ class FootballAPIClient:
         return data
 
 if __name__ == "__main__":
+    import time  # Imported locally here so you don't have to scroll to the top
+    
     client = FootballAPIClient()
     
-    # 1. Fetch 2022 World Cup
-    client.get_historical_fixtures(league_id=1, season=2022)
+    print("🚀 Starting Main Data Ingestion Script...\n")
     
-    # 2. Fetch 2024 Euros (League 4)
-    client.get_historical_fixtures(league_id=4, season=2024)
+    # 1. Fetch Core Historical Tournaments
+    print("--- Fetching Major Tournaments ---")
+    client.get_historical_fixtures(league_id=1, season=2022) # 2022 WC
+    time.sleep(6.5)
     
-    # 3. Fetch 2024 Copa América (League 9)
-    client.get_historical_fixtures(league_id=9, season=2024)
+    client.get_historical_fixtures(league_id=4, season=2024) # 2024 Euros
+    time.sleep(6.5)
+    
+    client.get_historical_fixtures(league_id=9, season=2024) # 2024 Copa América
+    time.sleep(6.5)
+
+    # 2. Fetch All 2026 World Cup Qualifier Regions
+    print("\n--- Fetching 2026 World Cup Qualifiers ---")
+    qualifier_leagues = {
+        "CONMEBOL": {"id": 30, "season": 2023},  # South America started in 2023
+        "CONCACAF": {"id": 31, "season": 2024},  # North/Central America
+        "UEFA": {"id": 32, "season": 2025},      # Europe 
+        "CAF": {"id": 33, "season": 2023},       # Africa
+        "AFC": {"id": 34, "season": 2023},       # Asia
+        "OFC": {"id": 35, "season": 2024}        # Oceania
+    }
+
+    for region, config in qualifier_leagues.items():
+        print(f"Syncing qualifier data for {region}...")
+        client.get_historical_fixtures(league_id=config["id"], season=config["season"])
+        
+        # Pause to safeguard against 429 rate limit errors
+        print("Waiting 6.5 seconds...")
+        time.sleep(6.5)
+
+    print("\n✅ All historical match assets successfully downloaded to data/raw/")
