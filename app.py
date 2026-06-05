@@ -3,6 +3,30 @@ import pandas as pd
 import math
 from pathlib import Path
 from src.models.poisson_engine import PoissonPredictionEngine
+from src.features.pipeline import FeaturePipeline
+from src.features.squad_mapper import ExactRosterMapper
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+FEATURES_PATH = PROJECT_ROOT / "data" / "processed" / "blended_model_features.csv"
+SQUAD_RATINGS_PATH = PROJECT_ROOT / "data" / "processed" / "exact_team_ratings.csv"
+
+
+@st.cache_data(show_spinner=False)
+def load_features():
+    if not SQUAD_RATINGS_PATH.exists():
+        eafc_path = PROJECT_ROOT / "data" / "raw" / "EAFC26-Men.csv"
+        if not eafc_path.exists():
+            raise FileNotFoundError(
+                f"Missing `{eafc_path.relative_to(PROJECT_ROOT)}`. "
+                "Add the EA FC player ratings CSV to `data/raw/` and restart."
+            )
+        ExactRosterMapper().calculate_exact_squad_ratings()
+
+    if not FEATURES_PATH.exists():
+        FeaturePipeline().run_blender_pipeline()
+
+    return pd.read_csv(FEATURES_PATH).set_index("team")
+
 
 st.set_page_config(page_title="World Cup Predictor Engine", layout="wide")
 
@@ -12,14 +36,19 @@ st.caption("Calibrated Performance Modeling via Team Metrics and Market Power")
 # --- MULTI-PAGE SETUP VIA TABS ---
 tab1, tab2 = st.tabs(["🔮 Match Simulator", "📅 Tournament Groups & Schedule"])
 
-# Load compiled features
-FEATURES_PATH = Path("data/processed/blended_model_features.csv")
-
-if not FEATURES_PATH.exists():
-    st.error("Please run your feature pipeline script first to generate your data matrix.")
+try:
+    with st.spinner("Building feature matrix (first run only)..."):
+        df_features = load_features()
+except FileNotFoundError as e:
+    st.error(str(e))
+    st.stop()
+except ValueError as e:
+    st.error(str(e))
+    st.stop()
+except Exception as e:
+    st.error(f"Failed to build the feature matrix: {e}")
     st.stop()
 
-df_features = pd.read_csv(FEATURES_PATH).set_index("team")
 teams = sorted(df_features.index.tolist())
 
 # ==========================================

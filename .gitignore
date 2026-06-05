@@ -1,2 +1,9 @@
 .env
-data/
+
+# Raw datasets are large and stay local only
+data/raw/
+
+# Processed outputs — ignore by default, allow the files the deployed app needs
+data/processed/*
+!data/processed/blended_model_features.csv
+!data/processed/exact_team_ratings.csv
