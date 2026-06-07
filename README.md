@@ -1,8 +1,11 @@
 # World Cup Score Predictor
 
-A Poisson-based match prediction engine for the **2026 FIFA World Cup**. The model blends three signals — recent international match history, squad strength from player ratings, and live betting market odds — to estimate expected goals, win/draw/loss probabilities, and the most likely exact scorelines.
+A Poisson-based match prediction engine for the **2026 FIFA World Cup**. The model blends three signals — international match history (2022+), squad strength from player ratings, and live betting market odds — to estimate expected goals, win/draw/loss probabilities, and the most likely exact scorelines.
 
-Includes a **Streamlit dashboard** for interactive simulations and a **CLI** for quick terminal predictions.
+**Live app (no install required):**  
+👉 **[https://ml-wc26-prediction-jp4sc9qrqyrzsqfjtebesl.streamlit.app/](https://ml-wc26-prediction-jp4sc9qrqyrzsqfjtebesl.streamlit.app/)**
+
+Open the link, pick two teams in the Match Simulator, and explore predictions instantly. No cloning, data downloads, or Python setup needed.
 
 ---
 
@@ -11,107 +14,34 @@ Includes a **Streamlit dashboard** for interactive simulations and a **CLI** for
 | Output | Description |
 |--------|-------------|
 | Expected goals (xG) | Poisson λ for each team in a fixture |
-| 1X2 probabilities | Home win, draw, and away win chances |
-| Exact scorelines | Top likely results (e.g. 1–0, 2–1) with confidence |
+| 1X2 probabilities | Win, draw, and loss chances |
+| Exact scorelines | Top likely results with confidence |
+| Visualizations | Goal distributions and 3D scoreline chart |
 | Group stage view | All 12 groups, fixtures, and matchday filters |
 
-The core idea: each team gets an **attack strength** and **defense weakness** score, blended from history, squad quality, and market power. Those feed into independent Poisson distributions for home and away goals, which are combined into a full score matrix.
+Each team gets an **attack strength** and **defense weakness** score, blended from history, squad quality, and market power. Those feed into independent Poisson distributions, combined into a full score matrix.
 
-**Default blend weights** (tunable in the dashboard):
+**Current calibrated weights** (in `pipeline.py` / `poisson_engine.py`):
 
-- History — 25%
-- Squad — 55%
-- Market — 30%
+| Parameter | Value |
+|-----------|-------|
+| History weight | 0.200 |
+| Squad weight | 0.430 |
+| Market power | 0.330 |
+| `GLOBAL_BASE_XG` | 2.240 |
+
+Validated against Bet365 correct-score odds: **±0.236 goals MAE** (6-fold cross-validation).
 
 ---
 
-## Quick start
+## Try it now
 
-### 1. Clone and install
+1. Go to the **[live Streamlit app](https://ml-wc26-prediction-jp4sc9qrqyrzsqfjtebesl.streamlit.app/)**
+2. Open the **Match Simulator** tab
+3. Select **Team A** and **Team B**
+4. Review xG, outcome probabilities, top scorelines, and charts
 
-```bash
-git clone <your-repo-url>
-cd world-cup-score-predictor
-
-python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-### 2. Add your data
-
-Create the `data/` folders and place the required files:
-
-```
-data/
-├── raw/
-│   ├── results.csv              # International match results (Kaggle)
-│   ├── EAFC26-Men.csv           # Player ratings (Kaggle / EA FC dataset)
-│   ├── market_odds_group_stage.json   # Optional: fetch via script below
-│   └── squad_team_*.json        # Optional: per-team squad files from API
-└── processed/                   # Generated automatically by the pipeline
-    ├── exact_team_ratings.csv
-    └── blended_model_features.csv
-```
-
-**`results.csv`** — International football results. Used to compute attack/defense metrics from matches since 2024.  
-Download from Kaggle (e.g. [International Football Results](https://www.kaggle.com/datasets/patateriedata/international-football-results-from-1872-to-2024)) and save to `data/raw/results.csv`.
-
-**`EAFC26-Men.csv`** — Player overall ratings used to build squad strength for all 48 World Cup teams.
-
-### 3. (Optional) Fetch live betting odds
-
-Create a `.env` file in the project root:
-
-```env
-ODDS_API_KEY=your_key_here
-```
-
-Then run:
-
-```bash
-python fetch_group_odds.py
-```
-
-This caches Bet365 odds for group-stage fixtures into `data/raw/market_odds_group_stage.json`. The script resumes safely if interrupted and skips already-downloaded matches.
-
-### 4. Build features
-
-**Step A** — Compute squad ratings from player data:
-
-```bash
-python -m src.features.squad_mapper
-```
-
-**Step B** — Blend all data layers into the model feature matrix:
-
-```bash
-python -m src.features.pipeline
-```
-
-This writes `data/processed/blended_model_features.csv`.
-
-### 5. Run predictions
-
-**Interactive dashboard:**
-
-```bash
-streamlit run app.py
-```
-
-Open the Match Simulator tab, pick two teams, and explore xG, outcome probabilities, and top scorelines. The Groups & Schedule tab shows the full 2026 group stage draw.
-
-**Command line:**
-
-```bash
-python -m src.main --teamA Brazil --teamB France
-```
-
-Force a feature rebuild from source data:
-
-```bash
-python -m src.main --rebuild --teamA Argentina --teamB Germany
-```
+The **Groups & Schedule** tab shows the full 2026 group stage draw and fixtures.
 
 ---
 
@@ -141,14 +71,59 @@ python -m src.main --rebuild --teamA Argentina --teamB Germany
               xG · 1X2 probs · exact scorelines
 ```
 
-For each match, expected goals are:
+For each match:
 
 ```
-λ_home = GLOBAL_BASE × attack_home × defense_away × (squad_home / squad_away)
-λ_away = GLOBAL_BASE × attack_away × defense_home × (squad_away / squad_home)
+λ_A = GLOBAL_BASE × attack_A × defense_B × (squad_A / squad_B)
+λ_B = GLOBAL_BASE × attack_B × defense_A × (squad_B / squad_A)
 ```
 
 Goal counts are modeled as independent Poisson random variables. Summing the joint probability grid gives win, draw, and loss chances.
+
+The model treats both teams symmetrically — **no home-field advantage** is applied.
+
+---
+
+## Run locally (developers)
+
+Want to modify the model, rebuild features, or run the CLI? Clone the repo:
+
+```bash
+git clone https://github.com/OmerYaacobi/ML-WC26-Prediction.git
+cd ML-WC26-Prediction
+
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### Data setup
+
+Pre-built feature files are committed for the live app. To rebuild from scratch, add raw data under `data/raw/`:
+
+| File | Purpose |
+|------|---------|
+| `results.csv` | International match results since **2022** ([Kaggle dataset](https://www.kaggle.com/datasets/patateriedata/international-football-results-from-1872-to-2024)) |
+| `EAFC26-Men.csv` | Player ratings for squad strength |
+| `market_odds_group_stage.json` | Optional — fetch with `python fetch_group_odds.py` (needs `ODDS_API_KEY` in `.env`) |
+
+Build features:
+
+```bash
+python -m src.features.squad_mapper
+python -m src.features.pipeline
+```
+
+### Local dashboard & CLI
+
+```bash
+streamlit run app.py
+```
+
+```bash
+python -m src.main --teamA Brazil --teamB France
+python -m src.main --rebuild --teamA Argentina --teamB Germany
+```
 
 ---
 
@@ -156,12 +131,12 @@ Goal counts are modeled as independent Poisson random variables. Summing the joi
 
 ```
 world-cup-score-predictor/
-├── app.py                      # Streamlit dashboard
+├── app.py                      # Streamlit dashboard (deployed to Streamlit Cloud)
 ├── fetch_group_odds.py         # Download & cache Bet365 group-stage odds
 ├── requirements.txt
 ├── data/
 │   ├── raw/                    # Source datasets (not committed)
-│   └── processed/              # Generated feature files
+│   └── processed/              # Pre-built feature CSVs for cloud deploy
 ├── notebooks/
 │   └── 01_exploratory_data_analysis.ipynb
 └── src/
@@ -175,7 +150,7 @@ world-cup-score-predictor/
     │   └── pipeline.py         # Blend layers → feature matrix
     ├── models/
     │   ├── poisson_engine.py   # Core prediction math
-    │   ├── optimize_weights.py # Tune history/squad/market weights
+    │   ├── optimize_weights.py # Tune weights (matches evaluate_cv)
     │   └── evaluate_cv.py      # Cross-validate against market xG
     ├── simulations/
     │   └── group_simulator.py  # Monte Carlo group-stage simulation
@@ -210,7 +185,7 @@ python -m src.simulations.group_simulator
 ## Requirements
 
 - Python 3.10+
-- See `requirements.txt` for full dependency list (pandas, scipy, scikit-learn, streamlit, etc.)
+- See `requirements.txt` (pandas, scipy, scikit-learn, streamlit, plotly, altair, etc.)
 
 ---
 
@@ -218,8 +193,8 @@ python -m src.simulations.group_simulator
 
 - Predictions are statistical estimates, not guarantees. Use for analysis and fun — not as betting advice.
 - Team names must match the 48-team 2026 tournament roster (e.g. `Czechia`, `Ivory Coast`, `DR Congo`).
-- If `blended_model_features.csv` is missing, the dashboard and CLI will prompt you to run the feature pipeline first.
-- Raw data files are intentionally excluded from version control. Each developer needs to supply their own datasets and API keys.
+- Raw data files are excluded from version control; the live app uses committed processed feature CSVs.
+- To update the deployed app after changing weights, re-run the pipeline and push the updated `data/processed/blended_model_features.csv`.
 
 ---
 

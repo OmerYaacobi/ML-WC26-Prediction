@@ -71,9 +71,9 @@ class FeaturePipeline:
                 market_ou_prob = df_market.loc[team_name, "market_over_25_prob"]
             
             # --- NEW OPTIMIZED WEIGHTS ---
-            w_hist = 0.250
-            w_squad = 0.550
-            w_market = 0.300
+            w_hist = 0.205
+            w_squad = 0.432
+            w_market = 0.334
             
             # Blended Calculations using the optimal formula
             # Note: We use the exponent (**) for the market power as discovered by the optimizer

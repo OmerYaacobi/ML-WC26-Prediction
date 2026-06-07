@@ -21,9 +21,9 @@ class HistoryDataLoader:
         # Load raw dataset
         df = pd.read_csv(self.csv_path)
 
-        # Convert date and filter for the last 2 years of modern international football
+        # Convert date and filter for modern international football (2022 onward)
         df["date"] = pd.to_datetime(df["date"])
-        df = df[df["date"] >= "2024-01-01"].copy()
+        df = df[df["date"] >= "2022-01-01"].copy()
 
         if df.empty:
             print("⚠️  Warning: No matches found matching the date criteria.")

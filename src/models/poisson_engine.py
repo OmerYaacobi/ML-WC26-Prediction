@@ -4,7 +4,7 @@ from scipy.stats import poisson
 class PoissonPredictionEngine:
     def __init__(self):
         # High accuracy base target expectation per team 
-        self.GLOBAL_BASE_XG = 2.0
+        self.GLOBAL_BASE_XG = 2.236
 
     def calculate_match_probabilities(self, team_a_stats, team_b_stats):
         """
@@ -27,8 +27,8 @@ class PoissonPredictionEngine:
         lambda_a = self.GLOBAL_BASE_XG * att_a * def_b * squad_mod_a
         lambda_b = self.GLOBAL_BASE_XG * att_b * def_a * squad_mod_b
 
-        # Build joint goal scoring distribution grid (up to 6 goals each)
-        max_goals = 7
+        # Build joint goal scoring distribution grid (0–9 goals; tail renormalized below)
+        max_goals = 10
         score_matrix = np.zeros((max_goals, max_goals))
         
         best_score = (0, 0)
@@ -47,6 +47,12 @@ class PoissonPredictionEngine:
         win_a_prob = np.sum(np.tril(score_matrix, -1))
         draw_prob = np.sum(np.diag(score_matrix))
         win_b_prob = np.sum(np.triu(score_matrix, 1))
+
+        total_prob = win_a_prob + draw_prob + win_b_prob
+        if total_prob > 0:
+            win_a_prob /= total_prob
+            draw_prob /= total_prob
+            win_b_prob /= total_prob
 
         return {
             "lambdas": (lambda_a, lambda_b),
