@@ -2,13 +2,13 @@
 
 A Poisson-based match prediction engine for the **2026 FIFA World Cup**, presented as a sportsbook-style **Match Centre** web app. The model blends three signals — international match history (2022+), squad strength from player ratings, and live betting market odds — to estimate expected goals, win/draw/loss probabilities, fair betting odds, and the most likely exact scorelines.
 
-## ⚡ The Match Centre web app (`webapp/`)
+## ⚡ The Match Centre web app (`docs/`)
 
 A zero-dependency static web app — the entire Poisson engine runs client-side in JavaScript (verified to match the Python engine to 6 decimal places). No server, no Python, no build step: host it anywhere (GitHub Pages works) or open it locally.
 
 ```bash
 # serve locally
-python3 -m http.server 8765 --directory webapp
+python3 -m http.server 8765 --directory docs
 # then open http://localhost:8765
 ```
 
@@ -24,7 +24,7 @@ python3 -m http.server 8765 --directory webapp
 After rebuilding model features, regenerate the app's data file:
 
 ```bash
-python3 scripts/build_webapp_data.py   # writes webapp/data.js (stdlib only, no pip installs)
+python3 scripts/build_webapp_data.py   # writes docs/data.js (stdlib only, no pip installs)
 ```
 
 The original Streamlit dashboard (`app.py`) is still included and works as before.
@@ -156,13 +156,13 @@ python -m src.main --rebuild --teamA Argentina --teamB Germany
 
 ```
 world-cup-score-predictor/
-├── webapp/                     # ⚡ Match Centre — static sportsbook-style web app
+├── docs/                     # ⚡ Match Centre — static sportsbook-style web app
 │   ├── index.html
 │   ├── style.css
 │   ├── app.js                  # Client-side Poisson engine + UI
 │   └── data.js                 # Generated team ratings (see scripts/)
 ├── scripts/
-│   └── build_webapp_data.py    # Regenerate webapp/data.js from processed features
+│   └── build_webapp_data.py    # Regenerate docs/data.js from processed features
 ├── app.py                      # Streamlit dashboard (legacy, deployed to Streamlit Cloud)
 ├── fetch_group_odds.py         # Download & cache Bet365 group-stage odds
 ├── requirements.txt

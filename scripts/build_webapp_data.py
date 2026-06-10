@@ -1,4 +1,4 @@
-"""Generate webapp/data.js from the processed feature matrix.
+"""Generate docs/data.js from the processed feature matrix.
 
 Run after rebuilding features so the static web app stays in sync:
 
@@ -10,7 +10,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 FEATURES_PATH = PROJECT_ROOT / "data" / "processed" / "blended_model_features.csv"
-OUTPUT_PATH = PROJECT_ROOT / "webapp" / "data.js"
+OUTPUT_PATH = PROJECT_ROOT / "docs" / "data.js"
 
 GLOBAL_BASE_XG = 2.236  # keep in sync with src/models/poisson_engine.py
 
