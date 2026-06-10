@@ -65,7 +65,7 @@ Validated against Bet365 correct-score odds: **±0.236 goals MAE** (6-fold cross
 ## Try it now
 
 **Match Centre (recommended):**  
-👉 **[https://omeryaacobi.github.io/ML-WC26-Prediction/](https://omeryaacobi.github.io/ML-WC26-Prediction/)** — pick two teams, browse fair odds markets, build a bet slip, and explore projected group tables. No install needed.
+👉 **[https://omeryaacobi.github.io/ML-WC26-Prediction/](https://omeryaacobi.github.io/ML-WC26-Prediction/)** — sign up (free, 10,000 play-money tokens), pick teams, browse fair odds markets, build a bet slip, compete on the league leaderboard, and explore projected group tables. No install needed.
 
 **Streamlit version (alternate UI):**  
 👉 **[https://ml-wc26-prediction-jp4sc9qrqyrzsqfjtebesl.streamlit.app/](https://ml-wc26-prediction-jp4sc9qrqyrzsqfjtebesl.streamlit.app/)** — open the Match Simulator tab, select Team A and Team B, and review xG, probabilities, and charts.
@@ -108,6 +108,21 @@ For each match:
 Goal counts are modeled as independent Poisson random variables. Summing the joint probability grid gives win, draw, and loss chances.
 
 The model treats both teams symmetrically — **no home-field advantage** is applied.
+
+---
+
+## Accounts, tokens & league
+
+- **Sign up** with username, email, and password — every new user gets **10,000 tokens**
+- **League tab** — leaderboard ranked by token balance across all players
+- **Bet slip** — add selections, set a stake, **Place bet** (deducts tokens), or **Send bet slip** (share/copy)
+- **How It Works tab** — full explanation of the model, xG, and token system
+
+By default the league is stored **in the browser** (works offline on GitHub Pages). For a **global leaderboard** shared with friends, enable Firebase in `docs/firebase-config.js` (free tier at [Firebase Console](https://console.firebase.google.com)):
+
+1. Create a project → enable **Authentication** (Email/Password) and **Cloud Firestore**
+2. Paste your web config into `docs/firebase-config.js` and set `enabled: true`
+3. Deploy — all users worldwide share one league board
 
 ---
 

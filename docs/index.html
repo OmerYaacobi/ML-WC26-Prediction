@@ -4,13 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WC26 Match Centre · World Cup Prediction Engine</title>
-<meta name="description" content="Poisson-based 2026 World Cup match predictor — fair odds, exact scorelines, group projections.">
+<meta name="description" content="Poisson-based 2026 World Cup match predictor — fair odds, exact scorelines, group projections, token league.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="topbar">
+<!-- ======================= LOGIN GATE ======================= -->
+<div class="auth-gate" id="authGate">
+  <div class="auth-card panel">
+    <div class="auth-brand">⚽ WC26 <em>Match Centre</em></div>
+    <p class="auth-tagline">Sign up free · get <strong>10,000 tokens</strong> · compete on the league board</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">Log In</button>
+      <button class="auth-tab" data-tab="signup">Sign Up</button>
+    </div>
+
+    <form class="auth-form" id="loginForm">
+      <label>Email<input type="email" id="loginEmail" required placeholder="you@email.com" autocomplete="email"></label>
+      <label>Password<input type="password" id="loginPassword" required placeholder="••••••••" autocomplete="current-password"></label>
+      <button type="submit" class="auth-submit">Log In</button>
+    </form>
+
+    <form class="auth-form hidden" id="signupForm">
+      <label>Username<input type="text" id="signupUsername" required placeholder="min 3 characters" minlength="3" autocomplete="username"></label>
+      <label>Email<input type="email" id="signupEmail" required placeholder="you@email.com" autocomplete="email"></label>
+      <label>Password<input type="password" id="signupPassword" required placeholder="min 6 characters" minlength="6" autocomplete="new-password"></label>
+      <button type="submit" class="auth-submit">Create Account · 10,000 tokens</button>
+    </form>
+
+    <p class="auth-error hidden" id="authError"></p>
+    <p class="auth-note" id="authModeNote">League data is stored in this browser. Enable Firebase in <code>firebase-config.js</code> for a global leaderboard.</p>
+  </div>
+</div>
+
+<header class="topbar hidden" id="mainHeader">
   <div class="topbar-inner">
     <div class="brand" id="brand">
       <span class="brand-ball">⚽</span>
@@ -18,15 +47,22 @@
     </div>
     <nav class="nav">
       <button class="nav-pill active" data-view="match">Match Odds</button>
-      <button class="nav-pill" data-view="groups">Groups &amp; Fixtures</button>
+      <button class="nav-pill" data-view="groups">Groups</button>
+      <button class="nav-pill" data-view="league">League</button>
+      <button class="nav-pill" data-view="explain">How It Works</button>
     </nav>
-    <button class="slip-toggle" id="slipToggle">
-      🧾 Bet Slip <span class="slip-count" id="slipCount">0</span>
-    </button>
+    <div class="topbar-right">
+      <div class="token-pill" id="tokenPill" title="Your token balance">🪙 <span id="tokenBalance">—</span></div>
+      <span class="user-pill" id="userPill"></span>
+      <button class="slip-toggle" id="slipToggle">
+        🧾 Slip <span class="slip-count" id="slipCount">0</span>
+      </button>
+      <button class="logout-btn" id="logoutBtn" title="Log out">↪</button>
+    </div>
   </div>
 </header>
 
-<main class="page">
+<main class="page hidden" id="mainPage">
 
   <!-- ======================= MATCH VIEW ======================= -->
   <section class="view" id="view-match">
@@ -43,9 +79,8 @@
       </div>
     </div>
 
-    <div class="hero panel" id="heroCard"><!-- filled by JS --></div>
-
-    <div class="outcome-bar-wrap panel" id="outcomeBar"><!-- filled by JS --></div>
+    <div class="hero panel" id="heroCard"></div>
+    <div class="outcome-bar-wrap panel" id="outcomeBar"></div>
 
     <p class="note">
       Neutral-venue model — no home-field advantage is applied. Hosts USA, Canada and Mexico
@@ -53,7 +88,7 @@
     </p>
 
     <h2 class="section-title">Markets <span class="fair-tag">fair odds · no margin</span></h2>
-    <div class="markets-grid" id="marketsGrid"><!-- filled by JS --></div>
+    <div class="markets-grid" id="marketsGrid"></div>
 
     <h2 class="section-title">Insights</h2>
     <div class="insights-grid">
@@ -61,25 +96,6 @@
       <div class="panel insight-card" id="distAway"></div>
     </div>
     <div class="panel heatmap-card" id="heatmapCard"></div>
-
-    <details class="explainer panel">
-      <summary>What do these numbers mean?</summary>
-      <div class="explainer-body">
-        <p><strong>Expected Goals (xG)</strong> — the <em>average</em> goals a team is expected to
-        score in this matchup. An xG of 2.0 doesn't mean exactly 2 goals; it means that over many
-        replays of this fixture they would average 2 per game.</p>
-        <p><strong>Win / Draw %</strong> — the chance each team wins or the match ends level,
-        derived from a Poisson score model. All three always sum to 100%.</p>
-        <p><strong>Fair odds</strong> — simply 1 ÷ probability, with no bookmaker margin baked in.
-        Odds of 2.50 mean a 40% model chance.</p>
-        <p><strong>Model pick</strong> — the win/draw outcome with the highest probability. It can
-        differ from the most likely <em>exact scoreline</em>: for xG ≈ 2, scoring exactly 1 or 2
-        goals are nearly equally likely (~27% each), which is why a 1–1 can edge out a 2–1.</p>
-        <p>The model blends international match history (2022+), EA FC squad ratings and betting
-        market power into attack / defence strengths, feeding independent Poisson distributions
-        (validated at ±0.236 goals MAE vs Bet365 correct-score odds).</p>
-      </div>
-    </details>
   </section>
 
   <!-- ======================= GROUPS VIEW ======================= -->
@@ -87,7 +103,7 @@
     <h2 class="section-title">2026 Group Stage — Projected Tables
       <span class="fair-tag">xPts = model expected points</span>
     </h2>
-    <div class="groups-grid" id="groupsGrid"><!-- filled by JS --></div>
+    <div class="groups-grid" id="groupsGrid"></div>
 
     <h2 class="section-title">Fixture Finder</h2>
     <div class="panel fixtures-panel">
@@ -100,13 +116,60 @@
           <button class="seg-btn" data-md="3">MD 3</button>
         </div>
       </div>
-      <div class="fixtures-list" id="fixturesList"><!-- filled by JS --></div>
+      <div class="fixtures-list" id="fixturesList"></div>
+    </div>
+  </section>
+
+  <!-- ======================= LEAGUE VIEW ======================= -->
+  <section class="view hidden" id="view-league">
+    <h2 class="section-title">🏆 Token League <span class="fair-tag">richest predictors</span></h2>
+    <p class="note league-note">Everyone starts with <strong>10,000 tokens</strong>. Place bets from your slip to compete — highest balance wins the league.</p>
+    <div class="panel league-panel">
+      <div class="league-you" id="leagueYou"></div>
+      <table class="league-table" id="leagueTable">
+        <thead><tr><th>#</th><th>Player</th><th>Tokens</th></tr></thead>
+        <tbody id="leagueBody"></tbody>
+      </table>
+    </div>
+    <h2 class="section-title">Your Recent Bets</h2>
+    <div class="panel" id="betHistory"><p class="note">No bets placed yet.</p></div>
+  </section>
+
+  <!-- ======================= EXPLAIN VIEW ======================= -->
+  <section class="view hidden" id="view-explain">
+    <h2 class="section-title">How It Works</h2>
+    <div class="explain-grid">
+      <div class="panel explain-card">
+        <h3>⚽ The Model</h3>
+        <p>Each team gets an <strong>attack strength</strong> and <strong>defense weakness</strong> score, blended from three signals:</p>
+        <ul>
+          <li><strong>Match history</strong> (2022+) — recent international form</li>
+          <li><strong>Squad ratings</strong> — EA FC player quality for all 48 teams</li>
+          <li><strong>Market odds</strong> — Bet365 correct-score implied power</li>
+        </ul>
+        <p>Those feed into independent Poisson distributions. Validated at <strong>±0.236 goals MAE</strong> vs Bet365.</p>
+      </div>
+      <div class="panel explain-card">
+        <h3>📊 Expected Goals (xG)</h3>
+        <p>xG is the <em>average</em> goals a team is expected to score — not a guarantee. An xG of 2.0 means scoring exactly 2 is only ~27% likely; 1–1 can beat 2–1 because both teams need specific goal counts.</p>
+        <p><strong>Fair odds</strong> = 1 ÷ probability, with no bookmaker margin. Odds of 2.50 = 40% model chance.</p>
+      </div>
+      <div class="panel explain-card">
+        <h3>🪙 Tokens &amp; League</h3>
+        <p>Every new account gets <strong>10,000 tokens</strong> (play money). Build a bet slip from any market, set your stake, and hit <strong>Place Bet</strong> to lock it in.</p>
+        <p>The <strong>League</strong> tab ranks all players by token balance. Climb the board by picking winners — or go bust trying!</p>
+      </div>
+      <div class="panel explain-card">
+        <h3>🧾 Bet Slip</h3>
+        <p>Tap any odds button to add a selection. Mix markets across different matches for an accumulator.</p>
+        <p><strong>Send Bet Slip</strong> copies your selections to share with friends. <strong>Place Bet</strong> deducts your stake from your token balance.</p>
+        <p class="warn">For fun and analysis only — <strong>not real betting advice</strong>.</p>
+      </div>
     </div>
   </section>
 
   <footer class="footer">
     Predictions are statistical estimates for analysis and fun — <strong>not betting advice</strong>.
-    Model: Poisson engine blending match history (w 0.20), squad ratings (w 0.43) and market power (w 0.33).
     · <a href="https://github.com/OmerYaacobi/ML-WC26-Prediction" target="_blank" rel="noopener">OmerYaacobi/ML-WC26-Prediction</a>
   </footer>
 </main>
@@ -124,6 +187,8 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="firebase-config.js"></script>
+<script src="auth.js"></script>
 <script src="data.js"></script>
 <script src="app.js"></script>
 </body>

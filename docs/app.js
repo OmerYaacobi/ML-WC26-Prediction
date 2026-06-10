@@ -372,27 +372,102 @@ function renderSlip() {
 
   const totalOdds = state.slip.reduce((x, s) => x * s.odds, 1);
   const ret = state.stake * totalOdds;
+  const user = WC26Auth.getUser();
+  const balance = user ? user.tokens : 0;
+
   $("slipFoot").innerHTML = `
     <div class="slip-line"><span>Selections</span><b>${state.slip.length}</b></div>
     <div class="slip-line"><span>Combined fair odds</span><b class="big">@${totalOdds >= 100 ? totalOdds.toFixed(0) : totalOdds.toFixed(2)}</b></div>
     <div class="slip-line"><span>Model chance all land</span><b>${fmtPct(1 / totalOdds, totalOdds > 50 ? 2 : 1)}</b></div>
-    <div class="stake-row"><label>Stake</label><input type="number" id="stakeInput" min="0" step="1" value="${state.stake}"><label>units</label></div>
-    <div class="slip-line"><span>Fair return if all land</span><b class="big">${ret >= 1000 ? ret.toFixed(0) : ret.toFixed(2)}</b></div>
+    <div class="stake-row"><label>Stake</label><input type="number" id="stakeInput" min="1" step="1" max="${balance}" value="${state.stake}"><label>tokens</label></div>
+    <div class="slip-line"><span>Potential return</span><b class="big">${ret >= 1000 ? ret.toFixed(0) : ret.toFixed(2)}</b></div>
+    ${user ? `<div class="slip-line"><span>Your balance</span><b>🪙 ${balance.toLocaleString()}</b></div>` : ""}
+    <div class="slip-actions">
+      <button class="slip-send" id="slipSend">📤 Send bet slip</button>
+      <button class="slip-place" id="slipPlace">✅ Place bet</button>
+    </div>
     <button class="slip-clear" id="slipClear">Clear slip</button>
-    <div class="slip-note">Fair odds from the model — no bookmaker margin. For fun and analysis, not betting advice.</div>`;
+    <div class="slip-note">Fair odds from the model — play-money tokens only. Not real betting advice.</div>`;
 
   $("stakeInput").addEventListener("input", (e) => {
-    state.stake = Math.max(0, parseFloat(e.target.value) || 0);
+    state.stake = Math.max(1, parseFloat(e.target.value) || 1);
     saveSlip();
     renderSlip();
     $("stakeInput").focus();
   });
+  $("slipSend").addEventListener("click", () => sendBetSlip(totalOdds));
+  $("slipPlace").addEventListener("click", () => placeBet(totalOdds));
   $("slipClear").addEventListener("click", () => {
     state.slip = [];
     saveSlip();
     renderSlip();
     renderMatch();
   });
+}
+
+async function sendBetSlip(totalOdds) {
+  if (!state.slip.length) { toast("Slip is empty"); return; }
+  const text = WC26Auth.formatSlipForShare(state.slip, state.stake, totalOdds);
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: "WC26 Bet Slip", text });
+      toast("Bet slip shared!");
+      return;
+    }
+  } catch (e) { /* fall through to clipboard */ }
+  try {
+    await navigator.clipboard.writeText(text);
+    toast("Bet slip copied to clipboard!");
+  } catch {
+    prompt("Copy your bet slip:", text);
+  }
+}
+
+async function placeBet(totalOdds) {
+  try {
+    await WC26Auth.placeBet(state.stake, state.slip, totalOdds);
+    state.slip = [];
+    saveSlip();
+    renderSlip();
+    renderMatch();
+    updateUserUI();
+    toast("Bet placed! Good luck 🍀");
+  } catch (e) {
+    toast(e.message || "Could not place bet");
+  }
+}
+
+async function renderLeague() {
+  const user = WC26Auth.getUser();
+  const board = await WC26Auth.getLeaderboard();
+  const rank = board.findIndex((u) => u.id === user?.id) + 1;
+
+  $("leagueYou").innerHTML = user
+    ? `<div class="ly-row"><span>Your rank</span><b>#${rank || "—"} of ${board.length}</b></div>
+       <div class="ly-row"><span>Your balance</span><b class="big">🪙 ${user.tokens.toLocaleString()}</b></div>`
+    : "";
+
+  $("leagueBody").innerHTML = board.map((u, i) => {
+    const isYou = user && u.id === user.id;
+    const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : i + 1;
+    return `<tr class="${isYou ? "you" : ""}"><td>${medal}</td><td>${u.username}${isYou ? " (you)" : ""}</td><td>🪙 ${u.tokens.toLocaleString()}</td></tr>`;
+  }).join("");
+
+  const bets = user?.bets || [];
+  $("betHistory").innerHTML = bets.length
+    ? bets.slice(0, 10).map((b) => `
+      <div class="bet-card">
+        <div class="bet-top"><span>${b.legs} leg${b.legs > 1 ? "s" : ""} · stake ${b.stake}</span><span class="bet-odds">@${b.totalOdds.toFixed(2)}</span></div>
+        <div class="bet-meta">Potential ${b.potential.toLocaleString()} tokens · ${new Date(b.placedAt).toLocaleDateString()}</div>
+        ${b.picks.map((p) => `<div class="bet-pick">${p.pick} — ${p.match}</div>`).join("")}
+      </div>`).join("")
+    : `<p class="note">No bets placed yet. Build a slip and hit <strong>Place bet</strong>.</p>`;
+}
+
+function updateUserUI() {
+  const user = WC26Auth.getUser();
+  $("tokenBalance").textContent = user ? user.tokens.toLocaleString() : "—";
+  $("userPill").textContent = user ? user.username : "";
 }
 
 function toggleSelection(btn) {
@@ -431,6 +506,9 @@ function showView(view) {
   document.querySelectorAll(".nav-pill").forEach((b) => b.classList.toggle("active", b.dataset.view === view));
   $("view-match").classList.toggle("hidden", view !== "match");
   $("view-groups").classList.toggle("hidden", view !== "groups");
+  $("view-league").classList.toggle("hidden", view !== "league");
+  $("view-explain").classList.toggle("hidden", view !== "explain");
+  if (view === "league") renderLeague();
   window.scrollTo({ top: 0 });
 }
 
@@ -481,10 +559,84 @@ $("fixturesList").addEventListener("click", (e) => {
   toast(`Loaded ${dname(state.home)} vs ${dname(state.away)}`);
 });
 
+/* ---------------- auth UI ---------------- */
+
+function showAuthError(msg) {
+  const el = $("authError");
+  el.textContent = msg;
+  el.classList.toggle("hidden", !msg);
+}
+
+function enterApp() {
+  $("authGate").classList.add("hidden");
+  $("mainHeader").classList.remove("hidden");
+  $("mainPage").classList.remove("hidden");
+  updateUserUI();
+  fillSelects();
+  renderMatch();
+  renderGroups();
+  renderFixtures();
+  renderSlip();
+}
+
+function showAuthGate() {
+  $("authGate").classList.remove("hidden");
+  $("mainHeader").classList.add("hidden");
+  $("mainPage").classList.add("hidden");
+}
+
+document.querySelectorAll(".auth-tab").forEach((tab) => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".auth-tab").forEach((t) => t.classList.remove("active"));
+    tab.classList.add("active");
+    const isLogin = tab.dataset.tab === "login";
+    $("loginForm").classList.toggle("hidden", !isLogin);
+    $("signupForm").classList.toggle("hidden", isLogin);
+    showAuthError("");
+  });
+});
+
+$("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  showAuthError("");
+  try {
+    await WC26Auth.login($("loginEmail").value, $("loginPassword").value);
+    enterApp();
+  } catch (err) {
+    showAuthError(err.message);
+  }
+});
+
+$("signupForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  showAuthError("");
+  try {
+    await WC26Auth.signup($("signupUsername").value, $("signupEmail").value, $("signupPassword").value);
+    enterApp();
+    toast(`Welcome! You received ${WC26Auth.STARTING_TOKENS.toLocaleString()} tokens 🪙`);
+  } catch (err) {
+    showAuthError(err.message);
+  }
+});
+
+$("logoutBtn").addEventListener("click", () => {
+  WC26Auth.logout();
+  showAuthGate();
+});
+
 /* ---------------- boot ---------------- */
 
-fillSelects();
-renderMatch();
-renderGroups();
-renderFixtures();
-renderSlip();
+(async () => {
+  $("authModeNote").textContent = WC26Auth.isCloud()
+    ? "Connected to cloud league — leaderboard syncs across all users."
+    : "League is stored in this browser. Enable Firebase in firebase-config.js for a global leaderboard shared with friends.";
+
+  await WC26Auth.init();
+  WC26Auth.onChange((user) => {
+    if (user && $("authGate").classList.contains("hidden") === false) enterApp();
+    else updateUserUI();
+  });
+
+  if (WC26Auth.getUser()) enterApp();
+  else showAuthGate();
+})();
