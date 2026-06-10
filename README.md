@@ -1,11 +1,36 @@
-# World Cup Score Predictor
+# WC26 Match Centre — World Cup Score Predictor
 
-A Poisson-based match prediction engine for the **2026 FIFA World Cup**. The model blends three signals — international match history (2022+), squad strength from player ratings, and live betting market odds — to estimate expected goals, win/draw/loss probabilities, and the most likely exact scorelines.
+A Poisson-based match prediction engine for the **2026 FIFA World Cup**, presented as a sportsbook-style **Match Centre** web app. The model blends three signals — international match history (2022+), squad strength from player ratings, and live betting market odds — to estimate expected goals, win/draw/loss probabilities, fair betting odds, and the most likely exact scorelines.
 
-**Live app (no install required):**  
+## ⚡ The Match Centre web app (`webapp/`)
+
+A zero-dependency static web app — the entire Poisson engine runs client-side in JavaScript (verified to match the Python engine to 6 decimal places). No server, no Python, no build step: host it anywhere (GitHub Pages works) or open it locally.
+
+```bash
+# serve locally
+python3 -m http.server 8765 --directory webapp
+# then open http://localhost:8765
+```
+
+**Features:**
+
+- **Match Odds view** — pick any two of the 48 qualified teams (swap button included) and get:
+  - xG for both teams, model pick, and a win/draw/win probability bar
+  - **Markets with fair decimal odds** (1 ÷ probability, no margin): Match Result (1X2), Double Chance, Total Goals Over/Under 1.5 / 2.5 / 3.5, Both Teams To Score, and Correct Score (top 6)
+  - Goal distribution charts for each team and an exact-scoreline probability heatmap
+- **🧾 Bet Slip** — tap any odds button to build an accumulator across matches; see combined fair odds, the model's chance that all legs land, and the fair return for your stake. Persisted in `localStorage`. (For fun and analysis — not betting advice.)
+- **Groups & Fixtures view** — all 12 groups as **projected tables** (expected points computed live from the engine, qualification spots highlighted), plus a fixture finder with group/matchday filters and one-tap "View odds" for any fixture.
+
+After rebuilding model features, regenerate the app's data file:
+
+```bash
+python3 scripts/build_webapp_data.py   # writes webapp/data.js (stdlib only, no pip installs)
+```
+
+The original Streamlit dashboard (`app.py`) is still included and works as before.
+
+**Streamlit version (legacy, hosted):**
 👉 **[https://ml-wc26-prediction-jp4sc9qrqyrzsqfjtebesl.streamlit.app/](https://ml-wc26-prediction-jp4sc9qrqyrzsqfjtebesl.streamlit.app/)**
-
-Open the link, pick two teams in the Match Simulator, and explore predictions instantly. No cloning, data downloads, or Python setup needed.
 
 ---
 
@@ -131,7 +156,14 @@ python -m src.main --rebuild --teamA Argentina --teamB Germany
 
 ```
 world-cup-score-predictor/
-├── app.py                      # Streamlit dashboard (deployed to Streamlit Cloud)
+├── webapp/                     # ⚡ Match Centre — static sportsbook-style web app
+│   ├── index.html
+│   ├── style.css
+│   ├── app.js                  # Client-side Poisson engine + UI
+│   └── data.js                 # Generated team ratings (see scripts/)
+├── scripts/
+│   └── build_webapp_data.py    # Regenerate webapp/data.js from processed features
+├── app.py                      # Streamlit dashboard (legacy, deployed to Streamlit Cloud)
 ├── fetch_group_odds.py         # Download & cache Bet365 group-stage odds
 ├── requirements.txt
 ├── data/

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WC26 Match Centre · World Cup Prediction Engine</title>
+<meta name="description" content="Poisson-based 2026 World Cup match predictor — fair odds, exact scorelines, group projections.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand" id="brand">
+      <span class="brand-ball">⚽</span>
+      <span class="brand-text">WC26 <em>Match Centre</em></span>
+    </div>
+    <nav class="nav">
+      <button class="nav-pill active" data-view="match">Match Odds</button>
+      <button class="nav-pill" data-view="groups">Groups &amp; Fixtures</button>
+    </nav>
+    <button class="slip-toggle" id="slipToggle">
+      🧾 Bet Slip <span class="slip-count" id="slipCount">0</span>
+    </button>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- ======================= MATCH VIEW ======================= -->
+  <section class="view" id="view-match">
+
+    <div class="picker-bar panel">
+      <div class="picker">
+        <label for="homeSelect">Team A</label>
+        <select id="homeSelect"></select>
+      </div>
+      <button class="swap-btn" id="swapBtn" title="Swap teams">⇄</button>
+      <div class="picker">
+        <label for="awaySelect">Team B</label>
+        <select id="awaySelect"></select>
+      </div>
+    </div>
+
+    <div class="hero panel" id="heroCard"><!-- filled by JS --></div>
+
+    <div class="outcome-bar-wrap panel" id="outcomeBar"><!-- filled by JS --></div>
+
+    <p class="note">
+      Neutral-venue model — no home-field advantage is applied. Hosts USA, Canada and Mexico
+      may benefit in the real 2026 tournament, but that effect is not included here.
+    </p>
+
+    <h2 class="section-title">Markets <span class="fair-tag">fair odds · no margin</span></h2>
+    <div class="markets-grid" id="marketsGrid"><!-- filled by JS --></div>
+
+    <h2 class="section-title">Insights</h2>
+    <div class="insights-grid">
+      <div class="panel insight-card" id="distHome"></div>
+      <div class="panel insight-card" id="distAway"></div>
+    </div>
+    <div class="panel heatmap-card" id="heatmapCard"></div>
+
+    <details class="explainer panel">
+      <summary>What do these numbers mean?</summary>
+      <div class="explainer-body">
+        <p><strong>Expected Goals (xG)</strong> — the <em>average</em> goals a team is expected to
+        score in this matchup. An xG of 2.0 doesn't mean exactly 2 goals; it means that over many
+        replays of this fixture they would average 2 per game.</p>
+        <p><strong>Win / Draw %</strong> — the chance each team wins or the match ends level,
+        derived from a Poisson score model. All three always sum to 100%.</p>
+        <p><strong>Fair odds</strong> — simply 1 ÷ probability, with no bookmaker margin baked in.
+        Odds of 2.50 mean a 40% model chance.</p>
+        <p><strong>Model pick</strong> — the win/draw outcome with the highest probability. It can
+        differ from the most likely <em>exact scoreline</em>: for xG ≈ 2, scoring exactly 1 or 2
+        goals are nearly equally likely (~27% each), which is why a 1–1 can edge out a 2–1.</p>
+        <p>The model blends international match history (2022+), EA FC squad ratings and betting
+        market power into attack / defence strengths, feeding independent Poisson distributions
+        (validated at ±0.236 goals MAE vs Bet365 correct-score odds).</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ======================= GROUPS VIEW ======================= -->
+  <section class="view hidden" id="view-groups">
+    <h2 class="section-title">2026 Group Stage — Projected Tables
+      <span class="fair-tag">xPts = model expected points</span>
+    </h2>
+    <div class="groups-grid" id="groupsGrid"><!-- filled by JS --></div>
+
+    <h2 class="section-title">Fixture Finder</h2>
+    <div class="panel fixtures-panel">
+      <div class="fixture-filters">
+        <select id="groupFilter"></select>
+        <div class="seg" id="mdFilter">
+          <button class="seg-btn active" data-md="all">All matchdays</button>
+          <button class="seg-btn" data-md="1">MD 1</button>
+          <button class="seg-btn" data-md="2">MD 2</button>
+          <button class="seg-btn" data-md="3">MD 3</button>
+        </div>
+      </div>
+      <div class="fixtures-list" id="fixturesList"><!-- filled by JS --></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    Predictions are statistical estimates for analysis and fun — <strong>not betting advice</strong>.
+    Model: Poisson engine blending match history (w 0.20), squad ratings (w 0.43) and market power (w 0.33).
+  </footer>
+</main>
+
+<!-- ======================= BET SLIP ======================= -->
+<aside class="slip" id="slipPanel">
+  <div class="slip-head">
+    <span>🧾 Bet Slip</span>
+    <button class="slip-close" id="slipClose">✕</button>
+  </div>
+  <div class="slip-body" id="slipBody"></div>
+  <div class="slip-foot" id="slipFoot"></div>
+</aside>
+<div class="slip-backdrop" id="slipBackdrop"></div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
