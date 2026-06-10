@@ -4,7 +4,10 @@ A Poisson-based match prediction engine for the **2026 FIFA World Cup**, present
 
 ## ⚡ The Match Centre web app (`docs/`)
 
-A zero-dependency static web app — the entire Poisson engine runs client-side in JavaScript (verified to match the Python engine to 6 decimal places). No server, no Python, no build step: host it anywhere (GitHub Pages works) or open it locally.
+**Live app (no install required):**  
+👉 **[https://omeryaacobi.github.io/ML-WC26-Prediction/](https://omeryaacobi.github.io/ML-WC26-Prediction/)**
+
+A zero-dependency static web app — the entire Poisson engine runs client-side in JavaScript (verified to match the Python engine to 6 decimal places). No server, no Python, no build step: open the link above or run locally.
 
 ```bash
 # serve locally
@@ -61,12 +64,11 @@ Validated against Bet365 correct-score odds: **±0.236 goals MAE** (6-fold cross
 
 ## Try it now
 
-1. Go to the **[live Streamlit app](https://ml-wc26-prediction-jp4sc9qrqyrzsqfjtebesl.streamlit.app/)**
-2. Open the **Match Simulator** tab
-3. Select **Team A** and **Team B**
-4. Review xG, outcome probabilities, top scorelines, and charts
+**Match Centre (recommended):**  
+👉 **[https://omeryaacobi.github.io/ML-WC26-Prediction/](https://omeryaacobi.github.io/ML-WC26-Prediction/)** — pick two teams, browse fair odds markets, build a bet slip, and explore projected group tables. No install needed.
 
-The **Groups & Schedule** tab shows the full 2026 group stage draw and fixtures.
+**Streamlit version (alternate UI):**  
+👉 **[https://ml-wc26-prediction-jp4sc9qrqyrzsqfjtebesl.streamlit.app/](https://ml-wc26-prediction-jp4sc9qrqyrzsqfjtebesl.streamlit.app/)** — open the Match Simulator tab, select Team A and Team B, and review xG, probabilities, and charts.
 
 ---
 
