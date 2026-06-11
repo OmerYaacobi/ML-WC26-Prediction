@@ -15,6 +15,7 @@ Without Firebase credentials this script only prints what would be settled.
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -97,9 +98,11 @@ def grade_bet(picks: list[dict], results: dict) -> tuple[str, list[bool | None]]
 
 
 def settle_firestore(results: dict) -> int:
-    cred_path = PROJECT_ROOT / "firebase-service-account.json"
+    cred_path = Path(os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", ""))
+    if not cred_path or not cred_path.exists():
+        cred_path = PROJECT_ROOT / "firebase-service-account.json"
     if not cred_path.exists():
-        print("ℹ️  No firebase-service-account.json — dry run only.")
+        print("ℹ️  No Firebase credentials found — dry run only.")
         return 0
 
     try:
