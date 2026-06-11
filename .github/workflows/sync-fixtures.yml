@@ -2,48 +2,72 @@ name: Sync WC26 fixtures
 
 on:
   schedule:
-    # Every 30 minutes during tournament — adjust as needed
     - cron: "*/30 * * * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   sync:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - run: pip install requests python-dotenv
+      - name: Install dependencies
+        run: pip install requests python-dotenv
 
       - name: Fetch fixtures from odds-api.io
+        id: fetch
+        continue-on-error: true
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
-        run: python scripts/fetch_fixtures.py
+        run: |
+          if [ -z "$ODDS_API_KEY" ]; then
+            echo "::warning::ODDS_API_KEY secret is not set. Add it in Settings → Secrets → Actions."
+            python -c "
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          p = Path('data/processed/wc26_fixtures.json')
+          p.parent.mkdir(parents=True, exist_ok=True)
+          p.write_text(json.dumps({'source':'empty','updatedAt':datetime.now(timezone.utc).isoformat(),'fixtures':[]}, indent=2))
+          "
+            exit 0
+          fi
+          python scripts/fetch_fixtures.py
 
       - name: Publish docs/fixtures.js
         run: python scripts/publish_fixtures.py
 
       - name: Settle finished bets (optional)
+        continue-on-error: true
         env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           GOOGLE_APPLICATION_CREDENTIALS: /tmp/firebase-sa.json
         run: |
-          if [ -n "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" ]; then
-            echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > /tmp/firebase-sa.json
-            pip install firebase-admin
-            python scripts/settle_bets.py
-          else
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
             echo "Skipping settlement — FIREBASE_SERVICE_ACCOUNT secret not set"
+            exit 0
           fi
+          printf '%s\n' "$FIREBASE_SERVICE_ACCOUNT" > /tmp/firebase-sa.json
+          pip install firebase-admin
+          python scripts/settle_bets.py
 
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add docs/fixtures.js
-          git diff --staged --quiet || git commit -m "Sync WC26 fixtures and scores from odds-api.io"
-          git push
+          if git diff --staged --quiet; then
+            echo "No fixture changes to commit."
+          else
+            git commit -m "Sync WC26 fixtures and scores from odds-api.io"
+            git push
+          fi

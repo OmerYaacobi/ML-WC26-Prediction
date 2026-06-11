@@ -94,15 +94,31 @@ def fetch_events(api_key: str) -> list[dict]:
     return response.json()
 
 
+def write_empty(reason: str) -> None:
+    payload = {
+        "source": "empty",
+        "updatedAt": datetime.now(timezone.utc).isoformat(),
+        "fixtures": [],
+        "note": reason,
+    }
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    print(f"⚠️  {reason}")
+
+
 def main() -> None:
     load_dotenv()
     api_key = os.getenv("ODDS_API_KEY")
     if not api_key:
-        print("❌ ODDS_API_KEY not found in .env")
+        write_empty("ODDS_API_KEY not set — add it to GitHub Secrets or .env")
         sys.exit(1)
 
     print("📡 Fetching football events from odds-api.io...")
-    events = fetch_events(api_key)
+    try:
+        events = fetch_events(api_key)
+    except Exception as e:
+        write_empty(f"API fetch failed: {e}")
+        sys.exit(1)
     fixtures = []
     seen = set()
 
