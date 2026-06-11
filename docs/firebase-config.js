@@ -9,6 +9,11 @@
 //         allow read: if true;
 //         allow create, update: if request.auth != null && request.auth.uid == userId;
 //       }
+//       match /privateLeagues/{leagueId} {
+//         allow read: if request.auth != null;
+//         allow create: if request.auth != null;
+//         allow update: if request.auth != null;
+//       }
 //     }
 //   }
 const FIREBASE_CONFIG = {

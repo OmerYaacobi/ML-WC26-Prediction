@@ -4,6 +4,7 @@
 const STARTING_TOKENS = 10000;
 const REGISTRY_KEY = "wc26-user-registry";
 const SESSION_KEY = "wc26-session";
+const PRIVATE_LEAGUES_KEY = "wc26-private-leagues";
 
 let firebaseApp = null;
 let firebaseAuth = null;
@@ -31,6 +32,31 @@ function loadRegistry() {
 
 function saveRegistry(reg) {
   localStorage.setItem(REGISTRY_KEY, JSON.stringify(reg));
+}
+
+function loadPrivateLeaguesStore() {
+  try {
+    return JSON.parse(localStorage.getItem(PRIVATE_LEAGUES_KEY) || '{"leagues":{}}');
+  } catch {
+    return { leagues: {} };
+  }
+}
+
+function savePrivateLeaguesStore(store) {
+  localStorage.setItem(PRIVATE_LEAGUES_KEY, JSON.stringify(store));
+}
+
+function generateLeagueCode(existing) {
+  let code;
+  do {
+    code = String(Math.floor(100000 + Math.random() * 900000));
+  } while (existing[code]);
+  return code;
+}
+
+function ensurePrivateLeagues(user) {
+  if (!user.privateLeagues) user.privateLeagues = [];
+  return user;
 }
 
 function useFirebase() {
@@ -61,14 +87,14 @@ async function initFirebase() {
   if (!useFirebase() || firebaseApp) return;
   const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
   const { getAuth, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
-  const { getFirestore, doc, getDoc, setDoc, collection, query, where, orderBy, limit, getDocs } =
+  const { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, where, orderBy, limit, getDocs, arrayUnion } =
     await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
 
   firebaseApp = initializeApp(FIREBASE_CONFIG);
   firebaseAuth = getAuth(firebaseApp);
   firestore = getFirestore(firebaseApp);
 
-  window._fb = { doc, getDoc, setDoc, collection, query, where, orderBy, limit, getDocs };
+  window._fb = { doc, getDoc, setDoc, updateDoc, collection, query, where, orderBy, limit, getDocs, arrayUnion };
 
   onAuthStateChanged(firebaseAuth, async (fbUser) => {
     if (!fbUser) {
@@ -81,21 +107,10 @@ async function initFirebase() {
       const snap = await getDoc(doc(firestore, "users", fbUser.uid));
       if (snap.exists()) {
         currentUser = { id: fbUser.uid, ...snap.data() };
-      } else {
-        currentUser = {
-          id: fbUser.uid,
-          username: fbUser.email.split("@")[0],
-          email: fbUser.email,
-          tokens: STARTING_TOKENS,
-        };
-        await setDoc(doc(firestore, "users", fbUser.uid), {
-          username: currentUser.username,
-          email: currentUser.email,
-          tokens: STARTING_TOKENS,
-          createdAt: Date.now(),
-        });
+        emit();
       }
-      emit();
+      // Profile is created during signup — never auto-create with email prefix here
+      // (avoids racing signup and overwriting the chosen username).
     } catch (err) {
       console.error("Firebase profile sync failed:", err);
     }
@@ -131,6 +146,7 @@ async function signupLocal(username, email, password) {
     tokens: STARTING_TOKENS,
     createdAt: Date.now(),
     bets: [],
+    privateLeagues: [],
   };
   reg.users.push(user);
   saveRegistry(reg);
@@ -182,8 +198,13 @@ async function signupFirebase(username, email, password) {
       tokens: STARTING_TOKENS,
       createdAt: Date.now(),
       bets: [],
+      privateLeagues: [],
     };
     await setDoc(doc(firestore, "users", cred.user.uid), profile);
+    try {
+      const { updateProfile } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+      await updateProfile(cred.user, { displayName: uname });
+    } catch { /* non-fatal */ }
     currentUser = { id: cred.user.uid, ...profile };
     emit();
     return currentUser;
@@ -208,19 +229,10 @@ async function loginFirebase(email, password) {
     await ensureAuthToken(cred.user);
     const ref = doc(firestore, "users", cred.user.uid);
     const snap = await getDoc(ref);
-    if (snap.exists()) {
-      currentUser = { id: cred.user.uid, ...snap.data() };
-    } else {
-      const profile = {
-        username: cred.user.email.split("@")[0],
-        email: cred.user.email,
-        tokens: STARTING_TOKENS,
-        createdAt: Date.now(),
-        bets: [],
-      };
-      await setDoc(ref, profile);
-      currentUser = { id: cred.user.uid, ...profile };
+    if (!snap.exists()) {
+      throw new Error("Account profile missing. Please sign up with a username.");
     }
+    currentUser = { id: cred.user.uid, ...snap.data() };
     emit();
     return currentUser;
   } catch (err) {
@@ -238,7 +250,160 @@ async function getLeaderboardLocal() {
 async function getLeaderboardFirebase() {
   const { collection, query, orderBy, limit, getDocs } = window._fb;
   const snap = await getDocs(query(collection(firestore, "users"), orderBy("tokens", "desc"), limit(50)));
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  return snap.docs.map((d) => ({ id: d.id, username: d.data().username, tokens: d.data().tokens }));
+}
+
+async function createPrivateLeagueLocal(name) {
+  if (!currentUser) throw new Error("Log in first.");
+  const leagueName = name.trim();
+  if (!leagueName || leagueName.length < 2) throw new Error("League name must be at least 2 characters.");
+
+  const store = loadPrivateLeaguesStore();
+  const code = generateLeagueCode(store.leagues);
+  store.leagues[code] = {
+    name: leagueName,
+    code,
+    createdBy: currentUser.id,
+    createdAt: Date.now(),
+    members: [currentUser.id],
+  };
+  savePrivateLeaguesStore(store);
+
+  const reg = loadRegistry();
+  const idx = reg.users.findIndex((u) => u.id === currentUser.id);
+  ensurePrivateLeagues(reg.users[idx]);
+  if (!reg.users[idx].privateLeagues.includes(code)) reg.users[idx].privateLeagues.push(code);
+  saveRegistry(reg);
+  currentUser = { ...reg.users[idx] };
+  delete currentUser.passwordHash;
+  emit();
+  return store.leagues[code];
+}
+
+async function joinPrivateLeagueLocal(code) {
+  if (!currentUser) throw new Error("Log in first.");
+  const id = String(code).trim();
+  if (!/^\d{6}$/.test(id)) throw new Error("Enter a valid 6-digit league ID.");
+
+  const store = loadPrivateLeaguesStore();
+  const league = store.leagues[id];
+  if (!league) throw new Error("League not found. Check the ID and try again.");
+
+  if (!league.members.includes(currentUser.id)) league.members.push(currentUser.id);
+  savePrivateLeaguesStore(store);
+
+  const reg = loadRegistry();
+  const idx = reg.users.findIndex((u) => u.id === currentUser.id);
+  ensurePrivateLeagues(reg.users[idx]);
+  if (!reg.users[idx].privateLeagues.includes(id)) reg.users[idx].privateLeagues.push(id);
+  saveRegistry(reg);
+  currentUser = { ...reg.users[idx] };
+  delete currentUser.passwordHash;
+  emit();
+  return league;
+}
+
+async function getPrivateLeaguesLocal() {
+  if (!currentUser) return [];
+  const store = loadPrivateLeaguesStore();
+  return (currentUser.privateLeagues || [])
+    .map((id) => store.leagues[id])
+    .filter(Boolean);
+}
+
+async function getPrivateLeagueLeaderboardLocal(leagueId) {
+  const store = loadPrivateLeaguesStore();
+  const league = store.leagues[leagueId];
+  if (!league) throw new Error("League not found.");
+  const reg = loadRegistry();
+  return league.members
+    .map((uid) => reg.users.find((u) => u.id === uid))
+    .filter(Boolean)
+    .map((u) => ({ id: u.id, username: u.username, tokens: u.tokens }))
+    .sort((a, b) => b.tokens - a.tokens);
+}
+
+async function createPrivateLeagueFirebase(name) {
+  if (!currentUser) throw new Error("Log in first.");
+  const leagueName = name.trim();
+  if (!leagueName || leagueName.length < 2) throw new Error("League name must be at least 2 characters.");
+
+  const { doc, getDoc, setDoc, updateDoc, arrayUnion } = window._fb;
+  await ensureAuthToken(firebaseAuth.currentUser);
+
+  let code;
+  for (let attempt = 0; attempt < 12; attempt++) {
+    code = generateLeagueCode({});
+    const ref = doc(firestore, "privateLeagues", code);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) break;
+    code = null;
+  }
+  if (!code) throw new Error("Could not generate a league ID. Try again.");
+
+  const league = {
+    name: leagueName,
+    code,
+    createdBy: currentUser.id,
+    createdAt: Date.now(),
+    members: [currentUser.id],
+  };
+  await setDoc(doc(firestore, "privateLeagues", code), league);
+  await updateDoc(doc(firestore, "users", currentUser.id), {
+    privateLeagues: arrayUnion(code),
+  });
+  currentUser = { ...currentUser, privateLeagues: [...new Set([...(currentUser.privateLeagues || []), code])] };
+  emit();
+  return league;
+}
+
+async function joinPrivateLeagueFirebase(code) {
+  if (!currentUser) throw new Error("Log in first.");
+  const id = String(code).trim();
+  if (!/^\d{6}$/.test(id)) throw new Error("Enter a valid 6-digit league ID.");
+
+  const { doc, getDoc, updateDoc, arrayUnion } = window._fb;
+  await ensureAuthToken(firebaseAuth.currentUser);
+
+  const leagueRef = doc(firestore, "privateLeagues", id);
+  const snap = await getDoc(leagueRef);
+  if (!snap.exists()) throw new Error("League not found. Check the ID and try again.");
+  const league = { id, ...snap.data() };
+
+  await updateDoc(leagueRef, { members: arrayUnion(currentUser.id) });
+  await updateDoc(doc(firestore, "users", currentUser.id), {
+    privateLeagues: arrayUnion(id),
+  });
+  currentUser = { ...currentUser, privateLeagues: [...new Set([...(currentUser.privateLeagues || []), id])] };
+  emit();
+  return league;
+}
+
+async function getPrivateLeaguesFirebase() {
+  if (!currentUser?.privateLeagues?.length) return [];
+  const { doc, getDoc } = window._fb;
+  const leagues = [];
+  for (const id of currentUser.privateLeagues) {
+    const snap = await getDoc(doc(firestore, "privateLeagues", id));
+    if (snap.exists()) leagues.push({ id, ...snap.data() });
+  }
+  return leagues;
+}
+
+async function getPrivateLeagueLeaderboardFirebase(leagueId) {
+  const { doc, getDoc } = window._fb;
+  const leagueSnap = await getDoc(doc(firestore, "privateLeagues", leagueId));
+  if (!leagueSnap.exists()) throw new Error("League not found.");
+  const members = leagueSnap.data().members || [];
+  const rows = [];
+  for (const uid of members) {
+    const userSnap = await getDoc(doc(firestore, "users", uid));
+    if (userSnap.exists()) {
+      const d = userSnap.data();
+      rows.push({ id: uid, username: d.username, tokens: d.tokens });
+    }
+  }
+  return rows.sort((a, b) => b.tokens - a.tokens);
 }
 
 async function updateTokensLocal(delta, betRecord) {
@@ -269,6 +434,59 @@ async function updateTokensFirebase(delta, betRecord) {
   await setDoc(ref, { ...data, tokens, bets }, { merge: true });
   currentUser = { ...currentUser, tokens, bets };
   emit();
+}
+
+function recalcBet(bet) {
+  bet.legs = bet.picks.length;
+  bet.totalOdds = bet.picks.reduce((x, p) => x * p.odds, 1);
+  bet.potential = Math.round(bet.stake * bet.totalOdds * 100) / 100;
+  return bet;
+}
+
+function findBet(bets, betId) {
+  const bet = bets.find((b) => b.id === betId);
+  if (!bet) throw new Error("Bet not found.");
+  if (bet.status !== "open") throw new Error("Only open bets can be edited.");
+  if (typeof WC26_FIXTURES !== "undefined") {
+    for (const p of bet.picks) {
+      const fx = WC26_FIXTURES.find(
+        (f) =>
+          (f.home === p.home && f.away === p.away) || (f.home === p.away && f.away === p.home)
+      );
+      if (!fx || !fx.bettable || fx.status !== "pending") {
+        throw new Error("Betting closed — this bet can no longer be edited.");
+      }
+    }
+  }
+  return bet;
+}
+
+async function persistBetsLocal(bets, tokenDelta = 0) {
+  const reg = loadRegistry();
+  const idx = reg.users.findIndex((u) => u.id === currentUser.id);
+  if (idx < 0) throw new Error("User not found.");
+  reg.users[idx].bets = bets;
+  if (tokenDelta) reg.users[idx].tokens = Math.max(0, reg.users[idx].tokens + tokenDelta);
+  saveRegistry(reg);
+  currentUser = { ...reg.users[idx] };
+  delete currentUser.passwordHash;
+  emit();
+}
+
+async function persistBetsFirebase(bets, tokenDelta = 0) {
+  const { doc, getDoc, setDoc } = window._fb;
+  const ref = doc(firestore, "users", currentUser.id);
+  const snap = await getDoc(ref);
+  const data = snap.data();
+  const tokens = Math.max(0, (data.tokens || 0) + tokenDelta);
+  await setDoc(ref, { ...data, bets, tokens }, { merge: true });
+  currentUser = { ...currentUser, bets, tokens };
+  emit();
+}
+
+async function persistBets(bets, tokenDelta = 0) {
+  if (useFirebase()) await persistBetsFirebase(bets, tokenDelta);
+  else await persistBetsLocal(bets, tokenDelta);
 }
 
 window.WC26Auth = {
@@ -316,6 +534,27 @@ window.WC26Auth = {
     return getLeaderboardLocal();
   },
 
+  async createPrivateLeague(name) {
+    if (useFirebase()) return createPrivateLeagueFirebase(name);
+    return createPrivateLeagueLocal(name);
+  },
+
+  async joinPrivateLeague(code) {
+    if (useFirebase()) return joinPrivateLeagueFirebase(code);
+    return joinPrivateLeagueLocal(code);
+  },
+
+  async getPrivateLeagues() {
+    if (!currentUser) return [];
+    if (useFirebase()) return getPrivateLeaguesFirebase();
+    return getPrivateLeaguesLocal();
+  },
+
+  async getPrivateLeagueLeaderboard(leagueId) {
+    if (useFirebase()) return getPrivateLeagueLeaderboardFirebase(leagueId);
+    return getPrivateLeagueLeaderboardLocal(leagueId);
+  },
+
   async placeBet(stake, slip, totalOdds) {
     if (!currentUser) throw new Error("Log in to place a bet.");
     if (stake <= 0) throw new Error("Enter a stake greater than 0.");
@@ -329,7 +568,16 @@ window.WC26Auth = {
       totalOdds,
       potential: Math.round(potential * 100) / 100,
       legs: slip.length,
-      picks: slip.map((s) => ({ pick: s.pick, odds: s.odds, match: s.match })),
+      picks: slip.map((s) => ({
+        pick: s.pick,
+        odds: s.odds,
+        match: s.match,
+        home: s.home,
+        away: s.away,
+        market: s.market,
+        outcome: s.outcome,
+        fixtureId: s.fixtureId,
+      })),
       placedAt: Date.now(),
       status: "open",
     };
@@ -337,6 +585,45 @@ window.WC26Auth = {
     if (useFirebase()) await updateTokensFirebase(-stake, record);
     else await updateTokensLocal(-stake, record);
     return record;
+  },
+
+  getBets() {
+    return currentUser?.bets || [];
+  },
+
+  async cancelBet(betId) {
+    if (!currentUser) throw new Error("Log in first.");
+    const bets = [...(currentUser.bets || [])];
+    const bet = findBet(bets, betId);
+    bet.status = "cancelled";
+    await persistBets(bets, bet.stake);
+    return bet;
+  },
+
+  async removeBetLeg(betId, legIndex) {
+    if (!currentUser) throw new Error("Log in first.");
+    const bets = [...(currentUser.bets || [])];
+    const bet = findBet(bets, betId);
+    if (legIndex < 0 || legIndex >= bet.picks.length) throw new Error("Invalid leg.");
+    if (bet.picks.length === 1) return this.cancelBet(betId);
+    bet.picks.splice(legIndex, 1);
+    recalcBet(bet);
+    await persistBets(bets);
+    return bet;
+  },
+
+  async updateBetStake(betId, newStake) {
+    if (!currentUser) throw new Error("Log in first.");
+    const stake = Math.round(Number(newStake));
+    if (!stake || stake < 1) throw new Error("Enter a stake of at least 1.");
+    const bets = [...(currentUser.bets || [])];
+    const bet = findBet(bets, betId);
+    const delta = stake - bet.stake;
+    if (delta > 0 && currentUser.tokens < delta) throw new Error("Not enough tokens.");
+    bet.stake = stake;
+    recalcBet(bet);
+    await persistBets(bets, -delta);
+    return bet;
   },
 
   formatSlipForShare(slip, stake, totalOdds) {
@@ -351,8 +638,7 @@ window.WC26Auth = {
       `Stake: ${stake} tokens`,
       `Potential return: ${(stake * totalOdds).toFixed(2)} tokens`,
       "",
-      "Fair odds from Poisson model — for fun, not real betting.",
-      "https://omeryaacobi.github.io/ML-WC26-Prediction/",
+      (typeof SITE_CONFIG !== "undefined" ? SITE_CONFIG.publicUrl : window.location.href),
     ];
     return lines.join("\n");
   },

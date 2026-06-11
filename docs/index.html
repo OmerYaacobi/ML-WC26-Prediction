@@ -48,6 +48,7 @@
     <nav class="nav">
       <button class="nav-pill active" data-view="match">Match Odds</button>
       <button class="nav-pill" data-view="groups">Groups</button>
+      <button class="nav-pill" data-view="mybets">My Bets</button>
       <button class="nav-pill" data-view="league">League</button>
       <button class="nav-pill" data-view="explain">How It Works</button>
     </nav>
@@ -67,6 +68,7 @@
   <!-- ======================= MATCH VIEW ======================= -->
   <section class="view" id="view-match">
 
+    <div class="match-lock-banner hidden" id="matchLockBanner"></div>
     <div class="picker-bar panel">
       <div class="picker">
         <label for="homeSelect">Team A</label>
@@ -87,7 +89,7 @@
       may benefit in the real 2026 tournament, but that effect is not included here.
     </p>
 
-    <h2 class="section-title">Markets <span class="fair-tag">fair odds · no margin</span></h2>
+    <h2 class="section-title">Markets <span class="fair-tag">model odds</span></h2>
     <div class="markets-grid" id="marketsGrid"></div>
 
     <h2 class="section-title">Insights</h2>
@@ -105,7 +107,7 @@
     </h2>
     <div class="groups-grid" id="groupsGrid"></div>
 
-    <h2 class="section-title">Fixture Finder</h2>
+    <h2 class="section-title">Fixture Finder <span class="fair-tag" id="fixturesMeta"></span></h2>
     <div class="panel fixtures-panel">
       <div class="fixture-filters">
         <select id="groupFilter"></select>
@@ -122,8 +124,8 @@
 
   <!-- ======================= LEAGUE VIEW ======================= -->
   <section class="view hidden" id="view-league">
-    <h2 class="section-title">🏆 Token League <span class="fair-tag">richest predictors</span></h2>
-    <p class="note league-note">Everyone starts with <strong>10,000 tokens</strong>. Place bets from your slip to compete — highest balance wins the league.</p>
+    <h2 class="section-title">🌍 Global League <span class="fair-tag">all players</span></h2>
+    <p class="note league-note">Everyone starts with <strong>10,000 tokens</strong>. Same balance counts everywhere — global and private leagues.</p>
     <div class="panel league-panel">
       <div class="league-you" id="leagueYou"></div>
       <table class="league-table" id="leagueTable">
@@ -131,8 +133,29 @@
         <tbody id="leagueBody"></tbody>
       </table>
     </div>
-    <h2 class="section-title">Your Recent Bets</h2>
-    <div class="panel" id="betHistory"><p class="note">No bets placed yet.</p></div>
+
+    <h2 class="section-title">👥 Private Leagues <span class="fair-tag">friends only</span></h2>
+    <p class="note" id="privateLeagueNote">Create a league and share the 6-digit ID with friends, or join theirs.</p>
+    <div class="private-league-actions">
+      <button class="pl-btn pl-create" id="createLeagueBtn">➕ Create private league</button>
+      <button class="pl-btn pl-join" id="joinLeagueBtn">🔗 Join private league</button>
+    </div>
+    <div class="private-league-tabs hidden" id="privateLeagueTabs"></div>
+    <div class="panel league-panel hidden" id="privateLeaguePanel">
+      <div class="league-you" id="privateLeagueYou"></div>
+      <div class="pl-meta" id="privateLeagueMeta"></div>
+      <table class="league-table" id="privateLeagueTable">
+        <thead><tr><th>#</th><th>Player</th><th>Tokens</th></tr></thead>
+        <tbody id="privateLeagueBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ======================= MY BETS VIEW ======================= -->
+  <section class="view hidden" id="view-mybets">
+    <h2 class="section-title">🧾 My Bets</h2>
+    <p class="note">Open bets can be edited until kickoff — change stake, remove legs, or cancel for a full refund.</p>
+    <div id="myBetsList"></div>
   </section>
 
   <!-- ======================= EXPLAIN VIEW ======================= -->
@@ -152,25 +175,23 @@
       <div class="panel explain-card">
         <h3>📊 Expected Goals (xG)</h3>
         <p>xG is the <em>average</em> goals a team is expected to score — not a guarantee. An xG of 2.0 means scoring exactly 2 is only ~27% likely; 1–1 can beat 2–1 because both teams need specific goal counts.</p>
-        <p><strong>Fair odds</strong> = 1 ÷ probability, with no bookmaker margin. Odds of 2.50 = 40% model chance.</p>
+        <p><strong>Model odds</strong> = 1 ÷ probability, no bookmaker margin. Odds of 2.50 ≈ 40% model chance before margin.</p>
       </div>
       <div class="panel explain-card">
         <h3>🪙 Tokens &amp; League</h3>
         <p>Every new account gets <strong>10,000 tokens</strong> (play money). Build a bet slip from any market, set your stake, and hit <strong>Place Bet</strong> to lock it in.</p>
-        <p>The <strong>League</strong> tab ranks all players by token balance. Climb the board by picking winners — or go bust trying!</p>
+        <p>The <strong>League</strong> tab ranks all players globally. Create a <strong>private league</strong> with a 6-digit ID so your friend group can compete separately.</p>
       </div>
       <div class="panel explain-card">
         <h3>🧾 Bet Slip</h3>
         <p>Tap any odds button to add a selection. Mix markets across different matches for an accumulator.</p>
         <p><strong>Send Bet Slip</strong> copies your selections to share with friends. <strong>Place Bet</strong> deducts your stake from your token balance.</p>
-        <p class="warn">For fun and analysis only — <strong>not real betting advice</strong>.</p>
       </div>
     </div>
   </section>
 
   <footer class="footer">
-    Predictions are statistical estimates for analysis and fun — <strong>not betting advice</strong>.
-    · <a href="https://github.com/OmerYaacobi/ML-WC26-Prediction" target="_blank" rel="noopener">OmerYaacobi/ML-WC26-Prediction</a>
+    <a href="#" id="footerLink" target="_blank" rel="noopener"></a>
   </footer>
 </main>
 
@@ -187,9 +208,28 @@
 
 <div class="toast" id="toast"></div>
 
+<div class="modal-backdrop hidden" id="leagueModalBackdrop"></div>
+<div class="modal hidden" id="leagueModal">
+  <div class="modal-card panel">
+    <button class="modal-close" id="leagueModalClose" type="button">✕</button>
+    <h3 class="modal-title" id="leagueModalTitle">Private league</h3>
+    <form id="createLeagueForm" class="modal-form hidden">
+      <label>League name<input type="text" id="createLeagueName" required placeholder="e.g. Office WC Pool" minlength="2" maxlength="40"></label>
+      <button type="submit" class="auth-submit">Create league</button>
+    </form>
+    <form id="joinLeagueForm" class="modal-form hidden">
+      <label>League ID (6 digits)<input type="text" id="joinLeagueCode" required placeholder="482910" pattern="[0-9]{6}" maxlength="6" inputmode="numeric"></label>
+      <button type="submit" class="auth-submit">Join league</button>
+    </form>
+    <p class="auth-error hidden" id="leagueModalError"></p>
+  </div>
+</div>
+
+<script src="site-config.js"></script>
 <script src="firebase-config.js"></script>
-<script src="auth.js"></script>
 <script src="data.js"></script>
+<script src="fixtures.js"></script>
+<script src="auth.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

@@ -126,6 +126,38 @@ By default the league is stored **in the browser** (works offline on GitHub Page
 
 ---
 
+## Live schedule, scores & bet settlement
+
+The Match Centre no longer invents arbitrary pairings. **Group-stage fixtures** come from your [odds-api.io](https://odds-api.io) key (same `ODDS_API_KEY` as `fetch_group_odds.py`):
+
+| What | How |
+|------|-----|
+| **Real kickoff times** | `GET /v3/events` returns `date`, `status`, and `scores` per match |
+| **Finished scores** | When `status` is `settled`, `scores.periods.ft` has the full-time result |
+| **Betting lock** | Bets only accepted on `pending` fixtures before kickoff |
+| **Auto refresh** | GitHub Action `.github/workflows/sync-fixtures.yml` (every 30 min) |
+
+### Refresh locally
+
+```bash
+python scripts/fetch_fixtures.py    # pull WC26 group-stage events + scores
+python scripts/publish_fixtures.py  # write docs/fixtures.js for GitHub Pages
+```
+
+Until the API lists World Cup matches, the app shows the official 72 group pairings with **betting disabled** (`bettable: false`).
+
+### Settle bets after full time
+
+```bash
+python scripts/settle_bets.py
+```
+
+Requires a Firebase **service account** JSON (`firebase-service-account.json`, gitignored) to credit winning tokens in Firestore. Add repo secrets `ODDS_API_KEY` and `FIREBASE_SERVICE_ACCOUNT` for hands-free runs via GitHub Actions.
+
+Knockout rounds can be added later by extending `scripts/fetch_fixtures.py` once you want R16+ markets.
+
+---
+
 ## Run locally (developers)
 
 Want to modify the model, rebuild features, or run the CLI? Clone the repo:

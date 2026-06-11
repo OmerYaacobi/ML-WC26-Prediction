@@ -10,6 +10,7 @@
 const MAX_GOALS = 10;        // scan grid size (matches the Python engine)
 const HEAT_CAP = 6;          // heatmap shows 0..5 and aggregates 6+
 const DIST_CAP = 7;          // goal distribution shows 0..6 and aggregates 7+
+const BOOK_MARGIN = 0.0;      // 5% bookmaker margin on displayed odds (tune in one place)
 
 /* ---------------- static tournament data ---------------- */
 
@@ -57,9 +58,37 @@ function groupFixtures(teams) {
   ];
 }
 
-const ALL_FIXTURES = Object.entries(GROUPS).flatMap(([group, teams]) =>
-  groupFixtures(teams).map((f) => ({ group, ...f }))
-);
+function getFixture(home, away) {
+  return WC26_FIXTURES.find(
+    (f) => (f.home === home && f.away === away) || (f.home === away && f.away === home)
+  );
+}
+
+function isBettable(home, away) {
+  const fx = getFixture(home, away);
+  return !!(fx && fx.bettable && fx.status === "pending");
+}
+
+function fmtKickoff(iso) {
+  if (!iso) return "Date TBD";
+  return new Date(iso).toLocaleString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function fixtureStatusLabel(f) {
+  if (f.status === "settled" && f.homeScore != null) {
+    return `${f.homeScore}–${f.awayScore} FT`;
+  }
+  if (f.status === "live") return "LIVE";
+  if (!f.bettable && f.kickoff) return "Betting closed";
+  if (!f.kickoff) return "Awaiting schedule";
+  return fmtKickoff(f.kickoff);
+}
 
 /* ---------------- Poisson engine ---------------- */
 
@@ -109,9 +138,14 @@ const flag = (t) => FLAGS[t] || "⚽";
 const dname = (t) => DISPLAY_NAMES[t] || t;
 const label = (t) => `${flag(t)} ${dname(t)}`;
 
+function bookOdds(p) {
+  if (p < 1e-4) return Infinity;
+  return 1 / Math.min(0.999, p * (1 + BOOK_MARGIN));
+}
+
 function fmtOdds(p) {
-  if (p < 1e-4) return "—";
-  const o = 1 / p;
+  const o = bookOdds(p);
+  if (!isFinite(o)) return "—";
   if (o >= 100) return o.toFixed(0);
   return o.toFixed(2);
 }
@@ -131,12 +165,17 @@ function outcomeTriple(pH, pD, pA) {
 
 /* ---------------- app state ---------------- */
 
-const TEAMS = Object.keys(TEAM_RATINGS).sort();
+const SCHEDULED_TEAMS = [...new Set(WC26_FIXTURES.flatMap((f) => [f.home, f.away]))]
+  .filter((t) => TEAM_RATINGS[t])
+  .sort();
+const TEAMS = SCHEDULED_TEAMS.length ? SCHEDULED_TEAMS : Object.keys(TEAM_RATINGS).sort();
+const firstFx = WC26_FIXTURES.find((f) => f.bettable) || WC26_FIXTURES[0];
 const state = {
-  home: TEAMS.includes("Argentina") ? "Argentina" : TEAMS[0],
-  away: TEAMS.includes("Algeria") ? "Algeria" : TEAMS.find((t) => t !== TEAMS[0]),
+  home: firstFx?.home || (TEAMS.includes("Argentina") ? "Argentina" : TEAMS[0]),
+  away: firstFx?.away || (TEAMS.includes("Algeria") ? "Algeria" : TEAMS.find((t) => t !== TEAMS[0])),
   slip: [],
   stake: 10,
+  selectedPrivateLeague: localStorage.getItem("wc26-selected-private-league") || null,
 };
 
 try {
@@ -166,16 +205,42 @@ function fillSelects() {
 function oddsBtn(m, market, pick, p, extra = {}) {
   const selId = `${m.home}|${m.away}|${market}`;
   const selected = state.slip.some((s) => s.id === selId && s.pick === pick);
-  const cls = ["odds-btn", selected ? "selected" : "", extra.best ? "best" : "", extra.cls || ""].join(" ");
+  const locked = extra.locked;
+  const cls = ["odds-btn", selected ? "selected" : "", extra.best ? "best" : "", extra.cls || "", locked ? "locked" : ""]
+    .filter(Boolean)
+    .join(" ");
   const title = extra.title || pick;
+  const dis = locked ? "disabled" : "";
   return `<button class="${cls}" data-id="${selId}" data-market="${market}" data-pick="${pick}"
-            data-odds="${(1 / p).toFixed(4)}" data-prob="${p.toFixed(6)}" title="${title}">
+            data-odds="${bookOdds(p).toFixed(4)}" data-prob="${p.toFixed(6)}" title="${title}" ${dis}>
             ${extra.top || ""}<span class="ob-odds">${fmtOdds(p)}</span>
             <span class="ob-prob">${extra.pct !== undefined ? `${extra.pct.toFixed(1)}%` : fmtPct(p)}</span></button>`;
 }
 
 function renderMatch() {
   const m = computeMatch(state.home, state.away);
+  const fx = getFixture(state.home, state.away);
+  const locked = !isBettable(state.home, state.away);
+  const lockEl = $("matchLockBanner");
+  if (fx && locked) {
+    lockEl.classList.remove("hidden");
+    lockEl.textContent =
+      fx.status === "settled"
+        ? `Final: ${dname(fx.home)} ${fx.homeScore}–${fx.awayScore} ${dname(fx.away)} — betting closed.`
+        : fx.status === "live"
+          ? "Match in progress — betting closed."
+          : fx.kickoff
+            ? `Kickoff ${fmtKickoff(fx.kickoff)} — betting closed for this match.`
+            : "This match is not open for betting yet. Load the live schedule with scripts/fetch_fixtures.py.";
+  } else if (fx && fx.kickoff) {
+    lockEl.classList.remove("hidden");
+    lockEl.classList.add("open");
+    lockEl.textContent = `${fx.group} · ${fmtKickoff(fx.kickoff)} · betting open until kickoff`;
+  } else {
+    lockEl.classList.add("hidden");
+    lockEl.classList.remove("open");
+  }
+
   const [hPct, dPct, aPct] = outcomeTriple(m.pHome, m.pDraw, m.pAway);
   const outcomes = [
     { lab: `${dname(m.home)} Win`, pct: hPct, p: m.pHome, key: "home" },
@@ -217,31 +282,32 @@ function renderMatch() {
     </div>`;
 
   // --- markets ---
+  const lockOpt = { locked };
   const row = (labelHtml, btns) =>
     `<div class="market-row"><span class="row-label">${labelHtml}</span>${btns}</div>`;
   const card = (name, inner) =>
     `<div class="market-card"><div class="market-name">${name}</div><div class="market-rows">${inner}</div></div>`;
 
   const m1x2 = card("Match Result (1X2)",
-    row(label(m.home), oddsBtn(m, "1X2", `${dname(m.home)} Win`, m.pHome, { best: pick.key === "home", pct: hPct })) +
-    row("🤝 Draw", oddsBtn(m, "1X2", "Draw", m.pDraw, { best: pick.key === "draw", pct: dPct })) +
-    row(label(m.away), oddsBtn(m, "1X2", `${dname(m.away)} Win`, m.pAway, { best: pick.key === "away", pct: aPct })));
+    row(label(m.home), oddsBtn(m, "1X2", `${dname(m.home)} Win`, m.pHome, { ...lockOpt, best: pick.key === "home", pct: hPct })) +
+    row("🤝 Draw", oddsBtn(m, "1X2", "Draw", m.pDraw, { ...lockOpt, best: pick.key === "draw", pct: dPct })) +
+    row(label(m.away), oddsBtn(m, "1X2", `${dname(m.away)} Win`, m.pAway, { ...lockOpt, best: pick.key === "away", pct: aPct })));
 
   const mdc = card("Double Chance",
-    row(`${dname(m.home)} or Draw`, oddsBtn(m, "DC", `${dname(m.home)} or Draw`, m.pHome + m.pDraw)) +
-    row(`${dname(m.home)} or ${dname(m.away)}`, oddsBtn(m, "DC", `${dname(m.home)} or ${dname(m.away)}`, m.pHome + m.pAway)) +
-    row(`Draw or ${dname(m.away)}`, oddsBtn(m, "DC", `Draw or ${dname(m.away)}`, m.pDraw + m.pAway)));
+    row(`${dname(m.home)} or Draw`, oddsBtn(m, "DC", `${dname(m.home)} or Draw`, m.pHome + m.pDraw, lockOpt)) +
+    row(`${dname(m.home)} or ${dname(m.away)}`, oddsBtn(m, "DC", `${dname(m.home)} or ${dname(m.away)}`, m.pHome + m.pAway, lockOpt)) +
+    row(`Draw or ${dname(m.away)}`, oddsBtn(m, "DC", `Draw or ${dname(m.away)}`, m.pDraw + m.pAway, lockOpt)));
 
   const mtot = card("Total Goals (Over / Under)",
     [1.5, 2.5, 3.5].map((line) =>
       row(`${line} goals`,
-        oddsBtn(m, `OU${line}`, `Over ${line}`, m.totals[line], { title: `Over ${line} goals` }) +
-        oddsBtn(m, `OU${line}`, `Under ${line}`, 1 - m.totals[line], { title: `Under ${line} goals` }))
+        oddsBtn(m, `OU${line}`, `Over ${line}`, m.totals[line], { ...lockOpt, title: `Over ${line} goals` }) +
+        oddsBtn(m, `OU${line}`, `Under ${line}`, 1 - m.totals[line], { ...lockOpt, title: `Under ${line} goals` }))
     ).join(""));
 
   const mbtts = card("Both Teams To Score",
-    row("Yes — both score", oddsBtn(m, "BTTS", "BTTS: Yes", m.pBtts)) +
-    row("No — at least one blanks", oddsBtn(m, "BTTS", "BTTS: No", 1 - m.pBtts)));
+    row("Yes — both score", oddsBtn(m, "BTTS", "BTTS: Yes", m.pBtts, lockOpt)) +
+    row("No — at least one blanks", oddsBtn(m, "BTTS", "BTTS: No", 1 - m.pBtts, lockOpt)));
 
   const top6 = m.scorelines.slice(0, 6);
   const ranks = ["①", "②", "③", "④", "⑤", "⑥"];
@@ -250,10 +316,10 @@ function renderMatch() {
       const pickLab = `Score ${s.h}–${s.g}`;
       const selId = `${m.home}|${m.away}|CS`;
       const selected = state.slip.some((x) => x.id === selId && x.pick === pickLab);
-      return `<button class="odds-btn score-btn ${selected ? "selected" : ""} ${i === 0 ? "best" : ""}"
+      return `<button class="odds-btn score-btn ${selected ? "selected" : ""} ${i === 0 ? "best" : ""} ${locked ? "locked" : ""}"
         data-id="${selId}" data-market="CS" data-pick="${pickLab}"
-        data-odds="${(m.total / s.p).toFixed(4)}" data-prob="${(s.p / m.total).toFixed(6)}"
-        title="${dname(m.home)} ${s.h} – ${s.g} ${dname(m.away)}">
+        data-odds="${bookOdds(s.p / m.total).toFixed(4)}" data-prob="${(s.p / m.total).toFixed(6)}"
+        title="${dname(m.home)} ${s.h} – ${s.g} ${dname(m.away)}" ${locked ? "disabled" : ""}>
         <span class="rank-dot">${ranks[i]}${i === 0 ? " most likely" : ""}</span>
         <span class="ob-odds ob-score">${s.h} – ${s.g}</span>
         <span class="ob-prob">${fmtPct(s.p / m.total, 2)} · @${fmtOdds(s.p / m.total)}</span></button>`;
@@ -341,15 +407,28 @@ function renderGroups() {
 function renderFixtures() {
   const g = $("groupFilter").value;
   const md = document.querySelector("#mdFilter .seg-btn.active").dataset.md;
-  const list = ALL_FIXTURES.filter(
+  const list = WC26_FIXTURES.filter(
     (f) => (g === "all" || f.group === g) && (md === "all" || String(f.md) === md)
   );
-  $("fixturesList").innerHTML = list.map((f) => `
-    <div class="fixture-row">
+  const meta = FIXTURES_META || {};
+  $("fixturesMeta").textContent =
+    meta.source === "api"
+      ? `live schedule · updated ${meta.updatedAt ? new Date(meta.updatedAt).toLocaleString() : ""}`
+      : "awaiting API schedule — run fetch_fixtures.py";
+
+  $("fixturesList").innerHTML = list.length
+    ? list.map((f) => {
+        const statusCls =
+          f.status === "settled" ? "done" : f.status === "live" ? "live" : f.bettable ? "open" : "locked";
+        return `
+    <div class="fixture-row ${f.bettable ? "" : "fixture-closed"}">
       <span class="fx-meta">${f.group} · MD ${f.md}</span>
       <span class="fx-teams"><b>${label(f.home)}</b> <span class="fx-vs">vs</span> <b>${label(f.away)}</b></span>
+      <span class="fx-status ${statusCls}">${fixtureStatusLabel(f)}</span>
       <button class="fx-btn" data-home="${f.home}" data-away="${f.away}">View odds →</button>
-    </div>`).join("");
+    </div>`;
+      }).join("")
+    : `<p class="note">No group-stage fixtures loaded yet.</p>`;
 }
 
 /* ---------------- bet slip ---------------- */
@@ -387,7 +466,7 @@ function renderSlip() {
       <button class="slip-place" id="slipPlace">✅ Place bet</button>
     </div>
     <button class="slip-clear" id="slipClear">Clear slip</button>
-    <div class="slip-note">Fair odds from the model — play-money tokens only. Not real betting advice.</div>`;
+    <div class="slip-note">${(BOOK_MARGIN * 100).toFixed(0)}% bookmaker margin applied to displayed odds.</div>`;
 
   $("stakeInput").addEventListener("input", (e) => {
     state.stake = Math.max(1, parseFloat(e.target.value) || 1);
@@ -424,6 +503,11 @@ async function sendBetSlip(totalOdds) {
 }
 
 async function placeBet(totalOdds) {
+  const closed = state.slip.find((s) => !isBettable(s.home, s.away));
+  if (closed) {
+    toast("Betting closed for one or more selections on your slip");
+    return;
+  }
   try {
     await WC26Auth.placeBet(state.stake, state.slip, totalOdds);
     state.slip = [];
@@ -432,6 +516,7 @@ async function placeBet(totalOdds) {
     renderMatch();
     updateUserUI();
     toast("Bet placed! Good luck 🍀");
+    if (!$("view-mybets").classList.contains("hidden")) renderMyBets();
   } catch (e) {
     toast(e.message || "Could not place bet");
   }
@@ -443,8 +528,9 @@ async function renderLeague() {
   const rank = board.findIndex((u) => u.id === user?.id) + 1;
 
   $("leagueYou").innerHTML = user
-    ? `<div class="ly-row"><span>Your rank</span><b>#${rank || "—"} of ${board.length}</b></div>
-       <div class="ly-row"><span>Your balance</span><b class="big">🪙 ${user.tokens.toLocaleString()}</b></div>`
+    ? `<div class="ly-row"><span>Global rank</span><b>#${rank || "—"} of ${board.length}</b></div>
+       <div class="ly-row"><span>Your balance</span><b class="big">🪙 ${user.tokens.toLocaleString()}</b></div>
+       <div class="ly-row"><span>Playing as</span><b>${user.username}</b></div>`
     : "";
 
   $("leagueBody").innerHTML = board.map((u, i) => {
@@ -453,15 +539,132 @@ async function renderLeague() {
     return `<tr class="${isYou ? "you" : ""}"><td>${medal}</td><td>${u.username}${isYou ? " (you)" : ""}</td><td>🪙 ${u.tokens.toLocaleString()}</td></tr>`;
   }).join("");
 
-  const bets = user?.bets || [];
-  $("betHistory").innerHTML = bets.length
-    ? bets.slice(0, 10).map((b) => `
-      <div class="bet-card">
-        <div class="bet-top"><span>${b.legs} leg${b.legs > 1 ? "s" : ""} · stake ${b.stake}</span><span class="bet-odds">@${b.totalOdds.toFixed(2)}</span></div>
-        <div class="bet-meta">Potential ${b.potential.toLocaleString()} tokens · ${new Date(b.placedAt).toLocaleDateString()}</div>
-        ${b.picks.map((p) => `<div class="bet-pick">${p.pick} — ${p.match}</div>`).join("")}
-      </div>`).join("")
-    : `<p class="note">No bets placed yet. Build a slip and hit <strong>Place bet</strong>.</p>`;
+  $("privateLeagueNote").textContent = WC26Auth.isCloud()
+    ? "Create a league, share the 6-digit ID with friends, or join theirs."
+    : "Private leagues work in this browser only. Enable Firebase for leagues shared with friends online.";
+
+  if (!user) {
+    $("privateLeagueTabs").classList.add("hidden");
+    $("privateLeaguePanel").classList.add("hidden");
+    return;
+  }
+
+  const privateLeagues = await WC26Auth.getPrivateLeagues();
+  if (!privateLeagues.length) {
+    $("privateLeagueTabs").classList.add("hidden");
+    $("privateLeaguePanel").classList.add("hidden");
+    return;
+  }
+
+  if (!state.selectedPrivateLeague || !privateLeagues.some((l) => (l.code || l.id) === state.selectedPrivateLeague)) {
+    state.selectedPrivateLeague = privateLeagues[0].code || privateLeagues[0].id;
+    localStorage.setItem("wc26-selected-private-league", state.selectedPrivateLeague);
+  }
+
+  $("privateLeagueTabs").classList.remove("hidden");
+  $("privateLeagueTabs").innerHTML = privateLeagues
+    .map((l) => {
+      const code = l.code || l.id;
+      const active = code === state.selectedPrivateLeague ? "active" : "";
+      return `<button class="pl-tab ${active}" data-league="${code}">${l.name}</button>`;
+    })
+    .join("");
+
+  const active = privateLeagues.find((l) => (l.code || l.id) === state.selectedPrivateLeague) || privateLeagues[0];
+  const code = active.code || active.id;
+  const pBoard = await WC26Auth.getPrivateLeagueLeaderboard(code);
+  const pRank = pBoard.findIndex((u) => u.id === user.id) + 1;
+
+  $("privateLeaguePanel").classList.remove("hidden");
+  $("privateLeagueYou").innerHTML = `
+    <div class="ly-row"><span>Rank in this group</span><b>#${pRank || "—"} of ${pBoard.length}</b></div>
+    <div class="ly-row"><span>Your balance</span><b class="big">🪙 ${user.tokens.toLocaleString()}</b></div>`;
+  $("privateLeagueMeta").innerHTML = `
+    <span class="pl-id">League ID: <b id="activeLeagueCode">${code}</b></span>
+    <button class="pl-copy" type="button" id="copyLeagueCodeBtn">Copy ID</button>`;
+  $("privateLeagueBody").innerHTML = pBoard.map((u, i) => {
+    const isYou = u.id === user.id;
+    const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : i + 1;
+    return `<tr class="${isYou ? "you" : ""}"><td>${medal}</td><td>${u.username}${isYou ? " (you)" : ""}</td><td>🪙 ${u.tokens.toLocaleString()}</td></tr>`;
+  }).join("");
+}
+
+function showLeagueModal(mode) {
+  $("leagueModalBackdrop").classList.remove("hidden");
+  $("leagueModal").classList.remove("hidden");
+  $("leagueModalError").classList.add("hidden");
+  $("createLeagueForm").classList.toggle("hidden", mode !== "create");
+  $("joinLeagueForm").classList.toggle("hidden", mode !== "join");
+  $("leagueModalTitle").textContent = mode === "create" ? "Create private league" : "Join private league";
+}
+
+function hideLeagueModal() {
+  $("leagueModalBackdrop").classList.add("hidden");
+  $("leagueModal").classList.add("hidden");
+  $("createLeagueName").value = "";
+  $("joinLeagueCode").value = "";
+  $("leagueModalError").classList.add("hidden");
+}
+
+function showLeagueModalError(msg) {
+  const el = $("leagueModalError");
+  el.textContent = msg;
+  el.classList.toggle("hidden", !msg);
+}
+
+function betEditable(bet) {
+  if (bet.status !== "open") return false;
+  return bet.picks.every((p) => p.home && p.away && isBettable(p.home, p.away));
+}
+
+function betStatusLabel(status) {
+  return { open: "Open", won: "Won", lost: "Lost", cancelled: "Cancelled" }[status] || status;
+}
+
+async function renderMyBets() {
+  const user = WC26Auth.getUser();
+  if (!user) {
+    $("myBetsList").innerHTML = `<p class="note">Log in to view your bets.</p>`;
+    return;
+  }
+  const bets = WC26Auth.getBets();
+  if (!bets.length) {
+    $("myBetsList").innerHTML = `<p class="note">No bets yet. Build a slip from Match Odds and hit <strong>Place bet</strong>.</p>`;
+    return;
+  }
+
+  $("myBetsList").innerHTML = bets
+    .map((b) => {
+      const editable = betEditable(b);
+      const statusCls = b.status === "open" ? "open" : b.status === "won" ? "won" : b.status === "lost" ? "lost" : "cancelled";
+      return `
+    <div class="panel my-bet-card" data-bet-id="${b.id}">
+      <div class="bet-top">
+        <span class="bet-status ${statusCls}">${betStatusLabel(b.status)}</span>
+        <span>${b.legs} leg${b.legs > 1 ? "s" : ""} · @${b.totalOdds.toFixed(2)}</span>
+      </div>
+      <div class="bet-meta">Placed ${new Date(b.placedAt).toLocaleString()} · Potential <b>${b.potential.toLocaleString()}</b> tokens</div>
+      ${b.picks
+        .map(
+          (p, i) => `
+        <div class="bet-pick-row">
+          <span>${p.pick} — ${p.match}</span>
+          ${editable ? `<button class="bet-leg-remove" data-action="remove-leg" data-bet="${b.id}" data-leg="${i}">Remove</button>` : ""}
+        </div>`
+        )
+        .join("")}
+      <div class="my-bet-foot">
+        ${
+          editable
+            ? `<label class="stake-edit">Stake <input type="number" min="1" max="${user.tokens + b.stake}" value="${b.stake}" data-stake-input="${b.id}"></label>
+               <button class="bet-save-stake" data-action="save-stake" data-bet="${b.id}">Update stake</button>
+               <button class="bet-cancel" data-action="cancel" data-bet="${b.id}">Cancel bet · refund ${b.stake}</button>`
+            : `<span class="bet-locked-stake">Stake: ${b.stake} tokens</span>`
+        }
+      </div>
+    </div>`;
+    })
+    .join("");
 }
 
 function updateUserUI() {
@@ -470,10 +673,40 @@ function updateUserUI() {
   $("userPill").textContent = user ? user.username : "";
 }
 
+function outcomeKey(market, pick, home, away) {
+  if (market === "1X2") {
+    if (pick === "Draw") return "draw";
+    if (pick === `${dname(home)} Win`) return "home";
+    if (pick === `${dname(away)} Win`) return "away";
+  }
+  if (market === "DC") {
+    if (pick === `${dname(home)} or Draw`) return "1X";
+    if (pick === `${dname(home)} or ${dname(away)}`) return "12";
+    if (pick === `Draw or ${dname(away)}`) return "X2";
+  }
+  if (market.startsWith("OU")) {
+    const line = market.slice(2);
+    if (pick === `Over ${line}`) return `over_${line}`;
+    if (pick === `Under ${line}`) return `under_${line}`;
+  }
+  if (market === "BTTS") return pick === "BTTS: Yes" ? "btts_yes" : "btts_no";
+  if (market === "CS") {
+    const m = pick.match(/(\d+)[–-](\d+)/);
+    if (m) return `cs_${m[1]}_${m[2]}`;
+  }
+  return null;
+}
+
 function toggleSelection(btn) {
+  if (btn.disabled || btn.classList.contains("locked")) return;
   const { id, market, pick } = btn.dataset;
   const odds = parseFloat(btn.dataset.odds);
   const [home, away] = id.split("|");
+  if (!isBettable(home, away)) {
+    toast("Betting closed for this match");
+    return;
+  }
+  const fx = getFixture(home, away);
   const existing = state.slip.findIndex((s) => s.id === id);
   const marketNames = { "1X2": "Match Result", DC: "Double Chance", BTTS: "Both Teams To Score", CS: "Correct Score" };
   const marketName = marketNames[market] || (market.startsWith("OU") ? `Total Goals ${market.slice(2)}` : market);
@@ -481,7 +714,18 @@ function toggleSelection(btn) {
   if (existing >= 0 && state.slip[existing].pick === pick) {
     state.slip.splice(existing, 1); // tap again to remove
   } else {
-    const sel = { id, pick, odds, marketName, match: `${dname(home)} vs ${dname(away)}` };
+    const sel = {
+      id,
+      pick,
+      odds,
+      market,
+      marketName,
+      home,
+      away,
+      fixtureId: fx?.id ?? null,
+      outcome: outcomeKey(market, pick, home, away),
+      match: `${dname(home)} vs ${dname(away)}`,
+    };
     if (existing >= 0) state.slip[existing] = sel; // replace pick within same market
     else state.slip.push(sel);
     toast(`Added: ${pick} @${odds.toFixed(2)}`);
@@ -506,9 +750,12 @@ function showView(view) {
   document.querySelectorAll(".nav-pill").forEach((b) => b.classList.toggle("active", b.dataset.view === view));
   $("view-match").classList.toggle("hidden", view !== "match");
   $("view-groups").classList.toggle("hidden", view !== "groups");
+  $("view-mybets").classList.toggle("hidden", view !== "mybets");
   $("view-league").classList.toggle("hidden", view !== "league");
   $("view-explain").classList.toggle("hidden", view !== "explain");
-  if (view === "league") renderLeague();
+    if (view === "league") renderLeague();
+    if (view === "mybets") renderMyBets();
+    if (!$("view-league").classList.contains("hidden")) renderLeague();
   window.scrollTo({ top: 0 });
 }
 
@@ -557,6 +804,84 @@ $("fixturesList").addEventListener("click", (e) => {
   renderMatch();
   showView("match");
   toast(`Loaded ${dname(state.home)} vs ${dname(state.away)}`);
+});
+
+$("myBetsList").addEventListener("click", async (e) => {
+  const btn = e.target.closest("[data-action]");
+  if (!btn) return;
+  const betId = btn.dataset.bet;
+  try {
+    if (btn.dataset.action === "cancel") {
+      await WC26Auth.cancelBet(betId);
+      toast("Bet cancelled — stake refunded");
+    } else if (btn.dataset.action === "remove-leg") {
+      await WC26Auth.removeBetLeg(betId, parseInt(btn.dataset.leg, 10));
+      toast("Leg removed");
+    } else if (btn.dataset.action === "save-stake") {
+      const input = document.querySelector(`[data-stake-input="${betId}"]`);
+      await WC26Auth.updateBetStake(betId, input.value);
+      toast("Stake updated");
+    }
+    updateUserUI();
+    renderMyBets();
+  } catch (err) {
+    toast(err.message || "Could not update bet");
+  }
+});
+
+$("createLeagueBtn").addEventListener("click", () => showLeagueModal("create"));
+$("joinLeagueBtn").addEventListener("click", () => showLeagueModal("join"));
+$("leagueModalClose").addEventListener("click", hideLeagueModal);
+$("leagueModalBackdrop").addEventListener("click", hideLeagueModal);
+
+$("createLeagueForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  showLeagueModalError("");
+  try {
+    const league = await WC26Auth.createPrivateLeague($("createLeagueName").value);
+    state.selectedPrivateLeague = league.code;
+    localStorage.setItem("wc26-selected-private-league", league.code);
+    hideLeagueModal();
+    renderLeague();
+    toast(`League created! Share ID ${league.code} with friends`);
+  } catch (err) {
+    showLeagueModalError(err.message);
+  }
+});
+
+$("joinLeagueForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  showLeagueModalError("");
+  try {
+    const league = await WC26Auth.joinPrivateLeague($("joinLeagueCode").value);
+    state.selectedPrivateLeague = league.code || league.id;
+    localStorage.setItem("wc26-selected-private-league", state.selectedPrivateLeague);
+    hideLeagueModal();
+    renderLeague();
+    toast(`Joined ${league.name}!`);
+  } catch (err) {
+    showLeagueModalError(err.message);
+  }
+});
+
+$("privateLeagueTabs").addEventListener("click", (e) => {
+  const tab = e.target.closest(".pl-tab");
+  if (!tab) return;
+  state.selectedPrivateLeague = tab.dataset.league;
+  localStorage.setItem("wc26-selected-private-league", state.selectedPrivateLeague);
+  renderLeague();
+});
+
+$("privateLeaguePanel").addEventListener("click", async (e) => {
+  if (!e.target.closest("#copyLeagueCodeBtn")) return;
+  const code = $("activeLeagueCode")?.textContent;
+  if (!code) return;
+  try {
+    await navigator.clipboard.writeText(code);
+    toast("League ID copied!");
+  } catch {
+    prompt("Copy league ID:", code);
+  }
 });
 
 /* ---------------- auth UI ---------------- */
@@ -624,6 +949,12 @@ $("logoutBtn").addEventListener("click", () => {
   showAuthGate();
 });
 
+if (typeof SITE_CONFIG !== "undefined") {
+  const foot = $("footerLink");
+  foot.href = SITE_CONFIG.githubUrl;
+  foot.textContent = SITE_CONFIG.footerLabel;
+}
+
 /* ---------------- boot ---------------- */
 
 (async () => {
@@ -635,6 +966,8 @@ $("logoutBtn").addEventListener("click", () => {
   WC26Auth.onChange((user) => {
     if (user && $("authGate").classList.contains("hidden") === false) enterApp();
     else updateUserUI();
+    if (!$("view-mybets").classList.contains("hidden")) renderMyBets();
+    if (!$("view-league").classList.contains("hidden")) renderLeague();
   });
 
   if (WC26Auth.getUser()) enterApp();
