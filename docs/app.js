@@ -58,15 +58,26 @@ function groupFixtures(teams) {
   ];
 }
 
+let liveFixtures = WC26_FIXTURES;
+let liveFixturesMeta = typeof FIXTURES_META !== "undefined" ? FIXTURES_META : {};
+
+function getFixtures() {
+  return liveFixtures;
+}
+
 function getFixture(home, away) {
-  return WC26_FIXTURES.find(
+  return liveFixtures.find(
     (f) => (f.home === home && f.away === away) || (f.home === away && f.away === home)
   );
 }
 
 function isBettable(home, away) {
   const fx = getFixture(home, away);
-  return !!(fx && fx.bettable && fx.status === "pending");
+  if (!fx) return false;
+  if (typeof WC26FixtureHelpers !== "undefined") {
+    return WC26FixtureHelpers.isBettableFixture(fx);
+  }
+  return !!(fx.bettable && fx.status === "pending");
 }
 
 function fmtKickoff(iso) {
@@ -404,31 +415,63 @@ function renderGroups() {
   }).join("");
 }
 
+function fixtureRowHtml(f, { showActions = true } = {}) {
+  const H = WC26FixtureHelpers;
+  const status = H.effectiveStatus(f);
+  const statusCls =
+    status === "settled" ? "done" : status === "live" ? "live" : isBettable(f.home, f.away) ? "open" : "locked";
+  const canBet = isBettable(f.home, f.away);
+  const actionBtn = !showActions
+    ? ""
+    : canBet
+      ? `<button class="fx-btn" data-home="${f.home}" data-away="${f.away}">View odds →</button>`
+      : status === "live"
+        ? `<button class="fx-btn fx-btn-muted" data-home="${f.home}" data-away="${f.away}">View match →</button>`
+        : `<span class="fx-locked-label">Betting closed</span>`;
+  return `
+    <div class="fixture-row ${canBet ? "" : "fixture-closed"}">
+      <span class="fx-meta">${f.group} · MD ${f.md}</span>
+      <span class="fx-teams"><b>${label(f.home)}</b> <span class="fx-vs">vs</span> <b>${label(f.away)}</b></span>
+      <span class="fx-status ${statusCls}">${H.statusLabel(f)}</span>
+      ${actionBtn}
+    </div>`;
+}
+
+function formatFixtureMeta(meta) {
+  if (meta?.source !== "api" || !meta.updatedAt) return "awaiting schedule";
+  const updated = new Date(meta.updatedAt);
+  const mins = Math.round((Date.now() - updated) / 60000);
+  if (mins > 15) return `updated ${updated.toLocaleString()} · may be stale (${mins} min old)`;
+  if (mins < 2) return "updated just now";
+  return `updated ${mins} min ago`;
+}
+
 function renderFixtures() {
   const g = $("groupFilter").value;
   const md = document.querySelector("#mdFilter .seg-btn.active").dataset.md;
-  const list = WC26_FIXTURES.filter(
-    (f) => (g === "all" || f.group === g) && (md === "all" || String(f.md) === md)
-  );
-  const meta = FIXTURES_META || {};
-  $("fixturesMeta").textContent =
-    meta.source === "api"
-      ? `live schedule · updated ${meta.updatedAt ? new Date(meta.updatedAt).toLocaleString() : ""}`
-      : "awaiting API schedule — run fetch_fixtures.py";
+  const H = WC26FixtureHelpers;
 
-  $("fixturesList").innerHTML = list.length
-    ? list.map((f) => {
-        const statusCls =
-          f.status === "settled" ? "done" : f.status === "live" ? "live" : f.bettable ? "open" : "locked";
-        return `
-    <div class="fixture-row ${f.bettable ? "" : "fixture-closed"}">
-      <span class="fx-meta">${f.group} · MD ${f.md}</span>
-      <span class="fx-teams"><b>${label(f.home)}</b> <span class="fx-vs">vs</span> <b>${label(f.away)}</b></span>
-      <span class="fx-status ${statusCls}">${fixtureStatusLabel(f)}</span>
-      <button class="fx-btn" data-home="${f.home}" data-away="${f.away}">View odds →</button>
-    </div>`;
-      }).join("")
-    : `<p class="note">No group-stage fixtures loaded yet.</p>`;
+  const active = getFixtures()
+    .filter((f) => H.isActive(f) && (g === "all" || f.group === g) && (md === "all" || String(f.md) === md))
+    .sort(H.sortActive);
+
+  const finished = getFixtures().filter((f) => H.isFinished(f)).sort(H.sortFinished);
+
+  const meta = liveFixturesMeta || FIXTURES_META || {};
+  $("fixturesMeta").textContent = formatFixtureMeta(meta);
+
+  const activeHtml = active.length
+    ? active.map((f) => fixtureRowHtml(f)).join("")
+    : `<p class="note">No upcoming or live matches in this filter.</p>`;
+
+  const finishedHtml = finished.length
+    ? `<div class="finished-block" id="finishedResults">
+        <h3 class="finished-heading">Finished Results <span class="finished-count">${finished.length}</span></h3>
+        <div class="fixtures-list finished-list">${finished.map((f) => fixtureRowHtml(f, { showActions: false })).join("")}</div>
+      </div>`
+    : "";
+
+  $("fixturesList").innerHTML = `<div class="fixtures-list active-list">${activeHtml}</div>${finishedHtml}`;
 }
 
 /* ---------------- bet slip ---------------- */
@@ -943,6 +986,54 @@ $("privateLeaguePanel").addEventListener("click", async (e) => {
 
 /* ---------------- auth UI ---------------- */
 
+function fixturesFingerprint(fixtures) {
+  return fixtures
+    .map((f) => `${f.id}:${f.status}:${f.homeScore ?? ""}:${f.awayScore ?? ""}`)
+    .join("|");
+}
+
+function applyFixtureData(data) {
+  if (!data?.fixtures?.length) return false;
+  const fp = fixturesFingerprint(data.fixtures);
+  const metaChanged = data.meta?.updatedAt && data.meta.updatedAt !== liveFixturesMeta?.updatedAt;
+  if (fp === fixturesFingerprint(liveFixtures)) {
+    if (metaChanged) {
+      liveFixturesMeta = data.meta;
+      if (!$("view-matches").classList.contains("hidden")) renderFixtures();
+    }
+    return false;
+  }
+  liveFixtures = data.fixtures;
+  liveFixturesMeta = data.meta;
+  return true;
+}
+
+function refreshFixtureViews() {
+  if (!$("view-matches").classList.contains("hidden")) renderFixtures();
+  if (!$("view-match").classList.contains("hidden")) renderMatch();
+  if (!$("view-groups").classList.contains("hidden")) renderGroups();
+  if (!$("view-mybets").classList.contains("hidden")) renderMyBets();
+}
+
+async function pollFixtures() {
+  try {
+    const res = await fetch(`fixtures.json?t=${Date.now()}`, { cache: "no-store" });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (applyFixtureData(data)) refreshFixtureViews();
+  } catch {
+    /* offline or fixtures.json not deployed yet */
+  }
+}
+
+function startFixturePolling() {
+  pollFixtures();
+  setInterval(pollFixtures, 60 * 1000);
+  setInterval(() => {
+    if (!$("mainPage").classList.contains("hidden")) refreshFixtureViews();
+  }, 60 * 1000);
+}
+
 function showAuthError(msg) {
   const el = $("authError");
   el.textContent = msg;
@@ -959,6 +1050,7 @@ function enterApp() {
   renderGroups();
   renderFixtures();
   renderSlip();
+  startFixturePolling();
   showView("matches");
 }
 

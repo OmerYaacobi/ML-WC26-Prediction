@@ -2,7 +2,8 @@ name: Sync WC26 fixtures
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    # Staggered minutes — GitHub often skips */5 at :00/:30
+    - cron: "1,6,11,16,21,26,31,36,41,46,51,56 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -11,6 +12,9 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    concurrency:
+      group: sync-fixtures
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,26 +28,16 @@ jobs:
         run: pip install requests python-dotenv
 
       - name: Fetch fixtures from odds-api.io
-        id: fetch
-        continue-on-error: true
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
           if [ -z "$ODDS_API_KEY" ]; then
-            echo "::warning::ODDS_API_KEY secret is not set. Add it in Settings → Secrets → Actions."
-            python -c "
-          import json
-          from datetime import datetime, timezone
-          from pathlib import Path
-          p = Path('data/processed/wc26_fixtures.json')
-          p.parent.mkdir(parents=True, exist_ok=True)
-          p.write_text(json.dumps({'source':'empty','updatedAt':datetime.now(timezone.utc).isoformat(),'fixtures':[]}, indent=2))
-          "
-            exit 0
+            echo "::error::ODDS_API_KEY secret is not set"
+            exit 1
           fi
           python scripts/fetch_fixtures.py
 
-      - name: Publish docs/fixtures.js
+      - name: Publish docs/fixtures.js and fixtures.json
         run: python scripts/publish_fixtures.py
 
       - name: Settle finished bets (optional)
@@ -62,12 +56,14 @@ jobs:
 
       - name: Commit and push if changed
         run: |
+          set -e
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/fixtures.js
+          git add docs/fixtures.js docs/fixtures.json data/wc26_finished_archive.json
           if git diff --staged --quiet; then
             echo "No fixture changes to commit."
           else
             git commit -m "Sync WC26 fixtures and scores from odds-api.io"
-            git push
+            git pull --rebase origin ${{ github.ref_name }}
+            git push origin HEAD:${{ github.ref_name }}
           fi

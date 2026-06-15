@@ -67,9 +67,9 @@
 
   <!-- ======================= MATCHES VIEW (home) ======================= -->
   <section class="view" id="view-matches">
-    <h2 class="section-title">World Cup Fixtures <span class="fair-tag" id="fixturesMeta"></span></h2>
+    <h2 class="section-title" id="fixturesTitle">Upcoming &amp; Live <span class="fair-tag" id="fixturesMeta"></span></h2>
     <div class="panel fixtures-panel">
-      <div class="fixture-filters">
+      <div class="fixture-filters" id="fixtureFilters">
         <select id="groupFilter"></select>
         <div class="seg" id="mdFilter">
           <button class="seg-btn active" data-md="all">All matchdays</button>
@@ -233,6 +233,7 @@
 <script src="firebase-config.js"></script>
 <script src="data.js"></script>
 <script src="fixtures.js"></script>
+<script src="fixtures-helpers.js"></script>
 <script src="auth.js"></script>
 <script src="app.js"></script>
 </body>

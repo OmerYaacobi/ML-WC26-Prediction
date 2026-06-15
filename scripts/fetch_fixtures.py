@@ -20,10 +20,12 @@ import requests
 from dotenv import load_dotenv
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from fixture_status import normalize_fixture
 from wc26_groups import TEAM_TO_GROUP, is_group_stage_league, normalize_team
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_PATH = PROJECT_ROOT / "data" / "processed" / "wc26_fixtures.json"
+ARCHIVE_PATH = PROJECT_ROOT / "data" / "wc26_finished_archive.json"
 BASE_URL = "https://api.odds-api.io/v3"
 
 
@@ -49,26 +51,8 @@ def parse_fixture(event: dict) -> dict | None:
         return None
 
     kickoff = event.get("date") or ""
-    status = (event.get("status") or "pending").lower()
-    scores = event.get("scores")
-    home_score = away_score = None
-    if isinstance(scores, dict):
-        ft = (scores.get("periods") or {}).get("ft")
-        if isinstance(ft, dict):
-            home_score = ft.get("home")
-            away_score = ft.get("away")
-        if home_score is None and scores.get("home") is not None:
-            home_score = scores.get("home")
-            away_score = scores.get("away")
-
-    bettable = status == "pending"
-    if kickoff and status == "pending":
-        try:
-            kickoff_dt = datetime.fromisoformat(kickoff.replace("Z", "+00:00"))
-            if kickoff_dt <= datetime.now(timezone.utc):
-                bettable = False
-        except ValueError:
-            pass
+    raw_status = event.get("status") or "pending"
+    norm = normalize_fixture(raw_status, kickoff, event.get("scores"))
 
     return {
         "id": event.get("id"),
@@ -76,22 +60,82 @@ def parse_fixture(event: dict) -> dict | None:
         "away": away,
         "group": TEAM_TO_GROUP[home],
         "kickoff": kickoff,
-        "status": status,
-        "homeScore": home_score,
-        "awayScore": away_score,
-        "bettable": bettable,
+        "status": norm["status"],
+        "homeScore": norm["homeScore"],
+        "awayScore": norm["awayScore"],
+        "bettable": norm["bettable"],
         "league": league,
     }
 
 
 def fetch_events(api_key: str) -> list[dict]:
+    """Fetch pending, live, and settled events; merge with the live-only feed."""
+    by_id: dict[int, dict] = {}
+
     response = requests.get(
         f"{BASE_URL}/events",
-        params={"sport": "football", "apiKey": api_key},
+        params={"sport": "football", "apiKey": api_key, "status": "pending,live,settled"},
         timeout=30,
     )
     response.raise_for_status()
-    return response.json()
+    for event in response.json():
+        eid = event.get("id")
+        if eid is not None:
+            by_id[eid] = event
+
+    live_resp = requests.get(
+        f"{BASE_URL}/events/live",
+        params={"sport": "football", "apiKey": api_key},
+        timeout=30,
+    )
+    live_resp.raise_for_status()
+    for event in live_resp.json():
+        eid = event.get("id")
+        if eid is not None:
+            by_id[eid] = event
+
+    return list(by_id.values())
+
+
+def load_finished_archive() -> list[dict]:
+    if not ARCHIVE_PATH.exists():
+        return []
+    try:
+        data = json.loads(ARCHIVE_PATH.read_text(encoding="utf-8"))
+        return [f for f in data.get("fixtures", []) if f.get("status") == "settled"]
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def save_finished_archive(fixtures: list[dict]) -> None:
+    settled = [f for f in fixtures if f.get("status") == "settled"]
+    ARCHIVE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    ARCHIVE_PATH.write_text(json.dumps({"fixtures": settled}, indent=2), encoding="utf-8")
+
+
+def merge_retained_finished(new_fixtures: list[dict], retained_sources: list[list[dict]]) -> list[dict]:
+    """Keep finished games when the API drops them from the feed."""
+    by_pair = {(f["home"], f["away"]): f for f in new_fixtures}
+    extra: list[dict] = []
+    seen: set[tuple[str, str]] = set()
+
+    for source in retained_sources:
+        for fx in source:
+            if fx.get("status") != "settled":
+                continue
+            pair = (fx["home"], fx["away"])
+            if pair in by_pair or pair in seen:
+                continue
+            seen.add(pair)
+            extra.append(fx)
+            by_pair[pair] = fx
+
+    if not extra:
+        return new_fixtures
+
+    merged = new_fixtures + extra
+    merged.sort(key=lambda f: (f.get("kickoff") or "", f.get("group", ""), f.get("home", "")))
+    return merged
 
 
 def write_empty(reason: str) -> None:
@@ -114,14 +158,21 @@ def main() -> None:
         sys.exit(1)
 
     print("📡 Fetching football events from odds-api.io...")
+    previous_fixtures: list[dict] = []
+    if OUTPUT_PATH.exists():
+        try:
+            previous_fixtures = json.loads(OUTPUT_PATH.read_text(encoding="utf-8")).get("fixtures", [])
+        except (json.JSONDecodeError, OSError):
+            previous_fixtures = []
+
     try:
         events = fetch_events(api_key)
     except Exception as e:
         write_empty(f"API fetch failed: {e}")
         sys.exit(1)
+
     fixtures = []
     seen = set()
-
     for event in events:
         fx = parse_fixture(event)
         if not fx:
@@ -132,8 +183,10 @@ def main() -> None:
         seen.add(key)
         fixtures.append(fx)
 
+    fixtures = merge_retained_finished(fixtures, [previous_fixtures, load_finished_archive()])
     fixtures.sort(key=lambda f: (f["kickoff"], f["group"], f["home"]))
     assign_matchdays(fixtures)
+    save_finished_archive(fixtures)
 
     payload = {
         "source": "api" if fixtures else "empty",
@@ -153,9 +206,9 @@ def main() -> None:
         print("⚠️  No World Cup group-stage events in the feed yet.")
         print("   publish_fixtures.py will fall back to the model schedule until API lists them.")
 
-    from update_results_csv import update_csv
+    from update_results_csv import main as update_results_main
 
-    update_csv()
+    update_results_main()
 
 
 if __name__ == "__main__":
