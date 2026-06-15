@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-15T21:28:20.304226+00:00"
+    "updatedAt": "2026-06-15T23:07:48.631769+00:00"
   },
   "fixtures": [
     {
@@ -88,10 +88,10 @@
       "away": "Uruguay",
       "group": "Group H",
       "kickoff": "2026-06-15T22:00:00Z",
-      "status": "pending",
-      "homeScore": null,
-      "awayScore": null,
-      "bettable": true,
+      "status": "live",
+      "homeScore": 1,
+      "awayScore": 0,
+      "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 1
     },
