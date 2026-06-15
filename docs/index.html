@@ -46,7 +46,7 @@
       <span class="brand-text">WC26 <em>Match Centre</em></span>
     </div>
     <nav class="nav">
-      <button class="nav-pill active" data-view="match">Match Odds</button>
+      <button class="nav-pill active" data-view="matches">Matches</button>
       <button class="nav-pill" data-view="groups">Groups</button>
       <button class="nav-pill" data-view="mybets">My Bets</button>
       <button class="nav-pill" data-view="league">League</button>
@@ -65,8 +65,26 @@
 
 <main class="page hidden" id="mainPage">
 
-  <!-- ======================= MATCH VIEW ======================= -->
-  <section class="view" id="view-match">
+  <!-- ======================= MATCHES VIEW (home) ======================= -->
+  <section class="view" id="view-matches">
+    <h2 class="section-title">World Cup Fixtures <span class="fair-tag" id="fixturesMeta"></span></h2>
+    <div class="panel fixtures-panel">
+      <div class="fixture-filters">
+        <select id="groupFilter"></select>
+        <div class="seg" id="mdFilter">
+          <button class="seg-btn active" data-md="all">All matchdays</button>
+          <button class="seg-btn" data-md="1">MD 1</button>
+          <button class="seg-btn" data-md="2">MD 2</button>
+          <button class="seg-btn" data-md="3">MD 3</button>
+        </div>
+      </div>
+      <div class="fixtures-list" id="fixturesList"></div>
+    </div>
+  </section>
+
+  <!-- ======================= MATCH ODDS VIEW ======================= -->
+  <section class="view hidden" id="view-match">
+    <button type="button" class="back-link" id="backToMatches">← All matches</button>
 
     <div class="match-lock-banner hidden" id="matchLockBanner"></div>
     <div class="picker-bar panel">
@@ -106,20 +124,6 @@
       <span class="fair-tag">xPts = model expected points</span>
     </h2>
     <div class="groups-grid" id="groupsGrid"></div>
-
-    <h2 class="section-title">Fixture Finder <span class="fair-tag" id="fixturesMeta"></span></h2>
-    <div class="panel fixtures-panel">
-      <div class="fixture-filters">
-        <select id="groupFilter"></select>
-        <div class="seg" id="mdFilter">
-          <button class="seg-btn active" data-md="all">All matchdays</button>
-          <button class="seg-btn" data-md="1">MD 1</button>
-          <button class="seg-btn" data-md="2">MD 2</button>
-          <button class="seg-btn" data-md="3">MD 3</button>
-        </div>
-      </div>
-      <div class="fixtures-list" id="fixturesList"></div>
-    </div>
   </section>
 
   <!-- ======================= LEAGUE VIEW ======================= -->

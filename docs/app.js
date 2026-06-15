@@ -433,12 +433,51 @@ function renderFixtures() {
 
 /* ---------------- bet slip ---------------- */
 
+function matchKey(home, away) {
+  return `${home}|${away}`;
+}
+
+function marketFamily(market) {
+  if (market === "CS") return "cs";
+  if (market === "1X2" || market === "DC") return "outcome";
+  if (market.startsWith("OU")) return "ou";
+  if (market === "BTTS") return "btts";
+  return "other";
+}
+
+function sameMatchSelections(home, away) {
+  const key = matchKey(home, away);
+  return state.slip.filter((s) => matchKey(s.home, s.away) === key);
+}
+
+/** Block correlated same-match legs: CS stands alone; 1X2 and DC don't stack. */
+function canAddToSlip(sel, excludeId = null) {
+  const others = sameMatchSelections(sel.home, sel.away).filter((s) => s.id !== excludeId);
+  const family = marketFamily(sel.market);
+
+  if (family === "cs") {
+    if (others.length) {
+      return { ok: false, msg: "Correct score must be the only pick for this match" };
+    }
+    return { ok: true };
+  }
+  if (others.some((s) => marketFamily(s.market) === "cs")) {
+    return { ok: false, msg: "Remove the correct score pick to add other markets for this match" };
+  }
+  if (family === "outcome") {
+    const otherOutcome = others.find((s) => marketFamily(s.market) === "outcome");
+    if (otherOutcome) return { ok: true, replaceOutcome: otherOutcome };
+  }
+  return { ok: true };
+}
+
 function renderSlip() {
   $("slipCount").textContent = state.slip.length;
   if (!state.slip.length) {
     $("slipBody").innerHTML = `<div class="slip-empty">Your slip is empty.<br><br>
       Tap any odds button in the Markets section to add a selection.
-      Mix matches to build an accumulator.</div>`;
+      Mix matches to build an accumulator.<br><br>
+      Same match: combine result (1X2 or double chance) with goals markets — not with correct score.</div>`;
     $("slipFoot").innerHTML = "";
     return;
   }
@@ -629,7 +668,7 @@ async function renderMyBets() {
   }
   const bets = WC26Auth.getBets();
   if (!bets.length) {
-    $("myBetsList").innerHTML = `<p class="note">No bets yet. Build a slip from Match Odds and hit <strong>Place bet</strong>.</p>`;
+    $("myBetsList").innerHTML = `<p class="note">No bets yet. Pick a match, build a slip, and hit <strong>Place bet</strong>.</p>`;
     return;
   }
 
@@ -726,9 +765,24 @@ function toggleSelection(btn) {
       outcome: outcomeKey(market, pick, home, away),
       match: `${dname(home)} vs ${dname(away)}`,
     };
-    if (existing >= 0) state.slip[existing] = sel; // replace pick within same market
-    else state.slip.push(sel);
-    toast(`Added: ${pick} @${odds.toFixed(2)}`);
+    if (existing >= 0) {
+      state.slip[existing] = sel; // replace pick within same market
+      toast(`Added: ${pick} @${odds.toFixed(2)}`);
+    } else {
+      const check = canAddToSlip(sel);
+      if (!check.ok) {
+        toast(check.msg);
+        return;
+      }
+      if (check.replaceOutcome) {
+        const idx = state.slip.indexOf(check.replaceOutcome);
+        if (idx >= 0) state.slip.splice(idx, 1);
+        toast(`Swapped ${check.replaceOutcome.pick} for ${pick}`);
+      } else {
+        toast(`Added: ${pick} @${odds.toFixed(2)}`);
+      }
+      state.slip.push(sel);
+    }
   }
   saveSlip();
   renderSlip();
@@ -748,14 +802,15 @@ function toast(msg) {
 
 function showView(view) {
   document.querySelectorAll(".nav-pill").forEach((b) => b.classList.toggle("active", b.dataset.view === view));
+  $("view-matches").classList.toggle("hidden", view !== "matches");
   $("view-match").classList.toggle("hidden", view !== "match");
   $("view-groups").classList.toggle("hidden", view !== "groups");
   $("view-mybets").classList.toggle("hidden", view !== "mybets");
   $("view-league").classList.toggle("hidden", view !== "league");
   $("view-explain").classList.toggle("hidden", view !== "explain");
-    if (view === "league") renderLeague();
-    if (view === "mybets") renderMyBets();
-    if (!$("view-league").classList.contains("hidden")) renderLeague();
+  if (view === "matches") renderFixtures();
+  if (view === "league") renderLeague();
+  if (view === "mybets") renderMyBets();
   window.scrollTo({ top: 0 });
 }
 
@@ -774,6 +829,8 @@ $("swapBtn").addEventListener("click", () => {
 });
 
 document.querySelectorAll(".nav-pill").forEach((b) => b.addEventListener("click", () => showView(b.dataset.view)));
+$("brand").addEventListener("click", () => showView("matches"));
+$("backToMatches").addEventListener("click", () => showView("matches"));
 $("slipToggle").addEventListener("click", () => openSlip(true));
 $("slipClose").addEventListener("click", () => openSlip(false));
 $("slipBackdrop").addEventListener("click", () => openSlip(false));
@@ -902,6 +959,7 @@ function enterApp() {
   renderGroups();
   renderFixtures();
   renderSlip();
+  showView("matches");
 }
 
 function showAuthGate() {
