@@ -451,27 +451,30 @@ function renderFixtures() {
   const md = document.querySelector("#mdFilter .seg-btn.active").dataset.md;
   const H = WC26FixtureHelpers;
 
-  const active = getFixtures()
-    .filter((f) => H.isActive(f) && (g === "all" || f.group === g) && (md === "all" || String(f.md) === md))
-    .sort(H.sortActive);
+  const list = getFixtures()
+    .filter((f) => (g === "all" || f.group === g) && (md === "all" || String(f.md) === md))
+    .sort((a, b) => {
+      const rank = (f) => (f.status === "live" ? 0 : f.status === "pending" ? 1 : 2);
+      const dr = rank(a) - rank(b);
+      if (dr !== 0) return dr;
+      if (a.status === "settled" && b.status === "settled") {
+        return (b.kickoff || "").localeCompare(a.kickoff || "");
+      }
+      return (a.kickoff || "").localeCompare(b.kickoff || "");
+    });
 
-  const finished = getFixtures().filter((f) => H.isFinished(f)).sort(H.sortFinished);
-
+  const finished = list.filter((f) => H.isFinished(f)).length;
   const meta = liveFixturesMeta || FIXTURES_META || {};
-  $("fixturesMeta").textContent = formatFixtureMeta(meta);
+  const sync = formatFixtureMeta(meta);
+  $("fixturesTitle").innerHTML = `Tournament Schedule <span class="fair-tag" id="fixturesMeta"></span>`;
+  $("fixturesMeta").textContent =
+    meta.source === "api"
+      ? `${list.length} matches · ${finished} finished · ${sync}`
+      : `${list.length} matches · awaiting schedule`;
 
-  const activeHtml = active.length
-    ? active.map((f) => fixtureRowHtml(f)).join("")
-    : `<p class="note">No upcoming or live matches in this filter.</p>`;
-
-  const finishedHtml = finished.length
-    ? `<div class="finished-block" id="finishedResults">
-        <h3 class="finished-heading">Finished Results <span class="finished-count">${finished.length}</span></h3>
-        <div class="fixtures-list finished-list">${finished.map((f) => fixtureRowHtml(f, { showActions: false })).join("")}</div>
-      </div>`
-    : "";
-
-  $("fixturesList").innerHTML = `<div class="fixtures-list active-list">${activeHtml}</div>${finishedHtml}`;
+  $("fixturesList").innerHTML = list.length
+    ? list.map((f) => fixtureRowHtml(f, { showActions: f.status !== "settled" })).join("")
+    : `<p class="note">No matches in this filter.</p>`;
 }
 
 /* ---------------- bet slip ---------------- */
