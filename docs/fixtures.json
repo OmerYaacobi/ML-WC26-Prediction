@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-16T01:44:49.354044+00:00"
+    "updatedAt": "2026-06-16T07:07:02.942716+00:00"
   },
   "fixtures": [
     {
@@ -101,9 +101,9 @@
       "away": "New Zealand",
       "group": "Group G",
       "kickoff": "2026-06-16T01:00:00Z",
-      "status": "live",
-      "homeScore": 1,
-      "awayScore": 1,
+      "status": "settled",
+      "homeScore": 2,
+      "awayScore": 2,
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 1

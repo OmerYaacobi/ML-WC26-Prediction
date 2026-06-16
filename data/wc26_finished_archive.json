@@ -90,6 +90,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 1
+    },
+    {
+      "id": 66456984,
+      "home": "Iran",
+      "away": "New Zealand",
+      "group": "Group G",
+      "kickoff": "2026-06-16T01:00:00Z",
+      "status": "settled",
+      "homeScore": 2,
+      "awayScore": 2,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 1
     }
   ]
 }
