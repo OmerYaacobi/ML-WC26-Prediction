@@ -103,6 +103,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 1
+    },
+    {
+      "id": 66457006,
+      "home": "France",
+      "away": "Senegal",
+      "group": "Group I",
+      "kickoff": "2026-06-16T19:00:00Z",
+      "status": "settled",
+      "homeScore": 3,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 1
     }
   ]
 }
