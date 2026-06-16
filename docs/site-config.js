@@ -4,5 +4,6 @@
 const SITE_CONFIG = {
   publicUrl: "https://omeryaacobi.github.io/ML-WC26-Prediction/",
   githubUrl: "https://github.com/OmerYaacobi/ML-WC26-Prediction",
+  fixturesRawUrl: "https://raw.githubusercontent.com/OmerYaacobi/ML-WC26-Prediction/main/docs/fixtures.json",
   footerLabel: "WC26 Match Centre",
 };

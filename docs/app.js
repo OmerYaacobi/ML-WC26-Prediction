@@ -1018,15 +1018,27 @@ function refreshFixtureViews() {
   if (!$("view-mybets").classList.contains("hidden")) renderMyBets();
 }
 
-async function pollFixtures() {
-  try {
-    const res = await fetch(`fixtures.json?t=${Date.now()}`, { cache: "no-store" });
-    if (!res.ok) return;
-    const data = await res.json();
-    if (applyFixtureData(data)) refreshFixtureViews();
-  } catch {
-    /* offline or fixtures.json not deployed yet */
+async function fetchFixtureJson() {
+  const urls = [];
+  if (typeof SITE_CONFIG !== "undefined" && SITE_CONFIG.fixturesRawUrl) {
+    urls.push(`${SITE_CONFIG.fixturesRawUrl}?t=${Date.now()}`);
   }
+  urls.push(`fixtures.json?t=${Date.now()}`);
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, { cache: "no-store" });
+      if (res.ok) return res.json();
+    } catch {
+      /* try next source */
+    }
+  }
+  return null;
+}
+
+async function pollFixtures() {
+  const data = await fetchFixtureJson();
+  if (!data) return;
+  if (applyFixtureData(data)) refreshFixtureViews();
 }
 
 function startFixturePolling() {
