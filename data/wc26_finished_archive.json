@@ -77,6 +77,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 1
+    },
+    {
+      "id": 66456996,
+      "home": "Saudi Arabia",
+      "away": "Uruguay",
+      "group": "Group H",
+      "kickoff": "2026-06-15T22:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 1
     }
   ]
 }

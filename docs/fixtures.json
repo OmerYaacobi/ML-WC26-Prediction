@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-15T23:07:48.631769+00:00"
+    "updatedAt": "2026-06-16T01:44:49.354044+00:00"
   },
   "fixtures": [
     {
@@ -88,9 +88,9 @@
       "away": "Uruguay",
       "group": "Group H",
       "kickoff": "2026-06-15T22:00:00Z",
-      "status": "live",
+      "status": "settled",
       "homeScore": 1,
-      "awayScore": 0,
+      "awayScore": 1,
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 1
@@ -101,10 +101,10 @@
       "away": "New Zealand",
       "group": "Group G",
       "kickoff": "2026-06-16T01:00:00Z",
-      "status": "pending",
-      "homeScore": null,
-      "awayScore": null,
-      "bettable": true,
+      "status": "live",
+      "homeScore": 1,
+      "awayScore": 1,
+      "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 1
     },
