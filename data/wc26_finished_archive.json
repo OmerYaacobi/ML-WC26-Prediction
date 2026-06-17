@@ -168,6 +168,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 1
+    },
+    {
+      "id": 66457042,
+      "home": "England",
+      "away": "Croatia",
+      "group": "Group L",
+      "kickoff": "2026-06-17T20:00:00Z",
+      "status": "settled",
+      "homeScore": 4,
+      "awayScore": 2,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 1
     }
   ]
 }
