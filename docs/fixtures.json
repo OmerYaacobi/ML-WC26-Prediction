@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-17T22:19:18.053002+00:00"
+    "updatedAt": "2026-06-17T23:52:49.140822+00:00"
   },
   "fixtures": [
     {
@@ -192,10 +192,10 @@
       "away": "Panama",
       "group": "Group L",
       "kickoff": "2026-06-17T23:00:00Z",
-      "status": "pending",
-      "homeScore": null,
-      "awayScore": null,
-      "bettable": true,
+      "status": "live",
+      "homeScore": 0,
+      "awayScore": 0,
+      "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 1
     },
