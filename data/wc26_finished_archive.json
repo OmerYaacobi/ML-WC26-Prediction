@@ -116,6 +116,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 1
+    },
+    {
+      "id": 66457008,
+      "home": "Iraq",
+      "away": "Norway",
+      "group": "Group I",
+      "kickoff": "2026-06-16T22:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 4,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 1
     }
   ]
 }
