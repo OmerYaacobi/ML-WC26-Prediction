@@ -129,6 +129,32 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 1
+    },
+    {
+      "id": 66457018,
+      "home": "Argentina",
+      "away": "Algeria",
+      "group": "Group J",
+      "kickoff": "2026-06-17T01:00:00Z",
+      "status": "settled",
+      "homeScore": 3,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 1
+    },
+    {
+      "id": 66457020,
+      "home": "Austria",
+      "away": "Jordan",
+      "group": "Group J",
+      "kickoff": "2026-06-17T04:00:00Z",
+      "status": "settled",
+      "homeScore": 3,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 1
     }
   ]
 }
