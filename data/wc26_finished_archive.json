@@ -324,6 +324,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66456922,
+      "home": "Switzerland",
+      "away": "Bosnia and Herzegovina",
+      "group": "Group B",
+      "kickoff": "2026-06-18T19:00:00Z",
+      "status": "settled",
+      "homeScore": 4,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }
