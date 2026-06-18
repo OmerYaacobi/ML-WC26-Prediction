@@ -3,8 +3,11 @@ from scipy.stats import poisson
 
 class PoissonPredictionEngine:
     def __init__(self):
-        # High accuracy base target expectation per team 
-        self.GLOBAL_BASE_XG = 2.236
+        # Per-team baseline λ before attack/defense/squad modifiers (sum ≈ match total xG).
+        # WC26 MD1: 75 goals / 24 games = 3.12 gpg; our old base (2.236) averaged ~2.71 gpg
+        # on those fixtures (~15% low). Prior WC openers (2018/2022) ran ~2.5 gpg, so we
+        # apply a modest ×1.15 bump instead of matching 3.12 outright (one matchday).
+        self.GLOBAL_BASE_XG = 2.571
 
     def calculate_match_probabilities(self, team_a_stats, team_b_stats):
         """

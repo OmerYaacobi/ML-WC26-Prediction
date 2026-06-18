@@ -12,7 +12,7 @@ from src.data_layers.market_loader import MarketOddsLoader
 DEFAULT_W_HIST = 0.200
 DEFAULT_W_SQUAD = 0.430
 DEFAULT_W_MARKET = 0.330
-DEFAULT_BASE_XG = 2.240
+DEFAULT_BASE_XG = 2.571
 
 
 class HyperparameterOptimizer:

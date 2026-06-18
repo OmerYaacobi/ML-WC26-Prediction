@@ -27,6 +27,10 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_PATH = PROJECT_ROOT / "data" / "processed" / "wc26_fixtures.json"
 ARCHIVE_PATH = PROJECT_ROOT / "data" / "wc26_finished_archive.json"
 BASE_URL = "https://api.odds-api.io/v3"
+WC_LEAGUE_SLUG = "international-fifa-world-cup"
+# Settled games vanish from /events; historical feed keeps full group-stage results.
+HISTORICAL_FROM = "2026-06-11T00:00:00Z"
+HISTORICAL_TO = "2026-06-27T23:59:59Z"
 
 
 def assign_matchdays(fixtures: list[dict]) -> None:
@@ -94,7 +98,29 @@ def fetch_events(api_key: str) -> list[dict]:
         if eid is not None:
             by_id[eid] = event
 
+    for event in fetch_historical_events(api_key):
+        eid = event.get("id")
+        if eid is not None:
+            by_id[eid] = event
+
     return list(by_id.values())
+
+
+def fetch_historical_events(api_key: str) -> list[dict]:
+    """Fetch settled WC group-stage results dropped from the live /events feed."""
+    response = requests.get(
+        f"{BASE_URL}/historical/events",
+        params={
+            "sport": "football",
+            "apiKey": api_key,
+            "league": WC_LEAGUE_SLUG,
+            "from": HISTORICAL_FROM,
+            "to": HISTORICAL_TO,
+        },
+        timeout=30,
+    )
+    response.raise_for_status()
+    return response.json()
 
 
 def load_finished_archive() -> list[dict]:
@@ -157,7 +183,7 @@ def main() -> None:
         write_empty("ODDS_API_KEY not set — add it to GitHub Secrets or .env")
         sys.exit(1)
 
-    print("📡 Fetching football events from odds-api.io...")
+    print("📡 Fetching football events from odds-api.io (live + historical)...")
     previous_fixtures: list[dict] = []
     if OUTPUT_PATH.exists():
         try:

@@ -12,7 +12,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 FEATURES_PATH = PROJECT_ROOT / "data" / "processed" / "blended_model_features.csv"
 OUTPUT_PATH = PROJECT_ROOT / "docs" / "data.js"
 
-GLOBAL_BASE_XG = 2.236  # keep in sync with src/models/poisson_engine.py
+# keep in sync with src/models/poisson_engine.py — see comment there for calibration
+GLOBAL_BASE_XG = 2.571
 
 
 def main():
