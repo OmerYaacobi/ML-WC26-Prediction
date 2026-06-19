@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-19T02:12:16.374536+00:00"
+    "updatedAt": "2026-06-19T07:26:11.530275+00:00"
   },
   "fixtures": [
     {
@@ -361,7 +361,7 @@
       "away": "South Korea",
       "group": "Group A",
       "kickoff": "2026-06-19T01:00:00Z",
-      "status": "live",
+      "status": "settled",
       "homeScore": 1,
       "awayScore": 0,
       "bettable": false,
