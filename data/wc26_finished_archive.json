@@ -337,6 +337,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66456920,
+      "home": "Canada",
+      "away": "Qatar",
+      "group": "Group B",
+      "kickoff": "2026-06-18T22:00:00Z",
+      "status": "settled",
+      "homeScore": 6,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }

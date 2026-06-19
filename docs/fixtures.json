@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-18T23:25:45.909857+00:00"
+    "updatedAt": "2026-06-19T02:12:16.374536+00:00"
   },
   "fixtures": [
     {
@@ -348,8 +348,8 @@
       "away": "Qatar",
       "group": "Group B",
       "kickoff": "2026-06-18T22:00:00Z",
-      "status": "live",
-      "homeScore": 4,
+      "status": "settled",
+      "homeScore": 6,
       "awayScore": 0,
       "bettable": false,
       "league": "International - FIFA World Cup",
@@ -361,10 +361,10 @@
       "away": "South Korea",
       "group": "Group A",
       "kickoff": "2026-06-19T01:00:00Z",
-      "status": "pending",
-      "homeScore": null,
-      "awayScore": null,
-      "bettable": true,
+      "status": "live",
+      "homeScore": 1,
+      "awayScore": 0,
+      "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
     },
