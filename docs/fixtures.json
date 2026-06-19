@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-19T18:52:34.757077+00:00"
+    "updatedAt": "2026-06-19T20:22:43.146719+00:00"
   },
   "fixtures": [
     {
@@ -374,10 +374,10 @@
       "away": "Australia",
       "group": "Group D",
       "kickoff": "2026-06-19T19:00:00Z",
-      "status": "pending",
-      "homeScore": null,
-      "awayScore": null,
-      "bettable": true,
+      "status": "live",
+      "homeScore": 2,
+      "awayScore": 0,
+      "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
     },
