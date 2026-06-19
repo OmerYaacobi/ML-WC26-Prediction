@@ -363,6 +363,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66456944,
+      "home": "United States",
+      "away": "Australia",
+      "group": "Group D",
+      "kickoff": "2026-06-19T19:00:00Z",
+      "status": "settled",
+      "homeScore": 2,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }
