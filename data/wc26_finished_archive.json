@@ -428,6 +428,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66457074,
+      "home": "Germany",
+      "away": "Ivory Coast",
+      "group": "Group E",
+      "kickoff": "2026-06-20T20:00:00Z",
+      "status": "settled",
+      "homeScore": 2,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }

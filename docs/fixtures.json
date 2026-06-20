@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-20T21:57:19.651651+00:00"
+    "updatedAt": "2026-06-20T23:02:12.378021+00:00"
   },
   "fixtures": [
     {
@@ -439,7 +439,7 @@
       "away": "Ivory Coast",
       "group": "Group E",
       "kickoff": "2026-06-20T20:00:00Z",
-      "status": "live",
+      "status": "settled",
       "homeScore": 2,
       "awayScore": 1,
       "bettable": false,
