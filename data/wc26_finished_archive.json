@@ -376,6 +376,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66456934,
+      "home": "Scotland",
+      "away": "Morocco",
+      "group": "Group C",
+      "kickoff": "2026-06-19T22:00:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }
