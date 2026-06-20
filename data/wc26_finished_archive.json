@@ -389,6 +389,32 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66456932,
+      "home": "Brazil",
+      "away": "Haiti",
+      "group": "Group C",
+      "kickoff": "2026-06-20T00:30:00Z",
+      "status": "settled",
+      "homeScore": 3,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
+    },
+    {
+      "id": 66456946,
+      "home": "Turkey",
+      "away": "Paraguay",
+      "group": "Group D",
+      "kickoff": "2026-06-20T03:00:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }
