@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-20T16:44:39.334815+00:00"
+    "updatedAt": "2026-06-20T18:00:17.036892+00:00"
   },
   "fixtures": [
     {
@@ -426,10 +426,10 @@
       "away": "Sweden",
       "group": "Group F",
       "kickoff": "2026-06-20T17:00:00Z",
-      "status": "pending",
-      "homeScore": null,
-      "awayScore": null,
-      "bettable": true,
+      "status": "live",
+      "homeScore": 2,
+      "awayScore": 0,
+      "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
     },
