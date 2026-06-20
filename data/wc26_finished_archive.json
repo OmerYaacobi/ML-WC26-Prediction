@@ -415,6 +415,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66456972,
+      "home": "Netherlands",
+      "away": "Sweden",
+      "group": "Group F",
+      "kickoff": "2026-06-20T17:00:00Z",
+      "status": "settled",
+      "homeScore": 5,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }
