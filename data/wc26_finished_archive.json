@@ -441,6 +441,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66457076,
+      "home": "Ecuador",
+      "away": "Curacao",
+      "group": "Group E",
+      "kickoff": "2026-06-21T00:00:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }
