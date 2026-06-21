@@ -454,6 +454,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66456974,
+      "home": "Tunisia",
+      "away": "Japan",
+      "group": "Group F",
+      "kickoff": "2026-06-21T04:00:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 4,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }
