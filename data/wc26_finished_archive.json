@@ -467,6 +467,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66456998,
+      "home": "Spain",
+      "away": "Saudi Arabia",
+      "group": "Group H",
+      "kickoff": "2026-06-21T16:00:00Z",
+      "status": "settled",
+      "homeScore": 4,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }
