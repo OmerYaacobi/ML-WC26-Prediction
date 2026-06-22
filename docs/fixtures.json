@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-22T14:15:54.561776+00:00"
+    "updatedAt": "2026-06-22T18:18:32.931873+00:00"
   },
   "fixtures": [
     {
@@ -530,10 +530,10 @@
       "away": "Austria",
       "group": "Group J",
       "kickoff": "2026-06-22T17:00:00Z",
-      "status": "pending",
-      "homeScore": null,
-      "awayScore": null,
-      "bettable": true,
+      "status": "live",
+      "homeScore": 1,
+      "awayScore": 0,
+      "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
     },
