@@ -493,6 +493,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66457000,
+      "home": "Uruguay",
+      "away": "Cape Verde",
+      "group": "Group H",
+      "kickoff": "2026-06-21T22:00:00Z",
+      "status": "settled",
+      "homeScore": 2,
+      "awayScore": 2,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }

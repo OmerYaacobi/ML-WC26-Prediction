@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-21T23:54:53.208145+00:00"
+    "updatedAt": "2026-06-22T02:30:49.344830+00:00"
   },
   "fixtures": [
     {
@@ -504,7 +504,7 @@
       "away": "Cape Verde",
       "group": "Group H",
       "kickoff": "2026-06-21T22:00:00Z",
-      "status": "live",
+      "status": "settled",
       "homeScore": 2,
       "awayScore": 2,
       "bettable": false,
@@ -517,10 +517,10 @@
       "away": "Egypt",
       "group": "Group G",
       "kickoff": "2026-06-22T01:00:00Z",
-      "status": "pending",
-      "homeScore": null,
-      "awayScore": null,
-      "bettable": true,
+      "status": "live",
+      "homeScore": 1,
+      "awayScore": 2,
+      "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
     },
