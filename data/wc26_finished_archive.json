@@ -519,6 +519,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66457022,
+      "home": "Argentina",
+      "away": "Austria",
+      "group": "Group J",
+      "kickoff": "2026-06-22T17:00:00Z",
+      "status": "settled",
+      "homeScore": 2,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }
