@@ -571,6 +571,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66457034,
+      "home": "Portugal",
+      "away": "Uzbekistan",
+      "group": "Group K",
+      "kickoff": "2026-06-23T17:00:00Z",
+      "status": "settled",
+      "homeScore": 5,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }
