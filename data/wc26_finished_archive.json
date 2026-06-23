@@ -584,6 +584,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66457046,
+      "home": "England",
+      "away": "Ghana",
+      "group": "Group L",
+      "kickoff": "2026-06-23T20:00:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }
