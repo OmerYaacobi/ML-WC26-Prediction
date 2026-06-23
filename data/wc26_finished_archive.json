@@ -558,6 +558,19 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 2
+    },
+    {
+      "id": 66457024,
+      "home": "Jordan",
+      "away": "Algeria",
+      "group": "Group J",
+      "kickoff": "2026-06-23T03:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 2,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 2
     }
   ]
 }
