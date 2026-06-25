@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-24T23:36:22.232749+00:00"
+    "updatedAt": "2026-06-25T01:34:52.513289+00:00"
   },
   "fixtures": [
     {
@@ -660,8 +660,8 @@
       "away": "Haiti",
       "group": "Group C",
       "kickoff": "2026-06-24T22:00:00Z",
-      "status": "live",
-      "homeScore": 2,
+      "status": "settled",
+      "homeScore": 4,
       "awayScore": 2,
       "bettable": false,
       "league": "International - FIFA World Cup",
@@ -673,7 +673,7 @@
       "away": "Brazil",
       "group": "Group C",
       "kickoff": "2026-06-24T22:00:00Z",
-      "status": "live",
+      "status": "settled",
       "homeScore": 0,
       "awayScore": 3,
       "bettable": false,
@@ -686,10 +686,10 @@
       "away": "Mexico",
       "group": "Group A",
       "kickoff": "2026-06-25T01:00:00Z",
-      "status": "pending",
-      "homeScore": null,
-      "awayScore": null,
-      "bettable": true,
+      "status": "live",
+      "homeScore": 0,
+      "awayScore": 0,
+      "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
     },
@@ -699,10 +699,10 @@
       "away": "South Korea",
       "group": "Group A",
       "kickoff": "2026-06-25T01:00:00Z",
-      "status": "pending",
-      "homeScore": null,
-      "awayScore": null,
-      "bettable": true,
+      "status": "live",
+      "homeScore": 0,
+      "awayScore": 0,
+      "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
     },

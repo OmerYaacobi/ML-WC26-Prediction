@@ -649,6 +649,32 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
+    },
+    {
+      "id": 66456938,
+      "home": "Morocco",
+      "away": "Haiti",
+      "group": "Group C",
+      "kickoff": "2026-06-24T22:00:00Z",
+      "status": "settled",
+      "homeScore": 4,
+      "awayScore": 2,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 66456936,
+      "home": "Scotland",
+      "away": "Brazil",
+      "group": "Group C",
+      "kickoff": "2026-06-24T22:00:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 3,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
     }
   ]
 }
