@@ -675,6 +675,32 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
+    },
+    {
+      "id": 66456912,
+      "home": "Czechia",
+      "away": "Mexico",
+      "group": "Group A",
+      "kickoff": "2026-06-25T01:00:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 3,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 66456914,
+      "home": "South Africa",
+      "away": "South Korea",
+      "group": "Group A",
+      "kickoff": "2026-06-25T01:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
     }
   ]
 }
