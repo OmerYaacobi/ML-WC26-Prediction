@@ -701,6 +701,32 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
+    },
+    {
+      "id": 66457080,
+      "home": "Curacao",
+      "away": "Ivory Coast",
+      "group": "Group E",
+      "kickoff": "2026-06-25T20:00:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 2,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 66457078,
+      "home": "Ecuador",
+      "away": "Germany",
+      "group": "Group E",
+      "kickoff": "2026-06-25T20:00:00Z",
+      "status": "settled",
+      "homeScore": 2,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
     }
   ]
 }
