@@ -779,6 +779,32 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
+    },
+    {
+      "id": 66457014,
+      "home": "Norway",
+      "away": "France",
+      "group": "Group I",
+      "kickoff": "2026-06-26T19:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 4,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 66457016,
+      "home": "Senegal",
+      "away": "Iraq",
+      "group": "Group I",
+      "kickoff": "2026-06-26T19:00:00Z",
+      "status": "settled",
+      "homeScore": 5,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
     }
   ]
 }

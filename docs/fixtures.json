@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-26T20:52:06.001830+00:00"
+    "updatedAt": "2026-06-26T21:57:24.898229+00:00"
   },
   "fixtures": [
     {
@@ -790,9 +790,9 @@
       "away": "France",
       "group": "Group I",
       "kickoff": "2026-06-26T19:00:00Z",
-      "status": "live",
+      "status": "settled",
       "homeScore": 1,
-      "awayScore": 3,
+      "awayScore": 4,
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
@@ -803,7 +803,7 @@
       "away": "Iraq",
       "group": "Group I",
       "kickoff": "2026-06-26T19:00:00Z",
-      "status": "live",
+      "status": "settled",
       "homeScore": 5,
       "awayScore": 0,
       "bettable": false,
@@ -972,6 +972,19 @@
       "away": "Morocco",
       "group": "Group F",
       "kickoff": "2026-06-30T01:00:00Z",
+      "status": "pending",
+      "homeScore": null,
+      "awayScore": null,
+      "bettable": true,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 53452561,
+      "home": "Ivory Coast",
+      "away": "Norway",
+      "group": "Group E",
+      "kickoff": "2026-06-30T17:00:00Z",
       "status": "pending",
       "homeScore": null,
       "awayScore": null,
