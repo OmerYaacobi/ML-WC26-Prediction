@@ -727,6 +727,58 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
+    },
+    {
+      "id": 66456978,
+      "home": "Japan",
+      "away": "Sweden",
+      "group": "Group F",
+      "kickoff": "2026-06-25T23:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 66456976,
+      "home": "Tunisia",
+      "away": "Netherlands",
+      "group": "Group F",
+      "kickoff": "2026-06-25T23:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 3,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 66456950,
+      "home": "Paraguay",
+      "away": "Australia",
+      "group": "Group D",
+      "kickoff": "2026-06-26T02:00:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 66456948,
+      "home": "Turkey",
+      "away": "United States",
+      "group": "Group D",
+      "kickoff": "2026-06-26T02:00:00Z",
+      "status": "settled",
+      "homeScore": 3,
+      "awayScore": 2,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
     }
   ]
 }
