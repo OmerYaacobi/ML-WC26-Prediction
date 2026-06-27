@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-27T21:04:43.313996+00:00"
+    "updatedAt": "2026-06-27T22:12:20.950035+00:00"
   },
   "fixtures": [
     {
@@ -869,7 +869,7 @@
       "group": "Group L",
       "kickoff": "2026-06-27T21:00:00Z",
       "status": "live",
-      "homeScore": 0,
+      "homeScore": 1,
       "awayScore": 0,
       "bettable": false,
       "league": "International - FIFA World Cup",
