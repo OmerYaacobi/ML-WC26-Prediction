@@ -857,6 +857,32 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
+    },
+    {
+      "id": 66457052,
+      "home": "Croatia",
+      "away": "Ghana",
+      "group": "Group L",
+      "kickoff": "2026-06-27T21:00:00Z",
+      "status": "settled",
+      "homeScore": 2,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 66457050,
+      "home": "Panama",
+      "away": "England",
+      "group": "Group L",
+      "kickoff": "2026-06-27T21:00:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 2,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
     }
   ]
 }

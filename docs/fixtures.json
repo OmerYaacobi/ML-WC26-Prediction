@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-06-27T22:12:20.950035+00:00"
+    "updatedAt": "2026-06-27T23:15:45.390670+00:00"
   },
   "fixtures": [
     {
@@ -868,9 +868,9 @@
       "away": "Ghana",
       "group": "Group L",
       "kickoff": "2026-06-27T21:00:00Z",
-      "status": "live",
-      "homeScore": 1,
-      "awayScore": 0,
+      "status": "settled",
+      "homeScore": 2,
+      "awayScore": 1,
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
@@ -881,9 +881,9 @@
       "away": "England",
       "group": "Group L",
       "kickoff": "2026-06-27T21:00:00Z",
-      "status": "live",
+      "status": "settled",
       "homeScore": 0,
-      "awayScore": 0,
+      "awayScore": 2,
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
