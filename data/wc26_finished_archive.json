@@ -831,6 +831,32 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
+    },
+    {
+      "id": 66456992,
+      "home": "Egypt",
+      "away": "Iran",
+      "group": "Group G",
+      "kickoff": "2026-06-27T03:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 66456990,
+      "home": "New Zealand",
+      "away": "Belgium",
+      "group": "Group G",
+      "kickoff": "2026-06-27T03:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 5,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
     }
   ]
 }
