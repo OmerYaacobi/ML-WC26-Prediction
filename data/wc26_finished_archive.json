@@ -805,6 +805,32 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
+    },
+    {
+      "id": 66457004,
+      "home": "Cape Verde",
+      "away": "Saudi Arabia",
+      "group": "Group H",
+      "kickoff": "2026-06-27T00:00:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 66457002,
+      "home": "Uruguay",
+      "away": "Spain",
+      "group": "Group H",
+      "kickoff": "2026-06-27T00:00:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
     }
   ]
 }
