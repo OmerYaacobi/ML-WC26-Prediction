@@ -883,6 +883,58 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "md": 3
+    },
+    {
+      "id": 66457038,
+      "home": "Colombia",
+      "away": "Portugal",
+      "group": "Group K",
+      "kickoff": "2026-06-27T23:30:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 66457040,
+      "home": "DR Congo",
+      "away": "Uzbekistan",
+      "group": "Group K",
+      "kickoff": "2026-06-27T23:30:00Z",
+      "status": "settled",
+      "homeScore": 3,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 66457028,
+      "home": "Algeria",
+      "away": "Austria",
+      "group": "Group J",
+      "kickoff": "2026-06-28T02:00:00Z",
+      "status": "settled",
+      "homeScore": 3,
+      "awayScore": 3,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 66457026,
+      "home": "Jordan",
+      "away": "Argentina",
+      "group": "Group J",
+      "kickoff": "2026-06-28T02:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 3,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "md": 3
     }
   ]
 }
