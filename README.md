@@ -56,7 +56,7 @@ Each team gets an **attack strength** and **defense weakness** score, blended fr
 | History weight | 0.205 |
 | Squad weight | 0.432 |
 | Market power | 0.334 |
-| `GLOBAL_BASE_XG` | 2.571 |
+| `GLOBAL_BASE_XG` | 2.482 |
 
 Validated against Bet365 correct-score odds: **±0.307 goals MAE** (6-fold cross-validation).
 

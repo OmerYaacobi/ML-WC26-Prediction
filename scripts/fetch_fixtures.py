@@ -21,7 +21,14 @@ from dotenv import load_dotenv
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fixture_status import normalize_fixture
-from wc26_groups import TEAM_TO_GROUP, is_group_stage_league, normalize_team
+from wc26_bracket import lookup_bracket, merge_knockout_fixtures
+from wc26_groups import (
+    TEAM_TO_GROUP,
+    is_group_stage_league,
+    is_knockout_league,
+    normalize_team,
+    parse_knockout_round,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_PATH = PROJECT_ROOT / "data" / "processed" / "wc26_fixtures.json"
@@ -30,22 +37,62 @@ BASE_URL = "https://api.odds-api.io/v3"
 WC_LEAGUE_SLUG = "international-fifa-world-cup"
 # Settled games vanish from /events; historical feed keeps full group-stage results.
 HISTORICAL_FROM = "2026-06-11T00:00:00Z"
-HISTORICAL_TO = "2026-06-27T23:59:59Z"
+HISTORICAL_TO = "2026-07-20T23:59:59Z"
 
 
 def assign_matchdays(fixtures: list[dict]) -> None:
     """Within each group, earliest two kickoffs = MD1, next two = MD2, last two = MD3."""
+    group_fixtures = [
+        fx
+        for fx in fixtures
+        if fx.get("stage") != "knockout" and not lookup_bracket(fx.get("home", ""), fx.get("away", ""))
+    ]
     by_group: dict[str, list[dict]] = defaultdict(list)
-    for fx in fixtures:
+    for fx in group_fixtures:
         by_group[fx["group"]].append(fx)
-    for group_fixtures in by_group.values():
-        group_fixtures.sort(key=lambda f: f["kickoff"])
-        for i, fx in enumerate(group_fixtures):
+    for fixtures_in_group in by_group.values():
+        fixtures_in_group.sort(key=lambda f: f["kickoff"])
+        for i, fx in enumerate(fixtures_in_group):
             fx["md"] = min(3, i // 2 + 1)
+
+
+def parse_knockout_fixture(event: dict) -> dict | None:
+    league = str(event.get("league", {}).get("name", ""))
+    if not is_knockout_league(league):
+        return None
+
+    home = normalize_team(str(event.get("home", "")))
+    away = normalize_team(str(event.get("away", "")))
+    if not home or not away or home == away:
+        return None
+
+    kickoff = event.get("date") or ""
+    raw_status = event.get("status") or "pending"
+    norm = normalize_fixture(raw_status, kickoff, event.get("scores"))
+    ko_round = parse_knockout_round(league)
+    bracket = lookup_bracket(home, away)
+
+    return {
+        "id": event.get("id"),
+        "home": home,
+        "away": away,
+        "stage": "knockout",
+        "round": ko_round,
+        "bracketRound": bracket["round"] if bracket else None,
+        "matchNo": bracket["matchNo"] if bracket else None,
+        "kickoff": kickoff,
+        "status": norm["status"],
+        "homeScore": norm["homeScore"],
+        "awayScore": norm["awayScore"],
+        "bettable": norm["bettable"],
+        "league": league,
+    }
 
 
 def parse_fixture(event: dict) -> dict | None:
     league = str(event.get("league", {}).get("name", ""))
+    if is_knockout_league(league):
+        return parse_knockout_fixture(event)
     if not is_group_stage_league(league):
         return None
 
@@ -62,6 +109,7 @@ def parse_fixture(event: dict) -> dict | None:
         "id": event.get("id"),
         "home": home,
         "away": away,
+        "stage": "group",
         "group": TEAM_TO_GROUP[home],
         "kickoff": kickoff,
         "status": norm["status"],
@@ -194,6 +242,18 @@ def main() -> None:
     try:
         events = fetch_events(api_key)
     except Exception as e:
+        if previous_fixtures:
+            print(f"⚠️  API fetch failed ({e}) — keeping {len(previous_fixtures)} cached fixtures")
+            fixtures = merge_knockout_fixtures(previous_fixtures)
+            assign_matchdays(fixtures)
+            payload = {
+                "source": "api",
+                "updatedAt": datetime.now(timezone.utc).isoformat(),
+                "fixtures": fixtures,
+                "note": f"stale: {e}",
+            }
+            OUTPUT_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+            return
         write_empty(f"API fetch failed: {e}")
         sys.exit(1)
 
@@ -210,7 +270,8 @@ def main() -> None:
         fixtures.append(fx)
 
     fixtures = merge_retained_finished(fixtures, [previous_fixtures, load_finished_archive()])
-    fixtures.sort(key=lambda f: (f["kickoff"], f["group"], f["home"]))
+    fixtures = merge_knockout_fixtures(fixtures)
+    fixtures.sort(key=lambda f: (f.get("kickoff") or "", f.get("stage", ""), f.get("group", ""), f.get("round", ""), f.get("home", "")))
     assign_matchdays(fixtures)
     save_finished_archive(fixtures)
 
@@ -222,12 +283,14 @@ def main() -> None:
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    print(f"✅ Saved {len(fixtures)} group-stage fixtures → {OUTPUT_PATH}")
+    print(f"✅ Saved {len(fixtures)} fixtures → {OUTPUT_PATH}")
+    group_n = sum(1 for f in fixtures if f.get("stage") != "knockout")
+    ko_n = len(fixtures) - group_n
 
     if fixtures:
         settled = sum(1 for f in fixtures if f["status"] == "settled")
         pending = sum(1 for f in fixtures if f["bettable"])
-        print(f"   {settled} finished · {pending} open for betting")
+        print(f"   {settled} finished · {pending} open for betting · {group_n} group · {ko_n} knockout")
     else:
         print("⚠️  No World Cup group-stage events in the feed yet.")
         print("   publish_fixtures.py will fall back to the model schedule until API lists them.")

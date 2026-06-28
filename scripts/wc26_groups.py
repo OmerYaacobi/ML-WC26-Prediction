@@ -78,8 +78,42 @@ def to_csv_team(name: str) -> str:
     return CSV_TEAM_NAMES.get(name, name)
 
 
+# results.csv spellings → internal model names
+CSV_TO_MODEL = {v: k for k, v in CSV_TEAM_NAMES.items()}
+
+
+def from_csv_team(name: str) -> str:
+    return CSV_TO_MODEL.get(name, name)
+
+
+def is_world_cup_league(league_name: str) -> bool:
+    return "world cup" in (league_name or "").lower()
+
+
 def is_group_stage_league(league_name: str) -> bool:
-    league = (league_name or "").lower()
-    if "world cup" not in league:
+    if not is_world_cup_league(league_name):
         return False
-    return not any(marker in league for marker in KNOCKOUT_MARKERS)
+    return not any(marker in league_name.lower() for marker in KNOCKOUT_MARKERS)
+
+
+def is_knockout_league(league_name: str) -> bool:
+    if not is_world_cup_league(league_name):
+        return False
+    return any(marker in league_name.lower() for marker in KNOCKOUT_MARKERS)
+
+
+def parse_knockout_round(league_name: str) -> str | None:
+    league = (league_name or "").lower()
+    if "round of 32" in league or "round of thirty-two" in league:
+        return "Round of 32"
+    if "round of 16" in league or "round of sixteen" in league:
+        return "Round of 16"
+    if "quarter" in league:
+        return "Quarter-finals"
+    if "semi" in league:
+        return "Semi-finals"
+    if "third place" in league or "3rd place" in league:
+        return "Third place"
+    if "final" in league:
+        return "Final"
+    return "Knockout"

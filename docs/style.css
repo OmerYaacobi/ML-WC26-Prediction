@@ -190,7 +190,48 @@ button { font-family: inherit; }
 .explainer-body { color: var(--muted); font-size: 13.5px; padding-top: 6px; }
 .explainer-body strong { color: var(--text); }
 
-/* ---------- groups view ---------- */
+/* ---------- knockout bracket ---------- */
+.bracket-panel { margin-top: 4px; }
+.bracket-round-filter { margin-bottom: 14px; flex-wrap: wrap; }
+.bracket-scroll {
+  display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px;
+  scroll-snap-type: x proximity;
+}
+.bracket-column {
+  flex: 0 0 min(280px, 88vw); scroll-snap-align: start;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.bracket-column h3 {
+  margin: 0 0 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--accent); font-weight: 800;
+}
+.bracket-column h3 small { color: var(--muted); letter-spacing: 0; text-transform: none; font-weight: 600; }
+.bracket-match {
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 10px 12px; cursor: default; transition: border-color 0.15s;
+}
+.bracket-match.clickable { cursor: pointer; }
+.bracket-match.clickable:hover { border-color: var(--accent); }
+.bracket-match.live { border-color: rgba(255, 107, 107, 0.55); }
+.bracket-match.done { opacity: 0.92; }
+.bm-head {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  margin-bottom: 8px; font-size: 11px; color: var(--muted); font-weight: 700;
+}
+.bm-tag { color: var(--accent); text-transform: uppercase; letter-spacing: 0.4px; }
+.bm-time { text-align: right; line-height: 1.3; }
+.bm-team {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 4px 0; font-size: 13.5px; font-weight: 600;
+}
+.bm-team.winner { color: var(--accent); }
+.bm-team .bm-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bm-score { font-weight: 800; color: var(--odds); min-width: 18px; text-align: right; }
+.bm-venue { margin-top: 6px; font-size: 11px; color: var(--muted); }
+.bm-action { margin-top: 8px; }
+.bm-action .fx-btn { width: 100%; justify-content: center; }
+
+/* legacy group styles (unused) */
 .groups-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 14px; }
 .group-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
 .group-card h3 {

@@ -13,7 +13,7 @@ FEATURES_PATH = PROJECT_ROOT / "data" / "processed" / "blended_model_features.cs
 OUTPUT_PATH = PROJECT_ROOT / "docs" / "data.js"
 
 # keep in sync with src/models/poisson_engine.py — see comment there for calibration
-GLOBAL_BASE_XG = 2.571
+GLOBAL_BASE_XG = 2.482
 
 
 def main():

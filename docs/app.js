@@ -61,23 +61,99 @@ function groupFixtures(teams) {
 let liveFixtures = WC26_FIXTURES;
 let liveFixturesMeta = typeof FIXTURES_META !== "undefined" ? FIXTURES_META : {};
 
-function getFixtures() {
-  return liveFixtures;
+const BRACKET_ROUND_LABELS = {
+  r32: "Round of 32",
+  r16: "Round of 16",
+  qf: "Quarter-finals",
+  sf: "Semi-finals",
+  final: "Final",
+};
+
+const bracketByPair = new Map();
+if (typeof WC26_BRACKET_MATCHES !== "undefined") {
+  for (const m of WC26_BRACKET_MATCHES) {
+    if (m.home && m.away) {
+      bracketByPair.set(`${m.home}|${m.away}`, m);
+      bracketByPair.set(`${m.away}|${m.home}`, m);
+    }
+  }
 }
 
-function getFixture(home, away) {
-  return liveFixtures.find(
-    (f) => (f.home === home && f.away === away) || (f.home === away && f.away === home)
+function bracketLookup(home, away) {
+  return bracketByPair.get(`${home}|${away}`) || null;
+}
+
+function isKnockoutFixture(f) {
+  return f?.stage === "knockout" || !!bracketLookup(f?.home, f?.away);
+}
+
+function fixtureMetaLine(f) {
+  if (isKnockoutFixture(f)) {
+    return f.round || BRACKET_ROUND_LABELS[bracketLookup(f.home, f.away)?.round] || "Knockout";
+  }
+  return `${f.group} · MD ${f.md}`;
+}
+
+function mergeKnockoutFixtures(fixtures) {
+  if (typeof WC26_BRACKET_MATCHES === "undefined") return fixtures;
+  const byPair = new Map();
+  for (const f of fixtures) {
+    if (f.home && f.away) byPair.set(`${f.home}|${f.away}`, f);
+  }
+  const groupOnly = fixtures.filter((f) => !isKnockoutFixture(f));
+  const knockout = [];
+  for (const m of WC26_BRACKET_MATCHES) {
+    if (!m.home || !m.away) continue;
+    const api = byPair.get(`${m.home}|${m.away}`) || byPair.get(`${m.away}|${m.home}`);
+    const apiKo = api && isKnockoutFixture(api) ? api : null;
+    knockout.push({
+      id: apiKo?.id || `bracket-${m.matchNo}`,
+      matchNo: m.matchNo,
+      home: m.home,
+      away: m.away,
+      stage: "knockout",
+      round: BRACKET_ROUND_LABELS[m.round] || m.round,
+      bracketRound: m.round,
+      kickoff: apiKo?.kickoff || m.kickoff,
+      status: apiKo?.status || "pending",
+      homeScore: apiKo?.homeScore ?? null,
+      awayScore: apiKo?.awayScore ?? null,
+      bettable: apiKo?.bettable ?? true,
+      league: apiKo?.league || "International - FIFA World Cup",
+      venue: m.venue,
+    });
+  }
+  return [...groupOnly, ...knockout].sort(
+    (a, b) => (a.kickoff || "").localeCompare(b.kickoff || "") || (a.matchNo || 0) - (b.matchNo || 0)
   );
 }
 
-function isBettable(home, away) {
-  const fx = getFixture(home, away);
-  if (!fx) return false;
-  if (typeof WC26FixtureHelpers !== "undefined") {
-    return WC26FixtureHelpers.isBettableFixture(fx);
+function getFixtures() {
+  return mergeKnockoutFixtures(liveFixtures);
+}
+
+function getFixture(home, away) {
+  const matches = getFixtures().filter(
+    (f) => (f.home === home && f.away === away) || (f.home === away && f.away === home)
+  );
+  if (!matches.length) return undefined;
+  const knockout = matches.filter((f) => isKnockoutFixture(f));
+  if (knockout.length) {
+    return knockout.sort((a, b) => (b.kickoff || "").localeCompare(a.kickoff || ""))[0];
   }
-  return !!(fx.bettable && fx.status === "pending");
+  return matches[0];
+}
+
+function isBettableForFixture(f) {
+  if (!f) return false;
+  if (typeof WC26FixtureHelpers !== "undefined") {
+    return WC26FixtureHelpers.isBettableFixture(f);
+  }
+  return !!(f.bettable && f.status === "pending");
+}
+
+function isBettable(home, away) {
+  return isBettableForFixture(getFixture(home, away));
 }
 
 function fmtKickoff(iso) {
@@ -393,26 +469,119 @@ function renderHeatmap(m) {
     <table class="heatmap">${rows}</table>`;
 }
 
-/* ---------------- groups view ---------------- */
+/* ---------------- knockout bracket view ---------------- */
 
-function renderGroups() {
-  $("groupsGrid").innerHTML = Object.entries(GROUPS).map(([gname, teams]) => {
-    const xpts = Object.fromEntries(teams.map((t) => [t, 0]));
-    for (const f of groupFixtures(teams)) {
-      const r = computeMatch(f.home, f.away);
-      xpts[f.home] += 3 * r.pHome + r.pDraw;
-      xpts[f.away] += 3 * r.pAway + r.pDraw;
-    }
-    const sorted = [...teams].sort((a, b) => xpts[b] - xpts[a]);
-    return `<div class="group-card"><h3>${gname} <small>xPts</small></h3>
-      ${sorted.map((t, i) => `
-        <div class="gc-row ${i < 2 ? "qualify" : ""}">
-          <span class="gc-pos">${i + 1}</span>
-          <span class="gc-team">${label(t)}</span>
-          <span class="gc-pts">${xpts[t].toFixed(1)}</span>
-        </div>`).join("")}
+let activeBracketRound = "all";
+
+function bracketSideName(team, fallback) {
+  if (team) return label(team);
+  const m = String(fallback || "").match(/^W(\d+)$/);
+  if (m) return `Winner M${m[1]}`;
+  const l = String(fallback || "").match(/^L(\d+)$/);
+  if (l) return `Loser M${l[1]}`;
+  return fallback || "TBD";
+}
+
+function enrichBracketMatch(m) {
+  const home = m.home || null;
+  const away = m.away || null;
+  const fx = home && away ? getFixture(home, away) : null;
+  return {
+    ...m,
+    home,
+    away,
+    status: fx?.status || "pending",
+    homeScore: fx?.homeScore ?? null,
+    awayScore: fx?.awayScore ?? null,
+    bettable: fx ? isBettable(home, away) : false,
+    kickoff: fx?.kickoff || m.kickoff,
+  };
+}
+
+function bracketMatchHtml(m) {
+  const H = WC26FixtureHelpers;
+  const row = enrichBracketMatch(m);
+  const hasTeams = !!(row.home && row.away);
+  const status = hasTeams ? H.effectiveStatus(row) : row.status;
+  const statusCls =
+    status === "settled" ? "done" : status === "live" ? "live" : row.bettable ? "open" : "";
+  const homeWins = status === "settled" && row.homeScore != null && row.homeScore > row.awayScore;
+  const awayWins = status === "settled" && row.awayScore != null && row.awayScore > row.homeScore;
+  const scoreHome = status === "settled" && row.homeScore != null ? row.homeScore : "";
+  const scoreAway = status === "settled" && row.awayScore != null ? row.awayScore : "";
+  const timeLabel = row.kickoff ? fmtKickoff(row.kickoff) : "TBD";
+  const statusLabel = hasTeams ? H.statusLabel(row) : timeLabel;
+  const canOpen = hasTeams && (row.bettable || status === "live" || status === "settled");
+  const action = !hasTeams
+    ? ""
+    : row.bettable
+      ? `<div class="bm-action"><button class="fx-btn" data-home="${row.home}" data-away="${row.away}">View odds →</button></div>`
+      : status === "live"
+        ? `<div class="bm-action"><button class="fx-btn fx-btn-muted" data-home="${row.home}" data-away="${row.away}">View match →</button></div>`
+        : "";
+
+  return `
+    <div class="bracket-match ${statusCls} ${canOpen ? "clickable" : ""}" data-home="${row.home || ""}" data-away="${row.away || ""}" data-open="${canOpen ? "1" : "0"}">
+      <div class="bm-head">
+        <span>M${row.matchNo}${row.tag ? ` · <span class="bm-tag">${row.tag}</span>` : ""}</span>
+        <span class="bm-time">${hasTeams && status !== "pending" ? statusLabel : timeLabel}</span>
+      </div>
+      <div class="bm-team ${homeWins ? "winner" : ""}">
+        <span class="bm-name">${bracketSideName(row.home, row.homeLabel)}</span>
+        <span class="bm-score">${scoreHome}</span>
+      </div>
+      <div class="bm-team ${awayWins ? "winner" : ""}">
+        <span class="bm-name">${bracketSideName(row.away, row.awayLabel)}</span>
+        <span class="bm-score">${scoreAway}</span>
+      </div>
+      <div class="bm-venue">${row.venue || ""}</div>
+      ${action}
     </div>`;
-  }).join("");
+}
+
+function renderBracketRoundFilter() {
+  const el = $("bracketRoundFilter");
+  if (!el || typeof WC26_BRACKET_ROUNDS === "undefined") return;
+  const buttons = [
+    `<button class="seg-btn ${activeBracketRound === "all" ? "active" : ""}" data-round="all">Full bracket</button>`,
+    ...WC26_BRACKET_ROUNDS.map(
+      (r) =>
+        `<button class="seg-btn ${activeBracketRound === r.id ? "active" : ""}" data-round="${r.id}">${r.short}</button>`
+    ),
+  ];
+  el.innerHTML = buttons.join("");
+}
+
+function renderBracket() {
+  if (typeof WC26_BRACKET_MATCHES === "undefined") return;
+  renderBracketRoundFilter();
+
+  const rounds =
+    activeBracketRound === "all"
+      ? WC26_BRACKET_ROUNDS
+      : WC26_BRACKET_ROUNDS.filter((r) => r.id === activeBracketRound);
+
+  const html = rounds
+    .map((round) => {
+      const matches = WC26_BRACKET_MATCHES.filter((m) => m.round === round.id)
+        .sort((a, b) => (a.kickoff || "").localeCompare(b.kickoff || "") || a.matchNo - b.matchNo);
+      return `<div class="bracket-column">
+        <h3>${round.label} <small>${matches.length} matches</small></h3>
+        ${matches.map((m) => bracketMatchHtml(m)).join("")}
+      </div>`;
+    })
+    .join("");
+
+  $("bracketScroll").innerHTML = html || `<p class="note">Bracket schedule unavailable.</p>`;
+
+  const r32 = WC26_BRACKET_MATCHES.filter((m) => m.round === "r32");
+  const next = r32.find((m) => {
+    const row = enrichBracketMatch(m);
+    return row.status !== "settled";
+  });
+  $("bracketMeta").textContent = next
+    ? `Next: M${next.matchNo} · ${fmtKickoff(next.kickoff)}`
+    : "Knockout stage";
 }
 
 function fixtureRowHtml(f, { showActions = true } = {}) {
@@ -420,7 +589,7 @@ function fixtureRowHtml(f, { showActions = true } = {}) {
   const status = H.effectiveStatus(f);
   const statusCls =
     status === "settled" ? "done" : status === "live" ? "live" : isBettable(f.home, f.away) ? "open" : "locked";
-  const canBet = isBettable(f.home, f.away);
+  const canBet = isBettableForFixture(f);
   const actionBtn = !showActions
     ? ""
     : canBet
@@ -428,9 +597,10 @@ function fixtureRowHtml(f, { showActions = true } = {}) {
       : status === "live"
         ? `<button class="fx-btn fx-btn-muted" data-home="${f.home}" data-away="${f.away}">View match →</button>`
         : `<span class="fx-locked-label">Betting closed</span>`;
+  const metaLine = fixtureMetaLine(f);
   return `
     <div class="fixture-row ${canBet ? "" : "fixture-closed"}">
-      <span class="fx-meta">${f.group} · MD ${f.md}</span>
+      <span class="fx-meta">${metaLine}</span>
       <span class="fx-teams"><b>${label(f.home)}</b> <span class="fx-vs">vs</span> <b>${label(f.away)}</b></span>
       <span class="fx-status ${statusCls}">${H.statusLabel(f)}</span>
       ${actionBtn}
@@ -452,7 +622,14 @@ function renderFixtures() {
   const H = WC26FixtureHelpers;
 
   const list = getFixtures()
-    .filter((f) => (g === "all" || f.group === g) && (md === "all" || String(f.md) === md))
+    .filter((f) => {
+      const ko = isKnockoutFixture(f);
+      if (md === "knockout") return ko;
+      if (md !== "all" && ko) return false;
+      if (g !== "all" && f.group !== g) return false;
+      if (md !== "all" && String(f.md) !== md) return false;
+      return true;
+    })
     .sort((a, b) => {
       const rank = (f) => (f.status === "live" ? 0 : f.status === "pending" ? 1 : 2);
       const dr = rank(a) - rank(b);
@@ -850,11 +1027,12 @@ function showView(view) {
   document.querySelectorAll(".nav-pill").forEach((b) => b.classList.toggle("active", b.dataset.view === view));
   $("view-matches").classList.toggle("hidden", view !== "matches");
   $("view-match").classList.toggle("hidden", view !== "match");
-  $("view-groups").classList.toggle("hidden", view !== "groups");
+  $("view-bracket").classList.toggle("hidden", view !== "bracket");
   $("view-mybets").classList.toggle("hidden", view !== "mybets");
   $("view-league").classList.toggle("hidden", view !== "league");
   $("view-explain").classList.toggle("hidden", view !== "explain");
   if (view === "matches") renderFixtures();
+  if (view === "bracket") renderBracket();
   if (view === "league") renderLeague();
   if (view === "mybets") renderMyBets();
   window.scrollTo({ top: 0 });
@@ -907,6 +1085,28 @@ $("fixturesList").addEventListener("click", (e) => {
   renderMatch();
   showView("match");
   toast(`Loaded ${dname(state.home)} vs ${dname(state.away)}`);
+});
+
+$("bracketRoundFilter")?.addEventListener("click", (e) => {
+  const btn = e.target.closest(".seg-btn");
+  if (!btn) return;
+  activeBracketRound = btn.dataset.round;
+  renderBracket();
+});
+
+$("bracketScroll")?.addEventListener("click", (e) => {
+  const btn = e.target.closest(".fx-btn");
+  const card = e.target.closest(".bracket-match");
+  const home = btn?.dataset.home || card?.dataset.home;
+  const away = btn?.dataset.away || card?.dataset.away;
+  if (!home || !away) return;
+  if (!btn && card?.dataset.open !== "1") return;
+  state.home = home;
+  state.away = away;
+  fillSelects();
+  renderMatch();
+  showView("match");
+  if (btn) toast(`Loaded ${dname(state.home)} vs ${dname(state.away)}`);
 });
 
 $("myBetsList").addEventListener("click", async (e) => {
@@ -1014,7 +1214,7 @@ function applyFixtureData(data) {
 function refreshFixtureViews() {
   if (!$("view-matches").classList.contains("hidden")) renderFixtures();
   if (!$("view-match").classList.contains("hidden")) renderMatch();
-  if (!$("view-groups").classList.contains("hidden")) renderGroups();
+  if (!$("view-bracket").classList.contains("hidden")) renderBracket();
   if (!$("view-mybets").classList.contains("hidden")) renderMyBets();
 }
 
@@ -1062,7 +1262,7 @@ function enterApp() {
   updateUserUI();
   fillSelects();
   renderMatch();
-  renderGroups();
+  renderBracket();
   renderFixtures();
   renderSlip();
   startFixturePolling();

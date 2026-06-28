@@ -47,7 +47,7 @@
     </div>
     <nav class="nav">
       <button class="nav-pill active" data-view="matches">Matches</button>
-      <button class="nav-pill" data-view="groups">Groups</button>
+      <button class="nav-pill" data-view="bracket">Bracket</button>
       <button class="nav-pill" data-view="mybets">My Bets</button>
       <button class="nav-pill" data-view="league">League</button>
       <button class="nav-pill" data-view="explain">How It Works</button>
@@ -76,8 +76,8 @@
           <button class="seg-btn" data-md="1">MD 1</button>
           <button class="seg-btn" data-md="2">MD 2</button>
           <button class="seg-btn" data-md="3">MD 3</button>
+          <button class="seg-btn" data-md="knockout">Knockout</button>
         </div>
-      </div>
       <div class="fixtures-list" id="fixturesList"></div>
     </div>
   </section>
@@ -118,12 +118,15 @@
     <div class="panel heatmap-card" id="heatmapCard"></div>
   </section>
 
-  <!-- ======================= GROUPS VIEW ======================= -->
-  <section class="view hidden" id="view-groups">
-    <h2 class="section-title">2026 Group Stage — Projected Tables
-      <span class="fair-tag">xPts = model expected points</span>
+  <!-- ======================= KNOCKOUT BRACKET ======================= -->
+  <section class="view hidden" id="view-bracket">
+    <h2 class="section-title">Knockout Bracket
+      <span class="fair-tag" id="bracketMeta">Round of 32 starts Jun 28</span>
     </h2>
-    <div class="groups-grid" id="groupsGrid"></div>
+    <div class="panel bracket-panel">
+      <div class="seg bracket-round-filter" id="bracketRoundFilter"></div>
+      <div class="bracket-scroll" id="bracketScroll"></div>
+    </div>
   </section>
 
   <!-- ======================= LEAGUE VIEW ======================= -->
@@ -234,7 +237,8 @@
 <script src="data.js"></script>
 <script src="fixtures.js"></script>
 <script src="fixtures-helpers.js"></script>
+<script src="bracket.js"></script>
 <script src="auth.js"></script>
-<script src="app.js?v=6"></script>
+<script src="app.js?v=9"></script>
 </body>
 </html>
