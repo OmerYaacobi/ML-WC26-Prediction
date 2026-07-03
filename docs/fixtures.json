@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-07-03T17:44:49.604747+00:00"
+    "updatedAt": "2026-07-03T18:50:57.138635+00:00"
   },
   "fixtures": [
     {
@@ -1229,10 +1229,10 @@
       "round": "Round of 32",
       "bracketRound": "r32",
       "kickoff": "2026-07-03T18:00:00Z",
-      "status": "pending",
-      "homeScore": null,
-      "awayScore": null,
-      "bettable": true,
+      "status": "live",
+      "homeScore": 0,
+      "awayScore": 1,
+      "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "AT&T Stadium, Arlington"
     },
