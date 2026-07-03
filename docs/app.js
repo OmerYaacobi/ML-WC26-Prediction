@@ -98,7 +98,9 @@ function bracketLookup(home, away) {
 }
 
 function isKnockoutFixture(f) {
-  return f?.stage === "knockout" || !!f?.bracketRound || !!bracketLookup(f?.home, f?.away);
+  if (!f) return false;
+  if (f.stage === "knockout" || f.bracketRound || f.round || f.matchNo) return true;
+  return !!bracketLookup(f.home, f.away);
 }
 
 function fixtureMetaLine(f) {
