@@ -2,243 +2,243 @@
 const GLOBAL_BASE_XG = 2.482;
 const TEAM_RATINGS = {
   "Mexico": {
-    "att": 0.496,
-    "def": 0.984,
+    "att": 0.5,
+    "def": 0.966,
     "squad": 75.4
   },
   "South Africa": {
-    "att": 0.103,
-    "def": 1.348,
+    "att": 0.101,
+    "def": 1.355,
     "squad": 64.8
   },
   "South Korea": {
-    "att": 0.523,
-    "def": 1.019,
+    "att": 0.495,
+    "def": 1.023,
     "squad": 76.5
   },
   "Czechia": {
-    "att": 0.5,
-    "def": 1.077,
+    "att": 0.503,
+    "def": 1.078,
     "squad": 77.5
   },
   "Canada": {
-    "att": 0.491,
-    "def": 1.066,
+    "att": 0.48,
+    "def": 1.04,
     "squad": 75.1
   },
   "Bosnia and Herzegovina": {
-    "att": 0.449,
-    "def": 1.158,
+    "att": 0.483,
+    "def": 1.157,
     "squad": 76.3
   },
   "Qatar": {
-    "att": 0.332,
+    "att": 0.357,
     "def": 1.273,
     "squad": 73.0
   },
   "Switzerland": {
-    "att": 0.689,
-    "def": 0.971,
+    "att": 0.637,
+    "def": 0.948,
     "squad": 79.5
   },
   "Brazil": {
-    "att": 0.852,
-    "def": 0.726,
+    "att": 0.913,
+    "def": 0.713,
     "squad": 85.2
   },
   "Morocco": {
-    "att": 0.627,
-    "def": 0.848,
+    "att": 0.709,
+    "def": 0.863,
     "squad": 79.9
   },
   "Haiti": {
-    "att": 0.18,
-    "def": 1.481,
+    "att": 0.194,
+    "def": 1.482,
     "squad": 64.6
   },
   "Scotland": {
-    "att": 0.461,
-    "def": 1.083,
+    "att": 0.388,
+    "def": 1.153,
     "squad": 77.4
   },
   "United States": {
-    "att": 0.684,
-    "def": 0.964,
+    "att": 0.689,
+    "def": 0.944,
     "squad": 79.5
   },
   "Paraguay": {
-    "att": 0.296,
-    "def": 1.207,
+    "att": 0.329,
+    "def": 1.192,
     "squad": 73.5
   },
   "Australia": {
-    "att": 0.313,
-    "def": 1.13,
+    "att": 0.336,
+    "def": 1.133,
     "squad": 70.9
   },
   "Turkey": {
-    "att": 0.624,
-    "def": 0.996,
+    "att": 0.628,
+    "def": 0.998,
     "squad": 80.3
   },
   "Germany": {
-    "att": 0.958,
-    "def": 0.828,
+    "att": 0.867,
+    "def": 0.838,
     "squad": 85.2
   },
   "Curacao": {
-    "att": 0.116,
+    "att": 0.134,
     "def": 1.517,
     "squad": 65.3
   },
   "Ivory Coast": {
-    "att": 0.557,
-    "def": 0.914,
+    "att": 0.615,
+    "def": 0.953,
     "squad": 78.5
   },
   "Ecuador": {
-    "att": 0.448,
-    "def": 0.911,
+    "att": 0.446,
+    "def": 0.945,
     "squad": 78.3
   },
   "Netherlands": {
-    "att": 0.882,
-    "def": 0.862,
+    "att": 0.908,
+    "def": 0.864,
     "squad": 83.5
   },
   "Japan": {
-    "att": 0.625,
-    "def": 0.982,
+    "att": 0.67,
+    "def": 1.0,
     "squad": 77.1
   },
   "Sweden": {
-    "att": 0.655,
-    "def": 1.121,
+    "att": 0.62,
+    "def": 1.128,
     "squad": 79.1
   },
   "Tunisia": {
-    "att": 0.304,
-    "def": 1.255,
+    "att": 0.301,
+    "def": 1.294,
     "squad": 72.1
   },
   "Belgium": {
-    "att": 0.778,
-    "def": 0.82,
+    "att": 0.832,
+    "def": 0.851,
     "squad": 82.9
   },
   "Egypt": {
-    "att": 0.478,
-    "def": 0.978,
+    "att": 0.521,
+    "def": 0.982,
     "squad": 76.7
   },
   "Iran": {
-    "att": 0.409,
-    "def": 1.124,
+    "att": 0.429,
+    "def": 1.128,
     "squad": 72.3
   },
   "New Zealand": {
-    "att": 0.345,
-    "def": 1.331,
+    "att": 0.352,
+    "def": 1.332,
     "squad": 71.0
   },
   "Spain": {
-    "att": 0.937,
-    "def": 0.66,
+    "att": 0.876,
+    "def": 0.644,
     "squad": 86.2
   },
   "Cape Verde": {
-    "att": 0.278,
-    "def": 1.118,
+    "att": 0.294,
+    "def": 1.122,
     "squad": 71.9
   },
   "Saudi Arabia": {
-    "att": 0.286,
-    "def": 1.146,
+    "att": 0.303,
+    "def": 1.192,
     "squad": 73.0
   },
   "Uruguay": {
-    "att": 0.532,
-    "def": 0.934,
+    "att": 0.482,
+    "def": 0.94,
     "squad": 79.0
   },
   "France": {
-    "att": 0.952,
-    "def": 0.733,
+    "att": 0.956,
+    "def": 0.724,
     "squad": 86.1
   },
   "Senegal": {
-    "att": 0.61,
-    "def": 0.96,
+    "att": 0.711,
+    "def": 0.968,
     "squad": 79.4
   },
   "Iraq": {
-    "att": 0.139,
-    "def": 1.454,
+    "att": 0.156,
+    "def": 1.455,
     "squad": 66.2
   },
   "Norway": {
-    "att": 0.803,
-    "def": 1.01,
+    "att": 0.723,
+    "def": 1.004,
     "squad": 80.1
   },
   "Argentina": {
-    "att": 0.871,
-    "def": 0.712,
+    "att": 0.925,
+    "def": 0.719,
     "squad": 83.8
   },
   "Algeria": {
-    "att": 0.57,
-    "def": 1.041,
+    "att": 0.602,
+    "def": 1.078,
     "squad": 78.1
   },
   "Austria": {
-    "att": 0.687,
-    "def": 1.038,
+    "att": 0.613,
+    "def": 1.105,
     "squad": 78.5
   },
   "Jordan": {
-    "att": 0.421,
-    "def": 1.189,
+    "att": 0.433,
+    "def": 1.201,
     "squad": 75.0
   },
   "Portugal": {
-    "att": 0.911,
-    "def": 0.711,
+    "att": 0.836,
+    "def": 0.721,
     "squad": 85.3
   },
   "DR Congo": {
-    "att": 0.453,
-    "def": 0.989,
+    "att": 0.467,
+    "def": 1.018,
     "squad": 76.2
   },
   "Uzbekistan": {
-    "att": 0.424,
-    "def": 1.151,
+    "att": 0.462,
+    "def": 1.153,
     "squad": 75.5
   },
   "Colombia": {
-    "att": 0.598,
-    "def": 0.92,
+    "att": 0.617,
+    "def": 0.924,
     "squad": 78.2
   },
   "England": {
-    "att": 0.83,
-    "def": 0.775,
+    "att": 0.882,
+    "def": 0.77,
     "squad": 84.3
   },
   "Croatia": {
-    "att": 0.615,
-    "def": 0.981,
+    "att": 0.642,
+    "def": 0.994,
     "squad": 81.0
   },
   "Ghana": {
-    "att": 0.376,
-    "def": 1.101,
+    "att": 0.36,
+    "def": 1.104,
     "squad": 74.5
   },
   "Panama": {
-    "att": 0.261,
-    "def": 1.251,
+    "att": 0.255,
+    "def": 1.263,
     "squad": 70.4
   }
 };

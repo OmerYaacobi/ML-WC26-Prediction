@@ -1,7 +1,7 @@
 """Update FIFA World Cup rows in data/raw/results.csv when scores arrive.
 
 Matches by home/away team (kickoff dates often differ from schedule placeholders).
-For a full sync + model rebuild, run:
+For a full sync + model rebuild (group + knockout), run:
 
     python scripts/sync_group_results.py
 """
@@ -18,9 +18,14 @@ RESULTS_PATH = Path(__file__).resolve().parent.parent / "data" / "raw" / "result
 
 def main() -> None:
     settled = collect_settled()
-    n = update_results_csv(settled)
-    if n:
-        print(f"✅ Updated {n} FIFA World Cup score(s) in {RESULTS_PATH}")
+    updated, appended = update_results_csv(settled)
+    if updated or appended:
+        parts = []
+        if updated:
+            parts.append(f"updated {updated}")
+        if appended:
+            parts.append(f"appended {appended}")
+        print(f"✅ {', '.join(parts)} FIFA World Cup score(s) in {RESULTS_PATH}")
         print("   Run: python scripts/sync_group_results.py  (to rebuild model ratings)")
     else:
         print("ℹ️  No new WC scores to write to results.csv")

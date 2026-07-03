@@ -21,11 +21,12 @@ from dotenv import load_dotenv
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from fixture_status import normalize_fixture
-from wc26_bracket import lookup_bracket, merge_knockout_fixtures
+from wc26_bracket import lookup_bracket, merge_knockout_fixtures, ROUND_LABELS
 from wc26_groups import (
     TEAM_TO_GROUP,
     is_group_stage_league,
     is_knockout_league,
+    is_world_cup_league,
     normalize_team,
     parse_knockout_round,
 )
@@ -35,9 +36,11 @@ OUTPUT_PATH = PROJECT_ROOT / "data" / "processed" / "wc26_fixtures.json"
 ARCHIVE_PATH = PROJECT_ROOT / "data" / "wc26_finished_archive.json"
 BASE_URL = "https://api.odds-api.io/v3"
 WC_LEAGUE_SLUG = "international-fifa-world-cup"
-# Settled games vanish from /events; historical feed keeps full group-stage results.
-HISTORICAL_FROM = "2026-06-11T00:00:00Z"
-HISTORICAL_TO = "2026-07-20T23:59:59Z"
+# Settled games vanish from /events; historical feed keeps results (max 31 days per request).
+HISTORICAL_RANGES = (
+    ("2026-06-11T00:00:00Z", "2026-07-11T23:59:59Z"),
+    ("2026-07-12T00:00:00Z", "2026-07-20T23:59:59Z"),
+)
 
 
 def assign_matchdays(fixtures: list[dict]) -> None:
@@ -58,19 +61,20 @@ def assign_matchdays(fixtures: list[dict]) -> None:
 
 def parse_knockout_fixture(event: dict) -> dict | None:
     league = str(event.get("league", {}).get("name", ""))
-    if not is_knockout_league(league):
-        return None
-
     home = normalize_team(str(event.get("home", "")))
     away = normalize_team(str(event.get("away", "")))
     if not home or not away or home == away:
+        return None
+    bracket = lookup_bracket(home, away)
+    if not (is_knockout_league(league) or (bracket and is_world_cup_league(league))):
         return None
 
     kickoff = event.get("date") or ""
     raw_status = event.get("status") or "pending"
     norm = normalize_fixture(raw_status, kickoff, event.get("scores"))
     ko_round = parse_knockout_round(league)
-    bracket = lookup_bracket(home, away)
+    if ko_round == "Knockout" and bracket:
+        ko_round = ROUND_LABELS.get(bracket["round"], ko_round)
 
     return {
         "id": event.get("id"),
@@ -91,13 +95,15 @@ def parse_knockout_fixture(event: dict) -> dict | None:
 
 def parse_fixture(event: dict) -> dict | None:
     league = str(event.get("league", {}).get("name", ""))
+    home = normalize_team(str(event.get("home", "")))
+    away = normalize_team(str(event.get("away", "")))
+    # API lists R32 under generic "FIFA World Cup" — detect via bracket pair.
+    if home and away and lookup_bracket(home, away) and is_world_cup_league(league):
+        return parse_knockout_fixture(event)
     if is_knockout_league(league):
         return parse_knockout_fixture(event)
     if not is_group_stage_league(league):
         return None
-
-    home = normalize_team(str(event.get("home", "")))
-    away = normalize_team(str(event.get("away", "")))
     if not home or not away or home == away:
         return None
 
@@ -155,20 +161,26 @@ def fetch_events(api_key: str) -> list[dict]:
 
 
 def fetch_historical_events(api_key: str) -> list[dict]:
-    """Fetch settled WC group-stage results dropped from the live /events feed."""
-    response = requests.get(
-        f"{BASE_URL}/historical/events",
-        params={
-            "sport": "football",
-            "apiKey": api_key,
-            "league": WC_LEAGUE_SLUG,
-            "from": HISTORICAL_FROM,
-            "to": HISTORICAL_TO,
-        },
-        timeout=30,
-    )
-    response.raise_for_status()
-    return response.json()
+    """Fetch settled WC results dropped from the live /events feed."""
+    by_id: dict[int, dict] = {}
+    for date_from, date_to in HISTORICAL_RANGES:
+        response = requests.get(
+            f"{BASE_URL}/historical/events",
+            params={
+                "sport": "football",
+                "apiKey": api_key,
+                "league": WC_LEAGUE_SLUG,
+                "from": date_from,
+                "to": date_to,
+            },
+            timeout=30,
+        )
+        response.raise_for_status()
+        for event in response.json():
+            eid = event.get("id")
+            if eid is not None:
+                by_id[eid] = event
+    return list(by_id.values())
 
 
 def load_finished_archive() -> list[dict]:

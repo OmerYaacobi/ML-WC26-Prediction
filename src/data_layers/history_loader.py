@@ -1,9 +1,10 @@
 import pandas as pd
 from pathlib import Path
 
-# WC26 group games are the freshest signal — weight each match this many times
-# vs a typical 2022+ international (so 72 group games materially move ratings).
+# WC26 tournament games are up-weighted vs a typical 2022+ international.
 WC26_GROUP_WEIGHT = 8.0
+WC26_KNOCKOUT_WEIGHT = 12.0
+WC26_KNOCKOUT_START = "2026-06-28"
 
 # results.csv spellings → model team names (must match squad_loader / wc26_groups)
 CSV_TO_MODEL = {
@@ -23,7 +24,12 @@ def _map_team(name: str) -> str:
 
 
 def _row_weight(row) -> float:
-    if row.get("tournament") == "FIFA World Cup" and str(row["date"]) >= "2026-06-11":
+    if row.get("tournament") != "FIFA World Cup":
+        return 1.0
+    d = str(row["date"])
+    if d >= WC26_KNOCKOUT_START:
+        return WC26_KNOCKOUT_WEIGHT
+    if d >= "2026-06-11":
         return WC26_GROUP_WEIGHT
     return 1.0
 
@@ -60,8 +66,15 @@ class HistoryDataLoader:
         df["away_team"] = df["away_team"].map(_map_team)
         df["_weight"] = df.apply(_row_weight, axis=1)
 
-        wc26_n = int(((df["tournament"] == "FIFA World Cup") & (df["date"] >= "2026-06-11")).sum())
-        print(f"   Using {len(df)} scored matches since 2022 ({wc26_n} WC26 group games ×{WC26_GROUP_WEIGHT:.0f} weight)")
+        wc26_group = int(
+            ((df["tournament"] == "FIFA World Cup") & (df["date"] >= "2026-06-11") & (df["date"] < WC26_KNOCKOUT_START)).sum()
+        )
+        wc26_ko = int(((df["tournament"] == "FIFA World Cup") & (df["date"] >= WC26_KNOCKOUT_START)).sum())
+        print(
+            f"   Using {len(df)} scored matches since 2022 "
+            f"({wc26_group} WC26 group ×{WC26_GROUP_WEIGHT:.0f}, "
+            f"{wc26_ko} knockout ×{WC26_KNOCKOUT_WEIGHT:.0f})"
+        )
 
         avg_home_goals = df["home_score"].mean()
         avg_away_goals = df["away_score"].mean()

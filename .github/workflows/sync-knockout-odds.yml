@@ -1,0 +1,66 @@
+name: Sync WC26 knockout odds
+
+on:
+  schedule:
+    # Once daily — refresh Bet365 lines for upcoming knockout fixtures
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-odds:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: sync-knockout-odds
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pandas requests python-dotenv
+
+      - name: Fetch Bet365 knockout odds
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          if [ -z "$ODDS_API_KEY" ]; then
+            echo "::error::ODDS_API_KEY secret is not set"
+            exit 1
+          fi
+          python scripts/fetch_knockout_odds.py
+
+      - name: Rebuild model with updated market odds
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          if [ -f data/raw/results.csv ]; then
+            python scripts/sync_group_results.py
+          else
+            echo "::warning::data/raw/results.csv missing — rebuilding from committed cache only"
+            python -m src.features.pipeline
+            python scripts/build_webapp_data.py
+          fi
+
+      - name: Commit and push if changed
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/raw/market_odds_knockout.json \
+            data/raw/market_odds_group_stage.json \
+            data/processed/blended_model_features.csv docs/data.js data/raw/results.csv
+          if git diff --staged --quiet; then
+            echo "No odds or model changes to commit."
+          else
+            git commit -m "Refresh WC26 knockout odds and rebuild model ratings"
+            git pull --rebase origin ${{ github.ref_name }}
+            git push origin HEAD:${{ github.ref_name }}
+          fi

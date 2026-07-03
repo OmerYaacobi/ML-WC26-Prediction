@@ -25,7 +25,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install requests python-dotenv
+        run: pip install pandas requests python-dotenv
 
       - name: Fetch fixtures from odds-api.io
         env:
@@ -39,6 +39,16 @@ jobs:
 
       - name: Publish docs/fixtures.js and fixtures.json
         run: python scripts/publish_fixtures.py
+
+      - name: Sync WC26 results and rebuild model
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          if [ ! -f data/raw/results.csv ]; then
+            echo "::warning::data/raw/results.csv missing — commit it once so CI can rebuild ratings"
+            exit 0
+          fi
+          python scripts/sync_group_results.py
 
       - name: Settle finished bets (optional)
         continue-on-error: true
@@ -59,11 +69,12 @@ jobs:
           set -e
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/fixtures.js docs/fixtures.json data/wc26_finished_archive.json
+          git add docs/fixtures.js docs/fixtures.json data/wc26_finished_archive.json \
+            data/processed/blended_model_features.csv docs/data.js data/raw/results.csv
           if git diff --staged --quiet; then
-            echo "No fixture changes to commit."
+            echo "No changes to commit."
           else
-            git commit -m "Sync WC26 fixtures and scores from odds-api.io"
+            git commit -m "Sync WC26 fixtures, results, and model ratings"
             git pull --rebase origin ${{ github.ref_name }}
             git push origin HEAD:${{ github.ref_name }}
           fi
