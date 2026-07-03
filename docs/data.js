@@ -72,8 +72,8 @@ const TEAM_RATINGS = {
     "squad": 73.5
   },
   "Australia": {
-    "att": 0.336,
-    "def": 1.133,
+    "att": 0.315,
+    "def": 1.147,
     "squad": 70.9
   },
   "Turkey": {
@@ -127,8 +127,8 @@ const TEAM_RATINGS = {
     "squad": 82.9
   },
   "Egypt": {
-    "att": 0.521,
-    "def": 0.982,
+    "att": 0.514,
+    "def": 0.986,
     "squad": 76.7
   },
   "Iran": {

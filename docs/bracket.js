@@ -138,8 +138,7 @@ const WC26_BRACKET_MATCHES = [
     "home": "Australia",
     "away": "Egypt",
     "kickoff": "2026-07-03T18:00:00Z",
-    "venue": "AT&T Stadium, Arlington",
-    "id": 53452503
+    "venue": "AT&T Stadium, Arlington"
   },
   {
     "matchNo": 86,

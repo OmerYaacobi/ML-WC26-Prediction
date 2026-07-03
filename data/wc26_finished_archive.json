@@ -1215,6 +1215,22 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "BC Place, Vancouver"
+    },
+    {
+      "id": 53452503,
+      "matchNo": 88,
+      "home": "Australia",
+      "away": "Egypt",
+      "stage": "knockout",
+      "round": "Round of 32",
+      "bracketRound": "r32",
+      "kickoff": "2026-07-03T18:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "venue": "AT&T Stadium, Arlington"
     }
   ]
 }
