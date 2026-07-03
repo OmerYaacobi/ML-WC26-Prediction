@@ -71,7 +71,7 @@ def parse_knockout_fixture(event: dict) -> dict | None:
 
     kickoff = event.get("date") or ""
     raw_status = event.get("status") or "pending"
-    norm = normalize_fixture(raw_status, kickoff, event.get("scores"))
+    norm = normalize_fixture(raw_status, kickoff, event.get("scores"), knockout=True)
     ko_round = parse_knockout_round(league)
     if ko_round == "Knockout" and bracket:
         ko_round = ROUND_LABELS.get(bracket["round"], ko_round)

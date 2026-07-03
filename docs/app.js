@@ -70,28 +70,49 @@ const BRACKET_ROUND_LABELS = {
 };
 
 const bracketByPair = new Map();
-if (typeof WC26_BRACKET_MATCHES !== "undefined") {
-  for (const m of WC26_BRACKET_MATCHES) {
-    if (m.home && m.away) {
-      bracketByPair.set(`${m.home}|${m.away}`, m);
-      bracketByPair.set(`${m.away}|${m.home}`, m);
+
+function rebuildBracketLookup() {
+  bracketByPair.clear();
+  if (typeof WC26_BRACKET_MATCHES !== "undefined") {
+    for (const m of WC26_BRACKET_MATCHES) {
+      if (m.home && m.away) {
+        bracketByPair.set(`${m.home}|${m.away}`, m);
+        bracketByPair.set(`${m.away}|${m.home}`, m);
+      }
+    }
+  }
+  for (const f of liveFixtures) {
+    if ((f.stage === "knockout" || f.bracketRound) && f.home && f.away) {
+      const key = `${f.home}|${f.away}`;
+      if (!bracketByPair.has(key)) {
+        bracketByPair.set(key, { round: f.bracketRound, matchNo: f.matchNo });
+        bracketByPair.set(`${f.away}|${f.home}`, { round: f.bracketRound, matchNo: f.matchNo });
+      }
     }
   }
 }
+rebuildBracketLookup();
 
 function bracketLookup(home, away) {
   return bracketByPair.get(`${home}|${away}`) || null;
 }
 
 function isKnockoutFixture(f) {
-  return f?.stage === "knockout" || !!bracketLookup(f?.home, f?.away);
+  return f?.stage === "knockout" || !!f?.bracketRound || !!bracketLookup(f?.home, f?.away);
 }
 
 function fixtureMetaLine(f) {
   if (isKnockoutFixture(f)) {
-    return f.round || BRACKET_ROUND_LABELS[bracketLookup(f.home, f.away)?.round] || "Knockout";
+    const round =
+      f.round ||
+      BRACKET_ROUND_LABELS[f.bracketRound] ||
+      BRACKET_ROUND_LABELS[bracketLookup(f.home, f.away)?.round] ||
+      "Knockout";
+    return f.matchNo ? `${round} · M${f.matchNo}` : round;
   }
-  return `${f.group} · MD ${f.md}`;
+  if (f.group && f.md) return `${f.group} · MD ${f.md}`;
+  if (f.group) return f.group;
+  return "Group stage";
 }
 
 function mergeKnockoutFixtures(fixtures) {
@@ -112,7 +133,7 @@ function mergeKnockoutFixtures(fixtures) {
       home: m.home,
       away: m.away,
       stage: "knockout",
-      round: BRACKET_ROUND_LABELS[m.round] || m.round,
+      round: apiKo?.round || BRACKET_ROUND_LABELS[m.round] || m.round,
       bracketRound: m.round,
       kickoff: apiKo?.kickoff || m.kickoff,
       status: apiKo?.status || "pending",
@@ -311,18 +332,19 @@ function renderMatch() {
   const lockEl = $("matchLockBanner");
   if (fx && locked) {
     lockEl.classList.remove("hidden");
+    lockEl.classList.remove("open");
     lockEl.textContent =
       fx.status === "settled"
-        ? `Final: ${dname(fx.home)} ${fx.homeScore}–${fx.awayScore} ${dname(fx.away)} — betting closed.`
+        ? `Final: ${dname(fx.home)} ${fx.homeScore}–${fx.awayScore} ${dname(fx.away)} · ${fixtureMetaLine(fx)} — model odds below (betting closed).`
         : fx.status === "live"
-          ? "Match in progress — betting closed."
+          ? `${fixtureMetaLine(fx)} · Match in progress — betting closed.`
           : fx.kickoff
-            ? `Kickoff ${fmtKickoff(fx.kickoff)} — betting closed for this match.`
-            : "This match is not open for betting yet. Load the live schedule with scripts/fetch_fixtures.py.";
+            ? `${fixtureMetaLine(fx)} · Kickoff ${fmtKickoff(fx.kickoff)} — betting closed.`
+            : "This match is not open for betting yet.";
   } else if (fx && fx.kickoff) {
     lockEl.classList.remove("hidden");
     lockEl.classList.add("open");
-    lockEl.textContent = `${fx.group} · ${fmtKickoff(fx.kickoff)} · betting open until kickoff`;
+    lockEl.textContent = `${fixtureMetaLine(fx)} · ${fmtKickoff(fx.kickoff)} · betting open until kickoff`;
   } else {
     lockEl.classList.add("hidden");
     lockEl.classList.remove("open");
@@ -584,19 +606,23 @@ function renderBracket() {
     : "Knockout stage";
 }
 
-function fixtureRowHtml(f, { showActions = true } = {}) {
+function fixtureRowHtml(f, { resultsTab = false } = {}) {
   const H = WC26FixtureHelpers;
   const status = H.effectiveStatus(f);
   const statusCls =
     status === "settled" ? "done" : status === "live" ? "live" : isBettable(f.home, f.away) ? "open" : "locked";
   const canBet = isBettableForFixture(f);
-  const actionBtn = !showActions
-    ? ""
-    : canBet
-      ? `<button class="fx-btn" data-home="${f.home}" data-away="${f.away}">View odds →</button>`
-      : status === "live"
-        ? `<button class="fx-btn fx-btn-muted" data-home="${f.home}" data-away="${f.away}">View match →</button>`
-        : `<span class="fx-locked-label">Betting closed</span>`;
+  const canViewOdds = canBet || status === "live" || status === "settled";
+  let actionBtn = "";
+  if (canBet) {
+    actionBtn = `<button class="fx-btn" data-home="${f.home}" data-away="${f.away}">View odds →</button>`;
+  } else if (canViewOdds) {
+    actionBtn = `<button class="fx-btn fx-btn-muted" data-home="${f.home}" data-away="${f.away}">${
+      status === "settled" ? "View model odds" : "View match →"
+    }</button>`;
+  } else {
+    actionBtn = `<span class="fx-locked-label">Betting closed</span>`;
+  }
   const metaLine = fixtureMetaLine(f);
   return `
     <div class="fixture-row ${canBet ? "" : "fixture-closed"}">
@@ -618,40 +644,44 @@ function formatFixtureMeta(meta) {
 
 function renderFixtures() {
   const g = $("groupFilter").value;
-  const md = document.querySelector("#mdFilter .seg-btn.active").dataset.md;
+  const schedule =
+    document.querySelector("#scheduleFilter .seg-btn.active")?.dataset.schedule || "upcoming";
+  const stage = document.querySelector("#stageFilter .seg-btn.active")?.dataset.stage || "all";
   const H = WC26FixtureHelpers;
+  const resultsTab = schedule === "results";
+
+  $("groupFilter").style.display = stage === "knockout" ? "none" : "";
 
   const list = getFixtures()
     .filter((f) => {
       const ko = isKnockoutFixture(f);
-      if (md === "knockout") return ko;
-      if (md !== "all" && ko) return false;
-      if (g !== "all" && f.group !== g) return false;
-      if (md !== "all" && String(f.md) !== md) return false;
+      if (resultsTab) {
+        if (!H.isFinished(f)) return false;
+      } else if (!H.isActive(f)) {
+        return false;
+      }
+      if (stage === "group" && ko) return false;
+      if (stage === "knockout" && !ko) return false;
+      if (g !== "all" && !ko && f.group !== g) return false;
       return true;
     })
     .sort((a, b) => {
-      const rank = (f) => (f.status === "live" ? 0 : f.status === "pending" ? 1 : 2);
-      const dr = rank(a) - rank(b);
-      if (dr !== 0) return dr;
-      if (a.status === "settled" && b.status === "settled") {
-        return (b.kickoff || "").localeCompare(a.kickoff || "");
-      }
-      return (a.kickoff || "").localeCompare(b.kickoff || "");
+      if (resultsTab) return H.sortFinished(a, b);
+      return H.sortActive(a, b);
     });
 
-  const finished = list.filter((f) => H.isFinished(f)).length;
   const meta = liveFixturesMeta || FIXTURES_META || {};
   const sync = formatFixtureMeta(meta);
-  $("fixturesTitle").innerHTML = `Tournament Schedule <span class="fair-tag" id="fixturesMeta"></span>`;
+  const title = resultsTab ? "Match Results" : "Upcoming Matches";
+  $("fixturesTitle").innerHTML = `${title} <span class="fair-tag" id="fixturesMeta"></span>`;
   $("fixturesMeta").textContent =
     meta.source === "api"
-      ? `${list.length} matches · ${finished} finished · ${sync}`
+      ? `${list.length} matches · ${sync}`
       : `${list.length} matches · awaiting schedule`;
 
   $("fixturesList").innerHTML = list.length
-    ? list.map((f) => fixtureRowHtml(f, { showActions: f.status !== "settled" })).join("")
-    : `<p class="note">No matches in this filter.</p>`;
+    ? list.map((f) => fixtureRowHtml(f, { resultsTab })).join("")
+    : `<p class="note">${resultsTab ? "No finished matches yet." : "No upcoming matches — check Results or Bracket."}</p>`;
 }
 
 /* ---------------- bet slip ---------------- */
@@ -1068,9 +1098,16 @@ $("groupFilter").innerHTML =
   `<option value="all">All groups</option>` +
   Object.keys(GROUPS).map((g) => `<option value="${g}">${g}</option>`).join("");
 $("groupFilter").addEventListener("change", renderFixtures);
-document.querySelectorAll("#mdFilter .seg-btn").forEach((b) =>
+document.querySelectorAll("#scheduleFilter .seg-btn").forEach((b) =>
   b.addEventListener("click", () => {
-    document.querySelectorAll("#mdFilter .seg-btn").forEach((x) => x.classList.remove("active"));
+    document.querySelectorAll("#scheduleFilter .seg-btn").forEach((x) => x.classList.remove("active"));
+    b.classList.add("active");
+    renderFixtures();
+  })
+);
+document.querySelectorAll("#stageFilter .seg-btn").forEach((b) =>
+  b.addEventListener("click", () => {
+    document.querySelectorAll("#stageFilter .seg-btn").forEach((x) => x.classList.remove("active"));
     b.classList.add("active");
     renderFixtures();
   })
@@ -1208,6 +1245,7 @@ function applyFixtureData(data) {
   }
   liveFixtures = data.fixtures;
   liveFixturesMeta = data.meta;
+  rebuildBracketLookup();
   return true;
 }
 

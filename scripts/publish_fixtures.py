@@ -13,7 +13,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from wc26_groups import GROUPS
-from wc26_bracket import merge_knockout_fixtures, write_bracket_js
+from wc26_bracket import advance_bracket, merge_knockout_fixtures, write_bracket_js
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 API_PATH = PROJECT_ROOT / "data" / "processed" / "wc26_fixtures.json"
@@ -101,8 +101,10 @@ def main() -> None:
             else:
                 print("⚠️  API returned no fixtures — using synthetic fallback")
 
-    write_outputs(source, updated_at, merge_knockout_fixtures(fixtures))
-    write_bracket_js(PROJECT_ROOT / "docs" / "bracket.js")
+    advanced = advance_bracket(fixtures)
+    merged = merge_knockout_fixtures(fixtures, advanced)
+    write_outputs(source, updated_at, merged)
+    write_bracket_js(PROJECT_ROOT / "docs" / "bracket.js", advanced)
 
 
 if __name__ == "__main__":

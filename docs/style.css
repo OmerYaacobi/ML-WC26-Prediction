@@ -258,7 +258,8 @@ button { font-family: inherit; }
 .finished-list .fixture-row { opacity: 0.95; }
 .fx-btn-muted { opacity: 0.85; }
 .fx-locked-label { font-size: 12px; color: var(--muted); font-weight: 600; }
-.fixture-filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.fixture-filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
+#scheduleFilter { flex-shrink: 0; }
 .fixture-filters select {
   background: var(--panel-2); color: var(--text); border: 1px solid var(--line);
   border-radius: 9px; padding: 8px 12px; font-size: 14px; font-weight: 600; cursor: pointer;

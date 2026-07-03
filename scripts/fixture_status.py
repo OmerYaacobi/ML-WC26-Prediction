@@ -37,7 +37,35 @@ def extract_scores(scores: dict | None) -> tuple[int | None, int | None, bool]:
     return None, None, False
 
 
-def normalize_fixture(raw_status: str, kickoff: str, scores: dict | None) -> dict:
+def extract_ko_decisive_scores(scores: dict | None) -> tuple[int | None, int | None]:
+    """Decisive KO scoreline — includes extra time / penalties when provided."""
+    if not isinstance(scores, dict):
+        return None, None
+
+    periods = scores.get("periods") or {}
+    ft = periods.get("ft") or {}
+    top_h, top_a = scores.get("home"), scores.get("away")
+    ft_h, ft_a = ft.get("home"), ft.get("away")
+
+    if top_h is not None and top_a is not None and ft_h is not None and ft_a is not None:
+        if int(top_h) != int(ft_h) or int(top_a) != int(ft_a):
+            return int(top_h), int(top_a)
+
+    for key in ("ap", "ot"):
+        period = periods.get(key)
+        if isinstance(period, dict) and period.get("home") is not None and period.get("away") is not None:
+            ph, pa = int(period["home"]), int(period["away"])
+            if ph != pa:
+                return ph, pa
+
+    if ft_h is not None and ft_a is not None:
+        return int(ft_h), int(ft_a)
+    if top_h is not None and top_a is not None:
+        return int(top_h), int(top_a)
+    return None, None
+
+
+def normalize_fixture(raw_status: str, kickoff: str, scores: dict | None, *, knockout: bool = False) -> dict:
     """Map API event fields → {status, homeScore, awayScore, bettable}."""
     status = (raw_status or "pending").lower()
     home_score, away_score, has_ft = extract_scores(scores)
@@ -53,12 +81,18 @@ def normalize_fixture(raw_status: str, kickoff: str, scores: dict | None) -> dic
         }
 
     if status in FINISHED_STATUSES or has_ft:
-        return {
+        result = {
             "status": "settled",
             "homeScore": home_score,
             "awayScore": away_score,
             "bettable": False,
         }
+        if knockout:
+            khs, kas = extract_ko_decisive_scores(scores)
+            if khs is not None and kas is not None:
+                result["homeScore"] = khs
+                result["awayScore"] = kas
+        return result
 
     if status in LIVE_STATUSES or kickoff_passed:
         return {

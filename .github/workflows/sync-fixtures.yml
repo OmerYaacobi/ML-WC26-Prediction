@@ -69,7 +69,7 @@ jobs:
           set -e
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/fixtures.js docs/fixtures.json data/wc26_finished_archive.json \
+          git add docs/fixtures.js docs/fixtures.json docs/bracket.js data/wc26_finished_archive.json \
             data/processed/blended_model_features.csv docs/data.js data/raw/results.csv
           if git diff --staged --quiet; then
             echo "No changes to commit."

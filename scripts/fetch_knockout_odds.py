@@ -19,12 +19,30 @@ import requests
 from dotenv import load_dotenv
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from wc26_bracket import lookup_bracket
+from wc26_bracket import advance_bracket, lookup_bracket
 from wc26_groups import is_world_cup_league, normalize_team
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 BASE_URL = "https://api.odds-api.io/v3"
 OUTPUT_FILE = PROJECT_ROOT / "data" / "raw" / "market_odds_knockout.json"
+FIXTURES_CANDIDATES = (
+    PROJECT_ROOT / "data" / "processed" / "wc26_fixtures.json",
+    PROJECT_ROOT / "docs" / "fixtures.json",
+)
+
+
+def _load_bracket_matches() -> list[dict]:
+    for path in FIXTURES_CANDIDATES:
+        if not path.exists():
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            fixtures = data.get("fixtures", [])
+            if fixtures:
+                return advance_bracket(fixtures)
+        except (json.JSONDecodeError, OSError):
+            continue
+    return advance_bracket([])
 
 
 def _load_cache() -> tuple[list[dict], dict[str, dict]]:
@@ -47,7 +65,7 @@ def _save_cache(data: list[dict]) -> None:
     OUTPUT_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")
 
 
-def _is_knockout_event(event: dict) -> bool:
+def _is_knockout_event(event: dict, bracket_matches: list[dict]) -> bool:
     league = str(event.get("league", {}).get("name", ""))
     if not is_world_cup_league(league):
         return False
@@ -55,7 +73,7 @@ def _is_knockout_event(event: dict) -> bool:
     away = normalize_team(str(event.get("away", "")))
     if not home or not away:
         return False
-    return lookup_bracket(home, away) is not None
+    return lookup_bracket(home, away, bracket_matches) is not None
 
 
 def _fetch_odds(api_key: str, event_id: str) -> dict | None:
@@ -100,7 +118,8 @@ def fetch_knockout_odds(*, refresh_pending: bool = True) -> int:
         print(f"❌ Failed to list events: {exc}")
         return 0
 
-    ko_events = [e for e in all_events if _is_knockout_event(e)]
+    bracket_matches = _load_bracket_matches()
+    ko_events = [e for e in all_events if _is_knockout_event(e, bracket_matches)]
     print(f"   Found {len(ko_events)} knockout bracket matches on the book")
 
     cached_list, cached_by_id = _load_cache()

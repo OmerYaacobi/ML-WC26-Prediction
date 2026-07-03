@@ -72,7 +72,96 @@ for _m in BRACKET_MATCHES:
         BRACKET_BY_PAIR[(a, h)] = _m
 
 
-def lookup_bracket(home: str, away: str) -> dict | None:
+def _rebuild_pair_lookup(matches: list[dict]) -> dict[tuple[str, str], dict]:
+    lookup: dict[tuple[str, str], dict] = {}
+    for match in matches:
+        h, a = match.get("home"), match.get("away")
+        if h and a:
+            lookup[(h, a)] = match
+            lookup[(a, h)] = match
+    return lookup
+
+
+def fixture_winner_loser(fx: dict) -> tuple[str, str] | None:
+    """Return (winner, loser) for a settled knockout fixture."""
+    if fx.get("status") != "settled":
+        return None
+    home, away = fx.get("home"), fx.get("away")
+    hs, aws = fx.get("homeScore"), fx.get("awayScore")
+    if not home or not away or hs is None or aws is None:
+        return None
+    if hs == aws:
+        return None
+    return (home, away) if hs > aws else (away, home)
+
+
+def _fixture_for_match(match: dict, fixtures: list[dict], by_match_no: dict[int, dict]) -> dict | None:
+    mno = match["matchNo"]
+    if mno in by_match_no:
+        return by_match_no[mno]
+    home, away = match.get("home"), match.get("away")
+    if not home or not away:
+        return None
+    for fx in fixtures:
+        if fx.get("home") == home and fx.get("away") == away:
+            return fx
+        if fx.get("home") == away and fx.get("away") == home:
+            return fx
+    return None
+
+
+def advance_bracket(fixtures: list[dict]) -> list[dict]:
+    """Fill W/L slots from settled results — e.g. W83 → Portugal after M83 finishes."""
+    import copy
+
+    advanced = copy.deepcopy(BRACKET_MATCHES)
+    slots: dict[str, str] = {}
+    by_match_no: dict[int, dict] = {}
+    for fx in fixtures:
+        mno = fx.get("matchNo")
+        if mno is not None:
+            by_match_no[int(mno)] = fx
+
+    for match in sorted(advanced, key=lambda m: m["matchNo"]):
+        mno = match["matchNo"]
+        fx = _fixture_for_match(match, fixtures, by_match_no)
+
+        if fx and fx.get("status") == "settled":
+            result = fixture_winner_loser(fx)
+            if result:
+                winner, loser = result
+                slots[f"W{mno}"] = winner
+                slots[f"L{mno}"] = loser
+                match["homeScore"] = fx.get("homeScore")
+                match["awayScore"] = fx.get("awayScore")
+                match["status"] = "settled"
+            elif match.get("home") and match.get("away"):
+                match["status"] = fx.get("status", "settled")
+                match["homeScore"] = fx.get("homeScore")
+                match["awayScore"] = fx.get("awayScore")
+        elif fx:
+            match["status"] = fx.get("status", match.get("status", "pending"))
+            match["homeScore"] = fx.get("homeScore")
+            match["awayScore"] = fx.get("awayScore")
+            match["kickoff"] = fx.get("kickoff", match.get("kickoff"))
+            if fx.get("id") is not None:
+                match["id"] = fx["id"]
+
+        if not match.get("home") and match.get("homeLabel"):
+            resolved = slots.get(match["homeLabel"])
+            if resolved:
+                match["home"] = resolved
+        if not match.get("away") and match.get("awayLabel"):
+            resolved = slots.get(match["awayLabel"])
+            if resolved:
+                match["away"] = resolved
+
+    return advanced
+
+
+def lookup_bracket(home: str, away: str, matches: list[dict] | None = None) -> dict | None:
+    if matches is not None:
+        return _rebuild_pair_lookup(matches).get((home, away))
     return BRACKET_BY_PAIR.get((home, away))
 
 
@@ -106,12 +195,18 @@ def bracket_to_fixture(match: dict, api: dict | None = None) -> dict | None:
     return base
 
 
-def merge_knockout_fixtures(fixtures: list[dict]) -> list[dict]:
+def merge_knockout_fixtures(fixtures: list[dict], bracket_matches: list[dict] | None = None) -> list[dict]:
     """Ensure all known knockout ties exist; overlay API data when available."""
+    matches = bracket_matches or advance_bracket(fixtures)
+    pair_lookup = _rebuild_pair_lookup(matches)
     by_pair = {(f["home"], f["away"]): f for f in fixtures if f.get("home") and f.get("away")}
-    merged = [f for f in fixtures if f.get("stage") != "knockout" and not lookup_bracket(f.get("home", ""), f.get("away", ""))]
+    merged = [
+        f
+        for f in fixtures
+        if f.get("stage") != "knockout" and not pair_lookup.get((f.get("home", ""), f.get("away", "")))
+    ]
 
-    for match in BRACKET_MATCHES:
+    for match in matches:
         home, away = match.get("home"), match.get("away")
         if not home or not away:
             continue
@@ -124,13 +219,20 @@ def merge_knockout_fixtures(fixtures: list[dict]) -> list[dict]:
     return merged
 
 
-def write_bracket_js(path) -> None:
+def write_bracket_js(path, bracket_matches: list[dict] | None = None) -> None:
     import json
     from pathlib import Path
+
+    matches = bracket_matches or BRACKET_MATCHES
+    # Strip internal keys before publishing to the browser.
+    public = []
+    for m in matches:
+        row = {k: v for k, v in m.items() if not k.startswith("_") and k not in ("status", "homeScore", "awayScore")}
+        public.append(row)
 
     payload = (
         "// Auto-generated by scripts/wc26_bracket.py — do not edit by hand.\n"
         f"const WC26_BRACKET_ROUNDS = {json.dumps(BRACKET_ROUNDS, indent=2)};\n\n"
-        f"const WC26_BRACKET_MATCHES = {json.dumps(BRACKET_MATCHES, indent=2, ensure_ascii=False)};\n"
+        f"const WC26_BRACKET_MATCHES = {json.dumps(public, indent=2, ensure_ascii=False)};\n"
     )
     Path(path).write_text(payload, encoding="utf-8")

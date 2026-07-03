@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-07-03T08:33:13.721859+00:00"
+    "updatedAt": "2026-07-03T08:53:04.901056+00:00"
   },
   "fixtures": [
     {
@@ -1054,8 +1054,8 @@
       "bracketRound": "r32",
       "kickoff": "2026-06-29T20:30:00Z",
       "status": "settled",
-      "homeScore": 1,
-      "awayScore": 1,
+      "homeScore": 4,
+      "awayScore": 5,
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "Gillette Stadium, Foxborough"
@@ -1070,8 +1070,8 @@
       "bracketRound": "r32",
       "kickoff": "2026-06-30T01:00:00Z",
       "status": "settled",
-      "homeScore": 1,
-      "awayScore": 1,
+      "homeScore": 3,
+      "awayScore": 4,
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "Estadio BBVA, Monterrey"
@@ -1150,7 +1150,7 @@
       "bracketRound": "r32",
       "kickoff": "2026-07-01T20:00:00Z",
       "status": "settled",
-      "homeScore": 2,
+      "homeScore": 3,
       "awayScore": 2,
       "bettable": false,
       "league": "International - FIFA World Cup",
@@ -1269,88 +1269,100 @@
       "venue": "Arrowhead Stadium, Kansas City"
     },
     {
-      "id": 53452511,
+      "id": "bracket-90",
+      "matchNo": 90,
       "home": "Canada",
       "away": "Morocco",
-      "stage": "group",
-      "group": "Group B",
+      "stage": "knockout",
+      "round": "Round of 16",
+      "bracketRound": "r16",
       "kickoff": "2026-07-04T17:00:00Z",
       "status": "pending",
       "homeScore": null,
       "awayScore": null,
       "bettable": true,
       "league": "International - FIFA World Cup",
-      "md": 3
+      "venue": "NRG Stadium, Houston"
     },
     {
-      "id": 53452509,
+      "id": "bracket-89",
+      "matchNo": 89,
       "home": "Paraguay",
       "away": "France",
-      "stage": "group",
-      "group": "Group D",
+      "stage": "knockout",
+      "round": "Round of 16",
+      "bracketRound": "r16",
       "kickoff": "2026-07-04T21:00:00Z",
       "status": "pending",
       "homeScore": null,
       "awayScore": null,
       "bettable": true,
       "league": "International - FIFA World Cup",
-      "md": 3
+      "venue": "Lincoln Financial Field, Philadelphia"
     },
     {
-      "id": 53452517,
+      "id": "bracket-91",
+      "matchNo": 91,
       "home": "Brazil",
       "away": "Norway",
-      "stage": "group",
-      "group": "Group C",
+      "stage": "knockout",
+      "round": "Round of 16",
+      "bracketRound": "r16",
       "kickoff": "2026-07-05T20:00:00Z",
       "status": "pending",
       "homeScore": null,
       "awayScore": null,
       "bettable": true,
       "league": "International - FIFA World Cup",
-      "md": 3
+      "venue": "MetLife Stadium, East Rutherford"
     },
     {
-      "id": 53452519,
+      "id": "bracket-92",
+      "matchNo": 92,
       "home": "Mexico",
       "away": "England",
-      "stage": "group",
-      "group": "Group A",
+      "stage": "knockout",
+      "round": "Round of 16",
+      "bracketRound": "r16",
       "kickoff": "2026-07-06T00:00:00Z",
       "status": "pending",
       "homeScore": null,
       "awayScore": null,
       "bettable": true,
       "league": "International - FIFA World Cup",
-      "md": 3
+      "venue": "Estadio Azteca, Mexico City"
     },
     {
-      "id": 53452513,
+      "id": "bracket-93",
+      "matchNo": 93,
       "home": "Portugal",
       "away": "Spain",
-      "stage": "group",
-      "group": "Group K",
+      "stage": "knockout",
+      "round": "Round of 16",
+      "bracketRound": "r16",
       "kickoff": "2026-07-06T19:00:00Z",
       "status": "pending",
       "homeScore": null,
       "awayScore": null,
       "bettable": true,
       "league": "International - FIFA World Cup",
-      "md": 3
+      "venue": "AT&T Stadium, Arlington"
     },
     {
-      "id": 53452515,
+      "id": "bracket-94",
+      "matchNo": 94,
       "home": "United States",
       "away": "Belgium",
-      "stage": "group",
-      "group": "Group D",
+      "stage": "knockout",
+      "round": "Round of 16",
+      "bracketRound": "r16",
       "kickoff": "2026-07-07T00:00:00Z",
       "status": "pending",
       "homeScore": null,
       "awayScore": null,
       "bettable": true,
       "league": "International - FIFA World Cup",
-      "md": 3
+      "venue": "Lumen Field, Seattle"
     }
   ]
 }

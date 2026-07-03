@@ -1,7 +1,10 @@
 .env
 
 # Raw datasets are large and stay local only
-data/raw/
+data/raw/*
+!data/raw/results.csv
+!data/raw/market_odds_group_stage.json
+!data/raw/market_odds_knockout.json
 
 # Processed outputs — ignore by default, allow the files the deployed app needs
 data/processed/*
