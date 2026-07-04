@@ -2,7 +2,7 @@
 const GLOBAL_BASE_XG = 2.482;
 const TEAM_RATINGS = {
   "Mexico": {
-    "att": 0.5,
+    "att": 0.475,
     "def": 0.966,
     "squad": 75.4
   },
@@ -22,7 +22,7 @@ const TEAM_RATINGS = {
     "squad": 77.5
   },
   "Canada": {
-    "att": 0.48,
+    "att": 0.469,
     "def": 1.04,
     "squad": 75.1
   },
@@ -37,17 +37,17 @@ const TEAM_RATINGS = {
     "squad": 73.0
   },
   "Switzerland": {
-    "att": 0.637,
+    "att": 0.63,
     "def": 0.948,
     "squad": 79.5
   },
   "Brazil": {
-    "att": 0.913,
+    "att": 0.885,
     "def": 0.713,
     "squad": 85.2
   },
   "Morocco": {
-    "att": 0.709,
+    "att": 0.678,
     "def": 0.863,
     "squad": 79.9
   },
@@ -62,12 +62,12 @@ const TEAM_RATINGS = {
     "squad": 77.4
   },
   "United States": {
-    "att": 0.689,
+    "att": 0.683,
     "def": 0.944,
     "squad": 79.5
   },
   "Paraguay": {
-    "att": 0.329,
+    "att": 0.299,
     "def": 1.192,
     "squad": 73.5
   },
@@ -122,12 +122,12 @@ const TEAM_RATINGS = {
     "squad": 72.1
   },
   "Belgium": {
-    "att": 0.832,
+    "att": 0.769,
     "def": 0.851,
     "squad": 82.9
   },
   "Egypt": {
-    "att": 0.514,
+    "att": 0.477,
     "def": 0.986,
     "squad": 76.7
   },
@@ -142,7 +142,7 @@ const TEAM_RATINGS = {
     "squad": 71.0
   },
   "Spain": {
-    "att": 0.876,
+    "att": 0.912,
     "def": 0.644,
     "squad": 86.2
   },
@@ -162,7 +162,7 @@ const TEAM_RATINGS = {
     "squad": 79.0
   },
   "France": {
-    "att": 0.956,
+    "att": 1.009,
     "def": 0.724,
     "squad": 86.1
   },
@@ -177,12 +177,12 @@ const TEAM_RATINGS = {
     "squad": 66.2
   },
   "Norway": {
-    "att": 0.723,
+    "att": 0.722,
     "def": 1.004,
     "squad": 80.1
   },
   "Argentina": {
-    "att": 0.895,
+    "att": 0.873,
     "def": 0.735,
     "squad": 83.8
   },
@@ -202,7 +202,7 @@ const TEAM_RATINGS = {
     "squad": 75.0
   },
   "Portugal": {
-    "att": 0.836,
+    "att": 0.821,
     "def": 0.721,
     "squad": 85.3
   },
@@ -217,12 +217,12 @@ const TEAM_RATINGS = {
     "squad": 75.5
   },
   "Colombia": {
-    "att": 0.607,
+    "att": 0.577,
     "def": 0.912,
     "squad": 78.2
   },
   "England": {
-    "att": 0.882,
+    "att": 0.823,
     "def": 0.77,
     "squad": 84.3
   },
