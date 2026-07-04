@@ -147,8 +147,8 @@ const TEAM_RATINGS = {
     "squad": 86.2
   },
   "Cape Verde": {
-    "att": 0.294,
-    "def": 1.122,
+    "att": 0.293,
+    "def": 1.118,
     "squad": 71.9
   },
   "Saudi Arabia": {
@@ -182,8 +182,8 @@ const TEAM_RATINGS = {
     "squad": 80.1
   },
   "Argentina": {
-    "att": 0.925,
-    "def": 0.719,
+    "att": 0.895,
+    "def": 0.735,
     "squad": 83.8
   },
   "Algeria": {

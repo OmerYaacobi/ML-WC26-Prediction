@@ -1231,6 +1231,22 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "AT&T Stadium, Arlington"
+    },
+    {
+      "id": 53452569,
+      "matchNo": 86,
+      "home": "Argentina",
+      "away": "Cape Verde",
+      "stage": "knockout",
+      "round": "Round of 32",
+      "bracketRound": "r32",
+      "kickoff": "2026-07-03T22:00:00Z",
+      "status": "settled",
+      "homeScore": 3,
+      "awayScore": 2,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "venue": "Hard Rock Stadium, Miami Gardens"
     }
   ]
 }

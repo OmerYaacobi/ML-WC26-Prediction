@@ -146,8 +146,7 @@ const WC26_BRACKET_MATCHES = [
     "home": "Argentina",
     "away": "Cape Verde",
     "kickoff": "2026-07-03T22:00:00Z",
-    "venue": "Hard Rock Stadium, Miami Gardens",
-    "id": 53452569
+    "venue": "Hard Rock Stadium, Miami Gardens"
   },
   {
     "matchNo": 87,
@@ -231,6 +230,8 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "W88",
     "kickoff": "2026-07-07T16:00:00Z",
     "venue": "Mercedes-Benz Stadium, Atlanta",
+    "id": "bracket-95",
+    "home": "Argentina",
     "away": "Egypt"
   },
   {
