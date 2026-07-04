@@ -148,7 +148,7 @@ const TEAM_RATINGS = {
   },
   "Cape Verde": {
     "att": 0.293,
-    "def": 1.118,
+    "def": 1.117,
     "squad": 71.9
   },
   "Saudi Arabia": {
@@ -217,8 +217,8 @@ const TEAM_RATINGS = {
     "squad": 75.5
   },
   "Colombia": {
-    "att": 0.617,
-    "def": 0.924,
+    "att": 0.607,
+    "def": 0.912,
     "squad": 78.2
   },
   "England": {
@@ -232,8 +232,8 @@ const TEAM_RATINGS = {
     "squad": 81.0
   },
   "Ghana": {
-    "att": 0.36,
-    "def": 1.104,
+    "att": 0.343,
+    "def": 1.095,
     "squad": 74.5
   },
   "Panama": {

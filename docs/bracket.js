@@ -154,8 +154,7 @@ const WC26_BRACKET_MATCHES = [
     "home": "Colombia",
     "away": "Ghana",
     "kickoff": "2026-07-04T01:30:00Z",
-    "venue": "Arrowhead Stadium, Kansas City",
-    "id": 53452507
+    "venue": "Arrowhead Stadium, Kansas City"
   },
   {
     "matchNo": 90,
@@ -241,7 +240,9 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "W87",
     "kickoff": "2026-07-07T20:00:00Z",
     "venue": "BC Place, Vancouver",
-    "home": "Switzerland"
+    "id": "bracket-96",
+    "home": "Switzerland",
+    "away": "Colombia"
   },
   {
     "matchNo": 97,
