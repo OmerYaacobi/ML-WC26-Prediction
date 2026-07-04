@@ -22,8 +22,8 @@ const TEAM_RATINGS = {
     "squad": 77.5
   },
   "Canada": {
-    "att": 0.469,
-    "def": 1.04,
+    "att": 0.439,
+    "def": 1.075,
     "squad": 75.1
   },
   "Bosnia and Herzegovina": {
@@ -47,8 +47,8 @@ const TEAM_RATINGS = {
     "squad": 85.2
   },
   "Morocco": {
-    "att": 0.678,
-    "def": 0.863,
+    "att": 0.694,
+    "def": 0.856,
     "squad": 79.9
   },
   "Haiti": {
