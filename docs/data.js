@@ -42,8 +42,8 @@ const TEAM_RATINGS = {
     "squad": 79.5
   },
   "Brazil": {
-    "att": 0.886,
-    "def": 0.713,
+    "att": 0.871,
+    "def": 0.734,
     "squad": 85.2
   },
   "Morocco": {
@@ -177,8 +177,8 @@ const TEAM_RATINGS = {
     "squad": 66.2
   },
   "Norway": {
-    "att": 0.721,
-    "def": 1.004,
+    "att": 0.714,
+    "def": 0.999,
     "squad": 80.1
   },
   "Argentina": {
