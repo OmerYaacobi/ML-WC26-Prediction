@@ -37,7 +37,7 @@ const TEAM_RATINGS = {
     "squad": 73.0
   },
   "Switzerland": {
-    "att": 0.632,
+    "att": 0.633,
     "def": 0.948,
     "squad": 79.5
   },
@@ -62,7 +62,7 @@ const TEAM_RATINGS = {
     "squad": 77.4
   },
   "United States": {
-    "att": 0.685,
+    "att": 0.688,
     "def": 0.944,
     "squad": 79.5
   },
@@ -122,12 +122,12 @@ const TEAM_RATINGS = {
     "squad": 72.1
   },
   "Belgium": {
-    "att": 0.771,
+    "att": 0.77,
     "def": 0.851,
     "squad": 82.9
   },
   "Egypt": {
-    "att": 0.481,
+    "att": 0.483,
     "def": 0.986,
     "squad": 76.7
   },
@@ -177,12 +177,12 @@ const TEAM_RATINGS = {
     "squad": 66.2
   },
   "Norway": {
-    "att": 0.722,
+    "att": 0.721,
     "def": 1.004,
     "squad": 80.1
   },
   "Argentina": {
-    "att": 0.875,
+    "att": 0.873,
     "def": 0.735,
     "squad": 83.8
   },
