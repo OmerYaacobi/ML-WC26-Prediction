@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-07-05T01:15:59.017411+00:00"
+    "updatedAt": "2026-07-05T05:08:55.611338+00:00"
   },
   "fixtures": [
     {
@@ -1395,6 +1395,20 @@
       "bettable": true,
       "league": "International - FIFA World Cup",
       "venue": "BC Place, Vancouver"
+    },
+    {
+      "id": 53452525,
+      "home": "France",
+      "away": "Morocco",
+      "stage": "group",
+      "group": "Group I",
+      "kickoff": "2026-07-09T20:00:00Z",
+      "status": "pending",
+      "homeScore": null,
+      "awayScore": null,
+      "bettable": true,
+      "league": "International - FIFA World Cup",
+      "md": 3
     }
   ]
 }
