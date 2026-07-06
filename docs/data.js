@@ -2,8 +2,8 @@
 const GLOBAL_BASE_XG = 2.482;
 const TEAM_RATINGS = {
   "Mexico": {
-    "att": 0.479,
-    "def": 0.966,
+    "att": 0.485,
+    "def": 0.997,
     "squad": 75.4
   },
   "South Africa": {
@@ -222,8 +222,8 @@ const TEAM_RATINGS = {
     "squad": 78.2
   },
   "England": {
-    "att": 0.825,
-    "def": 0.77,
+    "att": 0.839,
+    "def": 0.79,
     "squad": 84.3
   },
   "Croatia": {
