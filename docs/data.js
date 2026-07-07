@@ -53,7 +53,7 @@ const TEAM_RATINGS = {
   },
   "Haiti": {
     "att": 0.197,
-    "def": 1.485,
+    "def": 1.484,
     "squad": 64.6
   },
   "Scotland": {
@@ -62,8 +62,8 @@ const TEAM_RATINGS = {
     "squad": 77.4
   },
   "United States": {
-    "att": 0.691,
-    "def": 0.952,
+    "att": 0.673,
+    "def": 1.009,
     "squad": 79.5
   },
   "Paraguay": {
@@ -122,8 +122,8 @@ const TEAM_RATINGS = {
     "squad": 72.1
   },
   "Belgium": {
-    "att": 0.766,
-    "def": 0.858,
+    "att": 0.818,
+    "def": 0.859,
     "squad": 82.9
   },
   "Egypt": {
@@ -182,7 +182,7 @@ const TEAM_RATINGS = {
     "squad": 80.1
   },
   "Argentina": {
-    "att": 0.874,
+    "att": 0.873,
     "def": 0.746,
     "squad": 83.8
   },

@@ -1489,7 +1489,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1930-06-22,Italy,Spain,2,3,Friendly,Bologna,Italy,FALSE
 1930-06-27,Estonia,Latvia,1,1,Friendly,Tallinn,Estonia,FALSE
 1930-07-06,Sweden,Norway,6,3,Nordic Championship,Stockholm,Sweden,FALSE
-1930-07-13,Belgium,United States,0,3,FIFA World Cup,Montevideo,Uruguay,TRUE
+2026-07-07,Belgium,United States,4,1,FIFA World Cup,Montevideo,Uruguay,TRUE
 1930-07-13,France,Mexico,4,1,FIFA World Cup,Montevideo,Uruguay,TRUE
 1930-07-14,Brazil,Yugoslavia,1,2,FIFA World Cup,Montevideo,Uruguay,TRUE
 1930-07-14,Peru,Romania,1,3,FIFA World Cup,Montevideo,Uruguay,TRUE
@@ -37920,7 +37920,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2014-06-30,France,Nigeria,2,0,FIFA World Cup,Brasília,Brazil,TRUE
 2014-06-30,Germany,Algeria,2,1,FIFA World Cup,Porto Alegre,Brazil,TRUE
 2014-07-01,Argentina,Switzerland,1,0,FIFA World Cup,São Paulo,Brazil,TRUE
-2014-07-01,Belgium,United States,2,1,FIFA World Cup,Salvador,Brazil,TRUE
+2026-07-07,Belgium,United States,4,1,FIFA World Cup,Salvador,Brazil,TRUE
 2014-07-02,Vietnam,Myanmar,6,0,Friendly,Thủ Dầu Một,Vietnam,FALSE
 2014-07-04,Brazil,Colombia,2,1,FIFA World Cup,Fortaleza,Brazil,FALSE
 2014-07-04,France,Germany,0,1,FIFA World Cup,Rio de Janeiro,Brazil,TRUE
