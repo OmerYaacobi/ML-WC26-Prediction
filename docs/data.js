@@ -53,7 +53,7 @@ const TEAM_RATINGS = {
   },
   "Haiti": {
     "att": 0.197,
-    "def": 1.484,
+    "def": 1.485,
     "squad": 64.6
   },
   "Scotland": {
@@ -127,8 +127,8 @@ const TEAM_RATINGS = {
     "squad": 82.9
   },
   "Egypt": {
-    "att": 0.48,
-    "def": 0.995,
+    "att": 0.487,
+    "def": 1.026,
     "squad": 76.7
   },
   "Iran": {
@@ -182,8 +182,8 @@ const TEAM_RATINGS = {
     "squad": 80.1
   },
   "Argentina": {
-    "att": 0.877,
-    "def": 0.746,
+    "att": 0.891,
+    "def": 0.775,
     "squad": 83.8
   },
   "Algeria": {
