@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-07-07T23:35:54.475150+00:00"
+    "updatedAt": "2026-07-08T01:05:32.880605+00:00"
   },
   "fixtures": [
     {
@@ -1431,6 +1431,20 @@
       "stage": "group",
       "group": "Group I",
       "kickoff": "2026-07-11T21:00:00Z",
+      "status": "pending",
+      "homeScore": null,
+      "awayScore": null,
+      "bettable": true,
+      "league": "International - FIFA World Cup",
+      "md": 3
+    },
+    {
+      "id": 53452531,
+      "home": "Argentina",
+      "away": "Switzerland",
+      "stage": "group",
+      "group": "Group J",
+      "kickoff": "2026-07-12T01:00:00Z",
       "status": "pending",
       "homeScore": null,
       "awayScore": null,
