@@ -163,7 +163,6 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "W75",
     "kickoff": "2026-07-04T17:00:00Z",
     "venue": "NRG Stadium, Houston",
-    "id": "bracket-90",
     "home": "Canada",
     "away": "Morocco"
   },
@@ -174,7 +173,6 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "W77",
     "kickoff": "2026-07-04T21:00:00Z",
     "venue": "Lincoln Financial Field, Philadelphia",
-    "id": "bracket-89",
     "home": "Paraguay",
     "away": "France"
   },
@@ -185,7 +183,6 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "W78",
     "kickoff": "2026-07-05T20:00:00Z",
     "venue": "MetLife Stadium, East Rutherford",
-    "id": "bracket-91",
     "home": "Brazil",
     "away": "Norway"
   },
@@ -196,7 +193,6 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "W80",
     "kickoff": "2026-07-06T00:00:00Z",
     "venue": "Estadio Azteca, Mexico City",
-    "id": "bracket-92",
     "home": "Mexico",
     "away": "England"
   },
@@ -207,7 +203,6 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "W84",
     "kickoff": "2026-07-06T19:00:00Z",
     "venue": "AT&T Stadium, Arlington",
-    "id": "bracket-93",
     "home": "Portugal",
     "away": "Spain"
   },
@@ -218,7 +213,6 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "W82",
     "kickoff": "2026-07-07T00:00:00Z",
     "venue": "Lumen Field, Seattle",
-    "id": "bracket-94",
     "home": "United States",
     "away": "Belgium"
   },
@@ -229,7 +223,6 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "W88",
     "kickoff": "2026-07-07T16:00:00Z",
     "venue": "Mercedes-Benz Stadium, Atlanta",
-    "id": "bracket-95",
     "home": "Argentina",
     "away": "Egypt"
   },
@@ -240,7 +233,6 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "W87",
     "kickoff": "2026-07-07T20:00:00Z",
     "venue": "BC Place, Vancouver",
-    "id": "bracket-96",
     "home": "Switzerland",
     "away": "Colombia"
   },
@@ -250,7 +242,10 @@ const WC26_BRACKET_MATCHES = [
     "homeLabel": "W89",
     "awayLabel": "W90",
     "kickoff": "2026-07-09T20:00:00Z",
-    "venue": "Gillette Stadium, Foxborough"
+    "venue": "Gillette Stadium, Foxborough",
+    "home": "France",
+    "away": "Morocco",
+    "id": 53452525
   },
   {
     "matchNo": 98,
@@ -258,7 +253,10 @@ const WC26_BRACKET_MATCHES = [
     "homeLabel": "W93",
     "awayLabel": "W94",
     "kickoff": "2026-07-10T19:00:00Z",
-    "venue": "SoFi Stadium, Inglewood"
+    "venue": "SoFi Stadium, Inglewood",
+    "home": "Spain",
+    "away": "Belgium",
+    "id": 53452527
   },
   {
     "matchNo": 99,
@@ -266,7 +264,10 @@ const WC26_BRACKET_MATCHES = [
     "homeLabel": "W91",
     "awayLabel": "W92",
     "kickoff": "2026-07-11T21:00:00Z",
-    "venue": "Hard Rock Stadium, Miami Gardens"
+    "venue": "Hard Rock Stadium, Miami Gardens",
+    "home": "Norway",
+    "away": "England",
+    "id": 53452529
   },
   {
     "matchNo": 100,
@@ -274,7 +275,10 @@ const WC26_BRACKET_MATCHES = [
     "homeLabel": "W95",
     "awayLabel": "W96",
     "kickoff": "2026-07-12T01:00:00Z",
-    "venue": "Arrowhead Stadium, Kansas City"
+    "venue": "Arrowhead Stadium, Kansas City",
+    "home": "Argentina",
+    "away": "Switzerland",
+    "id": 53452531
   },
   {
     "matchNo": 101,
