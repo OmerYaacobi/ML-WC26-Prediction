@@ -124,6 +124,20 @@ def advance_bracket(fixtures: list[dict]) -> list[dict]:
 
     for match in sorted(advanced, key=lambda m: m["matchNo"]):
         mno = match["matchNo"]
+
+        # Resolve this tie's teams from earlier-round winners BEFORE looking up
+        # its fixture — later rounds (R16+) carry no matchNo when the API lists
+        # them under the generic league, so they can only be matched by team name
+        # once home/away are filled in.
+        if not match.get("home") and match.get("homeLabel"):
+            resolved = slots.get(match["homeLabel"])
+            if resolved:
+                match["home"] = resolved
+        if not match.get("away") and match.get("awayLabel"):
+            resolved = slots.get(match["awayLabel"])
+            if resolved:
+                match["away"] = resolved
+
         fx = _fixture_for_match(match, fixtures, by_match_no)
 
         if fx and fx.get("status") == "settled":
@@ -147,15 +161,6 @@ def advance_bracket(fixtures: list[dict]) -> list[dict]:
             if fx.get("id") is not None:
                 match["id"] = fx["id"]
 
-        if not match.get("home") and match.get("homeLabel"):
-            resolved = slots.get(match["homeLabel"])
-            if resolved:
-                match["home"] = resolved
-        if not match.get("away") and match.get("awayLabel"):
-            resolved = slots.get(match["awayLabel"])
-            if resolved:
-                match["away"] = resolved
-
     return advanced
 
 
@@ -166,33 +171,44 @@ def lookup_bracket(home: str, away: str, matches: list[dict] | None = None) -> d
 
 
 def bracket_to_fixture(match: dict, api: dict | None = None) -> dict | None:
-    """Build a fixture row from bracket data, optionally overlaid with API scores."""
+    """Build a fixture row from bracket data.
+
+    ``advance_bracket`` is the source of truth for status/score: it attributes
+    each result to its tie (by matchNo, then team pair) and stamps the match.
+    The raw API row is only used to backfill metadata, because R16+ results
+    arrive under the generic league and get misclassified as group fixtures —
+    so we can't rely on ``api['stage']`` to decide whether to trust them.
+    """
     home = match.get("home")
     away = match.get("away")
     if not home or not away:
         return None
 
-    base = {
-        "id": f"bracket-{match['matchNo']}",
+    api = api or {}
+    status = match.get("status") or api.get("status") or "pending"
+    home_score = match.get("homeScore")
+    if home_score is None:
+        home_score = api.get("homeScore")
+    away_score = match.get("awayScore")
+    if away_score is None:
+        away_score = api.get("awayScore")
+
+    return {
+        "id": match.get("id") or api.get("id") or f"bracket-{match['matchNo']}",
         "matchNo": match["matchNo"],
         "home": home,
         "away": away,
         "stage": "knockout",
         "round": ROUND_LABELS[match["round"]],
         "bracketRound": match["round"],
-        "kickoff": match["kickoff"],
-        "status": "pending",
-        "homeScore": None,
-        "awayScore": None,
-        "bettable": True,
-        "league": "International - FIFA World Cup",
+        "kickoff": match.get("kickoff") or api.get("kickoff"),
+        "status": status,
+        "homeScore": home_score,
+        "awayScore": away_score,
+        "bettable": False if status == "settled" else api.get("bettable", True),
+        "league": api.get("league") or "International - FIFA World Cup",
         "venue": match.get("venue", ""),
     }
-    if api and (api.get("stage") == "knockout" or lookup_bracket(home, away)):
-        for key in ("id", "kickoff", "status", "homeScore", "awayScore", "bettable", "league"):
-            if api.get(key) is not None:
-                base[key] = api[key]
-    return base
 
 
 def merge_knockout_fixtures(fixtures: list[dict], bracket_matches: list[dict] | None = None) -> list[dict]:

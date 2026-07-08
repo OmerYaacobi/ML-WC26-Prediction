@@ -59,6 +59,21 @@ def assign_matchdays(fixtures: list[dict]) -> None:
             fx["md"] = min(3, i // 2 + 1)
 
 
+def is_knockout_pairing(home: str, away: str, league: str) -> bool:
+    """True when this World Cup tie must be a knockout match.
+
+    The API lists R16+ under the generic "FIFA World Cup" league with no round
+    hint, so we can't rely on the league name or the static bracket (whose R16+
+    slots are still unresolved). Two teams from *different* groups can only meet
+    in the bracket — group-stage games are always within a single group.
+    """
+    if not is_world_cup_league(league):
+        return False
+    if is_knockout_league(league) or lookup_bracket(home, away):
+        return True
+    return TEAM_TO_GROUP.get(home) != TEAM_TO_GROUP.get(away)
+
+
 def parse_knockout_fixture(event: dict) -> dict | None:
     league = str(event.get("league", {}).get("name", ""))
     home = normalize_team(str(event.get("home", "")))
@@ -66,7 +81,7 @@ def parse_knockout_fixture(event: dict) -> dict | None:
     if not home or not away or home == away:
         return None
     bracket = lookup_bracket(home, away)
-    if not (is_knockout_league(league) or (bracket and is_world_cup_league(league))):
+    if not is_knockout_pairing(home, away, league):
         return None
 
     kickoff = event.get("date") or ""
@@ -97,8 +112,10 @@ def parse_fixture(event: dict) -> dict | None:
     league = str(event.get("league", {}).get("name", ""))
     home = normalize_team(str(event.get("home", "")))
     away = normalize_team(str(event.get("away", "")))
-    # API lists R32 under generic "FIFA World Cup" — detect via bracket pair.
-    if home and away and lookup_bracket(home, away) and is_world_cup_league(league):
+    # API lists all knockout ties under the generic "FIFA World Cup" league —
+    # detect them via bracket pair or cross-group pairing so decisive (extra
+    # time / penalty) scores are captured and winners can advance.
+    if home and away and home != away and is_knockout_pairing(home, away, league):
         return parse_knockout_fixture(event)
     if is_knockout_league(league):
         return parse_knockout_fixture(event)
