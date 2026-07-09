@@ -47,8 +47,8 @@ const TEAM_RATINGS = {
     "squad": 85.2
   },
   "Morocco": {
-    "att": 0.635,
-    "def": 0.866,
+    "att": 0.626,
+    "def": 0.877,
     "squad": 79.9
   },
   "Haiti": {
@@ -162,8 +162,8 @@ const TEAM_RATINGS = {
     "squad": 79.0
   },
   "France": {
-    "att": 0.932,
-    "def": 0.717,
+    "att": 0.929,
+    "def": 0.713,
     "squad": 86.1
   },
   "Senegal": {

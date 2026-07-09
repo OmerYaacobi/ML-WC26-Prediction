@@ -1391,6 +1391,22 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "BC Place, Vancouver"
+    },
+    {
+      "id": 53452525,
+      "matchNo": 97,
+      "home": "France",
+      "away": "Morocco",
+      "stage": "knockout",
+      "round": "Quarter-finals",
+      "bracketRound": "qf",
+      "kickoff": "2026-07-09T20:00:00Z",
+      "status": "settled",
+      "homeScore": 2,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "venue": "Gillette Stadium, Foxborough"
     }
   ]
 }

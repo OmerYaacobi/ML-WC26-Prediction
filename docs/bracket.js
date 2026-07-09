@@ -244,8 +244,7 @@ const WC26_BRACKET_MATCHES = [
     "kickoff": "2026-07-09T20:00:00Z",
     "venue": "Gillette Stadium, Foxborough",
     "home": "France",
-    "away": "Morocco",
-    "id": 53452525
+    "away": "Morocco"
   },
   {
     "matchNo": 98,
@@ -286,7 +285,8 @@ const WC26_BRACKET_MATCHES = [
     "homeLabel": "W97",
     "awayLabel": "W98",
     "kickoff": "2026-07-14T19:00:00Z",
-    "venue": "AT&T Stadium, Arlington"
+    "venue": "AT&T Stadium, Arlington",
+    "home": "France"
   },
   {
     "matchNo": 102,
