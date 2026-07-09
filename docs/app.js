@@ -118,34 +118,47 @@ function fixtureMetaLine(f) {
 }
 
 function mergeKnockoutFixtures(fixtures) {
-  if (typeof WC26_BRACKET_MATCHES === "undefined") return fixtures;
-  const byPair = new Map();
-  for (const f of fixtures) {
-    if (f.home && f.away) byPair.set(`${f.home}|${f.away}`, f);
-  }
   const groupOnly = fixtures.filter((f) => !isKnockoutFixture(f));
+
+  // fixtures.json (fetched fresh each poll) is the source of truth for
+  // knockout ties — it already carries resolved teams, scores, and round
+  // labels from the backend. The static bracket is only a fallback for ties
+  // not yet published (and can be stale in the browser cache), so it must
+  // never hide a live knockout fixture.
   const knockout = [];
-  for (const m of WC26_BRACKET_MATCHES) {
-    if (!m.home || !m.away) continue;
-    const api = byPair.get(`${m.home}|${m.away}`) || byPair.get(`${m.away}|${m.home}`);
-    const apiKo = api && isKnockoutFixture(api) ? api : null;
-    knockout.push({
-      id: apiKo?.id || `bracket-${m.matchNo}`,
-      matchNo: m.matchNo,
-      home: m.home,
-      away: m.away,
-      stage: "knockout",
-      round: apiKo?.round || BRACKET_ROUND_LABELS[m.round] || m.round,
-      bracketRound: m.round,
-      kickoff: apiKo?.kickoff || m.kickoff,
-      status: apiKo?.status || "pending",
-      homeScore: apiKo?.homeScore ?? null,
-      awayScore: apiKo?.awayScore ?? null,
-      bettable: apiKo?.bettable ?? true,
-      league: apiKo?.league || "International - FIFA World Cup",
-      venue: m.venue,
-    });
+  const seenPairs = new Set();
+  const seenMatchNos = new Set();
+  for (const f of fixtures) {
+    if (!isKnockoutFixture(f) || !f.home || !f.away) continue;
+    knockout.push(f);
+    seenPairs.add(`${f.home}|${f.away}`);
+    seenPairs.add(`${f.away}|${f.home}`);
+    if (f.matchNo) seenMatchNos.add(f.matchNo);
   }
+
+  if (typeof WC26_BRACKET_MATCHES !== "undefined") {
+    for (const m of WC26_BRACKET_MATCHES) {
+      if (!m.home || !m.away) continue;
+      if (seenMatchNos.has(m.matchNo) || seenPairs.has(`${m.home}|${m.away}`)) continue;
+      knockout.push({
+        id: `bracket-${m.matchNo}`,
+        matchNo: m.matchNo,
+        home: m.home,
+        away: m.away,
+        stage: "knockout",
+        round: BRACKET_ROUND_LABELS[m.round] || m.round,
+        bracketRound: m.round,
+        kickoff: m.kickoff,
+        status: "pending",
+        homeScore: null,
+        awayScore: null,
+        bettable: true,
+        league: "International - FIFA World Cup",
+        venue: m.venue,
+      });
+    }
+  }
+
   return [...groupOnly, ...knockout].sort(
     (a, b) => (a.kickoff || "").localeCompare(b.kickoff || "") || (a.matchNo || 0) - (b.matchNo || 0)
   );
@@ -507,8 +520,17 @@ function bracketSideName(team, fallback) {
 }
 
 function enrichBracketMatch(m) {
-  const home = m.home || null;
-  const away = m.away || null;
+  let home = m.home || null;
+  let away = m.away || null;
+  // Resolve teams from the fresh fixtures.json by match number when the cached
+  // bracket.js is behind (its W/L slots not yet filled for this round).
+  if (!home || !away) {
+    const live = getFixtures().find((f) => f.matchNo === m.matchNo && f.home && f.away);
+    if (live) {
+      home = live.home;
+      away = live.away;
+    }
+  }
   const fx = home && away ? getFixture(home, away) : null;
   return {
     ...m,
