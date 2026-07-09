@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-07-09T18:21:47.561954+00:00"
+    "updatedAt": "2026-07-09T20:11:47.106842+00:00"
   },
   "fixtures": [
     {
@@ -1405,10 +1405,10 @@
       "round": "Quarter-finals",
       "bracketRound": "qf",
       "kickoff": "2026-07-09T20:00:00Z",
-      "status": "pending",
-      "homeScore": null,
-      "awayScore": null,
-      "bettable": true,
+      "status": "live",
+      "homeScore": 0,
+      "awayScore": 0,
+      "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "Gillette Stadium, Foxborough"
     },
