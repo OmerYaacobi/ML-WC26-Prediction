@@ -254,8 +254,7 @@ const WC26_BRACKET_MATCHES = [
     "kickoff": "2026-07-10T19:00:00Z",
     "venue": "SoFi Stadium, Inglewood",
     "home": "Spain",
-    "away": "Belgium",
-    "id": 53452527
+    "away": "Belgium"
   },
   {
     "matchNo": 99,
@@ -286,7 +285,9 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "W98",
     "kickoff": "2026-07-14T19:00:00Z",
     "venue": "AT&T Stadium, Arlington",
-    "home": "France"
+    "home": "France",
+    "away": "Spain",
+    "id": "bracket-101"
   },
   {
     "matchNo": 102,

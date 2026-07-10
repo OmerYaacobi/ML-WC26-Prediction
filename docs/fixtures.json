@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-07-10T20:40:03.073462+00:00"
+    "updatedAt": "2026-07-10T21:39:28.731948+00:00"
   },
   "fixtures": [
     {
@@ -1421,8 +1421,8 @@
       "round": "Quarter-finals",
       "bracketRound": "qf",
       "kickoff": "2026-07-10T19:00:00Z",
-      "status": "live",
-      "homeScore": 1,
+      "status": "settled",
+      "homeScore": 2,
       "awayScore": 1,
       "bettable": false,
       "league": "International - FIFA World Cup",
@@ -1459,6 +1459,22 @@
       "bettable": true,
       "league": "International - FIFA World Cup",
       "venue": "Arrowhead Stadium, Kansas City"
+    },
+    {
+      "id": "bracket-101",
+      "matchNo": 101,
+      "home": "France",
+      "away": "Spain",
+      "stage": "knockout",
+      "round": "Semi-finals",
+      "bracketRound": "sf",
+      "kickoff": "2026-07-14T19:00:00Z",
+      "status": "pending",
+      "homeScore": null,
+      "awayScore": null,
+      "bettable": true,
+      "league": "International - FIFA World Cup",
+      "venue": "AT&T Stadium, Arlington"
     }
   ]
 }

@@ -1407,6 +1407,22 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "Gillette Stadium, Foxborough"
+    },
+    {
+      "id": 53452527,
+      "matchNo": 98,
+      "home": "Spain",
+      "away": "Belgium",
+      "stage": "knockout",
+      "round": "Quarter-finals",
+      "bracketRound": "qf",
+      "kickoff": "2026-07-10T19:00:00Z",
+      "status": "settled",
+      "homeScore": 2,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "venue": "SoFi Stadium, Inglewood"
     }
   ]
 }
