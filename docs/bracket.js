@@ -287,7 +287,7 @@ const WC26_BRACKET_MATCHES = [
     "venue": "AT&T Stadium, Arlington",
     "home": "France",
     "away": "Spain",
-    "id": "bracket-101"
+    "id": 53452533
   },
   {
     "matchNo": 102,
