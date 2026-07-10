@@ -37,7 +37,7 @@ const TEAM_RATINGS = {
     "squad": 73.0
   },
   "Switzerland": {
-    "att": 0.584,
+    "att": 0.586,
     "def": 0.94,
     "squad": 79.5
   },
@@ -177,12 +177,12 @@ const TEAM_RATINGS = {
     "squad": 66.2
   },
   "Norway": {
-    "att": 0.717,
+    "att": 0.719,
     "def": 1.003,
     "squad": 80.1
   },
   "Argentina": {
-    "att": 0.867,
+    "att": 0.865,
     "def": 0.775,
     "squad": 83.8
   },
@@ -222,7 +222,7 @@ const TEAM_RATINGS = {
     "squad": 78.2
   },
   "England": {
-    "att": 0.861,
+    "att": 0.858,
     "def": 0.799,
     "squad": 84.3
   },
