@@ -264,8 +264,7 @@ const WC26_BRACKET_MATCHES = [
     "kickoff": "2026-07-11T21:00:00Z",
     "venue": "Hard Rock Stadium, Miami Gardens",
     "home": "Norway",
-    "away": "England",
-    "id": 53452529
+    "away": "England"
   },
   {
     "matchNo": 100,

@@ -1423,6 +1423,22 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "SoFi Stadium, Inglewood"
+    },
+    {
+      "id": 53452529,
+      "matchNo": 99,
+      "home": "Norway",
+      "away": "England",
+      "stage": "knockout",
+      "round": "Quarter-finals",
+      "bracketRound": "qf",
+      "kickoff": "2026-07-11T21:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "venue": "Hard Rock Stadium, Miami Gardens"
     }
   ]
 }
