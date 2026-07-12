@@ -1439,6 +1439,22 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "Hard Rock Stadium, Miami Gardens"
+    },
+    {
+      "id": 53452531,
+      "matchNo": 100,
+      "home": "Argentina",
+      "away": "Switzerland",
+      "stage": "knockout",
+      "round": "Quarter-finals",
+      "bracketRound": "qf",
+      "kickoff": "2026-07-12T01:00:00Z",
+      "status": "settled",
+      "homeScore": 3,
+      "awayScore": 1,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "venue": "Arrowhead Stadium, Kansas City"
     }
   ]
 }

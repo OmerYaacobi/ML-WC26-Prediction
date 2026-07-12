@@ -274,8 +274,7 @@ const WC26_BRACKET_MATCHES = [
     "kickoff": "2026-07-12T01:00:00Z",
     "venue": "Arrowhead Stadium, Kansas City",
     "home": "Argentina",
-    "away": "Switzerland",
-    "id": 53452531
+    "away": "Switzerland"
   },
   {
     "matchNo": 101,
@@ -295,7 +294,9 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "W100",
     "kickoff": "2026-07-15T19:00:00Z",
     "venue": "Mercedes-Benz Stadium, Atlanta",
-    "home": "England"
+    "home": "England",
+    "away": "Argentina",
+    "id": "bracket-102"
   },
   {
     "matchNo": 103,

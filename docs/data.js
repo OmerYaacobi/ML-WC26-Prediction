@@ -37,8 +37,8 @@ const TEAM_RATINGS = {
     "squad": 73.0
   },
   "Switzerland": {
-    "att": 0.584,
-    "def": 0.929,
+    "att": 0.571,
+    "def": 0.922,
     "squad": 79.5
   },
   "Brazil": {
@@ -182,8 +182,8 @@ const TEAM_RATINGS = {
     "squad": 80.1
   },
   "Argentina": {
-    "att": 0.867,
-    "def": 0.761,
+    "att": 0.834,
+    "def": 0.77,
     "squad": 83.8
   },
   "Algeria": {
