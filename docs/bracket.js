@@ -294,7 +294,8 @@ const WC26_BRACKET_MATCHES = [
     "homeLabel": "W99",
     "awayLabel": "W100",
     "kickoff": "2026-07-15T19:00:00Z",
-    "venue": "Mercedes-Benz Stadium, Atlanta"
+    "venue": "Mercedes-Benz Stadium, Atlanta",
+    "home": "England"
   },
   {
     "matchNo": 103,
