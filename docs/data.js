@@ -222,7 +222,7 @@ const TEAM_RATINGS = {
     "squad": 78.2
   },
   "England": {
-    "att": 0.814,
+    "att": 0.812,
     "def": 0.79,
     "squad": 84.3
   },
