@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-07-14T20:01:20.665016+00:00"
+    "updatedAt": "2026-07-14T21:04:14.179558+00:00"
   },
   "fixtures": [
     {
@@ -1469,9 +1469,9 @@
       "round": "Semi-finals",
       "bracketRound": "sf",
       "kickoff": "2026-07-14T19:00:00Z",
-      "status": "live",
+      "status": "settled",
       "homeScore": 0,
-      "awayScore": 1,
+      "awayScore": 2,
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "AT&T Stadium, Arlington"

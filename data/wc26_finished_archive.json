@@ -1455,6 +1455,22 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "Arrowhead Stadium, Kansas City"
+    },
+    {
+      "id": 53452533,
+      "matchNo": 101,
+      "home": "France",
+      "away": "Spain",
+      "stage": "knockout",
+      "round": "Semi-finals",
+      "bracketRound": "sf",
+      "kickoff": "2026-07-14T19:00:00Z",
+      "status": "settled",
+      "homeScore": 0,
+      "awayScore": 2,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "venue": "AT&T Stadium, Arlington"
     }
   ]
 }

@@ -284,8 +284,7 @@ const WC26_BRACKET_MATCHES = [
     "kickoff": "2026-07-14T19:00:00Z",
     "venue": "AT&T Stadium, Arlington",
     "home": "France",
-    "away": "Spain",
-    "id": 53452533
+    "away": "Spain"
   },
   {
     "matchNo": 102,
@@ -305,7 +304,8 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "L102",
     "kickoff": "2026-07-18T21:00:00Z",
     "venue": "Hard Rock Stadium, Miami Gardens",
-    "tag": "3rd place"
+    "tag": "3rd place",
+    "home": "France"
   },
   {
     "matchNo": 104,
@@ -314,6 +314,7 @@ const WC26_BRACKET_MATCHES = [
     "awayLabel": "W102",
     "kickoff": "2026-07-19T19:00:00Z",
     "venue": "MetLife Stadium, East Rutherford",
-    "tag": "Final"
+    "tag": "Final",
+    "home": "Spain"
   }
 ];
