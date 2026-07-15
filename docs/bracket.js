@@ -306,7 +306,7 @@ const WC26_BRACKET_MATCHES = [
     "tag": "3rd place",
     "home": "France",
     "away": "England",
-    "id": "bracket-103"
+    "id": 53452539
   },
   {
     "matchNo": 104,
@@ -318,6 +318,6 @@ const WC26_BRACKET_MATCHES = [
     "tag": "Final",
     "home": "Spain",
     "away": "Argentina",
-    "id": "bracket-104"
+    "id": 53452537
   }
 ];
