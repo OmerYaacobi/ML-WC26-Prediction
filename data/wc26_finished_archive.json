@@ -1471,6 +1471,22 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "AT&T Stadium, Arlington"
+    },
+    {
+      "id": 53452535,
+      "matchNo": 102,
+      "home": "England",
+      "away": "Argentina",
+      "stage": "knockout",
+      "round": "Semi-finals",
+      "bracketRound": "sf",
+      "kickoff": "2026-07-15T19:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 2,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "venue": "Mercedes-Benz Stadium, Atlanta"
     }
   ]
 }

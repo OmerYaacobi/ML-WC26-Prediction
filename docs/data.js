@@ -182,8 +182,8 @@ const TEAM_RATINGS = {
     "squad": 80.1
   },
   "Argentina": {
-    "att": 0.789,
-    "def": 0.776,
+    "att": 0.784,
+    "def": 0.79,
     "squad": 83.8
   },
   "Algeria": {
@@ -222,8 +222,8 @@ const TEAM_RATINGS = {
     "squad": 78.2
   },
   "England": {
-    "att": 0.81,
-    "def": 0.794,
+    "att": 0.764,
+    "def": 0.852,
     "squad": 84.3
   },
   "Croatia": {

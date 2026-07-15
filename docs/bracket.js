@@ -294,8 +294,7 @@ const WC26_BRACKET_MATCHES = [
     "kickoff": "2026-07-15T19:00:00Z",
     "venue": "Mercedes-Benz Stadium, Atlanta",
     "home": "England",
-    "away": "Argentina",
-    "id": 53452535
+    "away": "Argentina"
   },
   {
     "matchNo": 103,
@@ -305,7 +304,9 @@ const WC26_BRACKET_MATCHES = [
     "kickoff": "2026-07-18T21:00:00Z",
     "venue": "Hard Rock Stadium, Miami Gardens",
     "tag": "3rd place",
-    "home": "France"
+    "home": "France",
+    "away": "England",
+    "id": "bracket-103"
   },
   {
     "matchNo": 104,
@@ -315,6 +316,8 @@ const WC26_BRACKET_MATCHES = [
     "kickoff": "2026-07-19T19:00:00Z",
     "venue": "MetLife Stadium, East Rutherford",
     "tag": "Final",
-    "home": "Spain"
+    "home": "Spain",
+    "away": "Argentina",
+    "id": "bracket-104"
   }
 ];
