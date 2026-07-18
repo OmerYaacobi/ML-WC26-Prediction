@@ -18,7 +18,7 @@ const TEAM_RATINGS = {
   },
   "Czechia": {
     "att": 0.507,
-    "def": 1.079,
+    "def": 1.078,
     "squad": 77.5
   },
   "Canada": {
@@ -162,8 +162,8 @@ const TEAM_RATINGS = {
     "squad": 79.0
   },
   "France": {
-    "att": 0.868,
-    "def": 0.724,
+    "att": 0.94,
+    "def": 0.905,
     "squad": 86.1
   },
   "Senegal": {
@@ -222,8 +222,8 @@ const TEAM_RATINGS = {
     "squad": 78.2
   },
   "England": {
-    "att": 0.746,
-    "def": 0.852,
+    "att": 0.844,
+    "def": 0.939,
     "squad": 84.3
   },
   "Croatia": {

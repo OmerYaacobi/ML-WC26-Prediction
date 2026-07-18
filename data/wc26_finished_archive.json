@@ -1487,6 +1487,22 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "Mercedes-Benz Stadium, Atlanta"
+    },
+    {
+      "id": 53452539,
+      "matchNo": 103,
+      "home": "France",
+      "away": "England",
+      "stage": "knockout",
+      "round": "Final",
+      "bracketRound": "final",
+      "kickoff": "2026-07-18T21:00:00Z",
+      "status": "settled",
+      "homeScore": 4,
+      "awayScore": 6,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "venue": "Hard Rock Stadium, Miami Gardens"
     }
   ]
 }

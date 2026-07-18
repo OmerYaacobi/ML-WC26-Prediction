@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-07-18T23:00:16.680935+00:00"
+    "updatedAt": "2026-07-18T23:55:24.263868+00:00"
   },
   "fixtures": [
     {
@@ -1501,9 +1501,9 @@
       "round": "Final",
       "bracketRound": "final",
       "kickoff": "2026-07-18T21:00:00Z",
-      "status": "live",
+      "status": "settled",
       "homeScore": 4,
-      "awayScore": 5,
+      "awayScore": 6,
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "Hard Rock Stadium, Miami Gardens"

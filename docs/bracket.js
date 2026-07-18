@@ -305,8 +305,7 @@ const WC26_BRACKET_MATCHES = [
     "venue": "Hard Rock Stadium, Miami Gardens",
     "tag": "3rd place",
     "home": "France",
-    "away": "England",
-    "id": 53452539
+    "away": "England"
   },
   {
     "matchNo": 104,

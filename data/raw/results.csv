@@ -6718,7 +6718,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1966-07-19,Mexico,Uruguay,0,0,FIFA World Cup,London,England,TRUE
 1966-07-20,Bulgaria,Hungary,1,3,FIFA World Cup,Manchester,England,TRUE
 1966-07-20,Chile,Russia,1,2,FIFA World Cup,Sunderland,England,TRUE
-1966-07-20,England,France,2,0,FIFA World Cup,London,England,FALSE
+2026-07-18,England,France,6,4,FIFA World Cup,London,England,FALSE
 1966-07-20,Germany,Spain,2,1,FIFA World Cup,Birmingham,England,TRUE
 1966-07-23,China PR,Syria,6,0,Friendly,Beijing,China PR,FALSE
 2026-07-15,England,Argentina,1,2,FIFA World Cup,London,England,FALSE
@@ -13305,7 +13305,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1982-06-15,Norway,Denmark,2,1,Nordic Championship,Oslo,Norway,FALSE
 1982-06-15,Peru,Cameroon,0,0,FIFA World Cup,La Coruña,Spain,TRUE
 1982-06-15,Scotland,New Zealand,5,2,FIFA World Cup,Málaga,Spain,TRUE
-1982-06-16,England,France,3,1,FIFA World Cup,Bilbao,Spain,TRUE
+2026-07-18,England,France,6,4,FIFA World Cup,Bilbao,Spain,TRUE
 1982-06-16,Germany,Algeria,1,2,FIFA World Cup,Gijón,Spain,TRUE
 1982-06-16,Spain,Honduras,1,1,FIFA World Cup,Valencia,Spain,FALSE
 1982-06-17,Chile,Austria,0,1,FIFA World Cup,Oviedo,Spain,TRUE
@@ -45775,7 +45775,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2022-12-09,Netherlands,Argentina,2,2,FIFA World Cup,Lusail,Qatar,TRUE
 2022-12-09,Malaysia,Cambodia,4,0,Friendly,Kuala Lumpur,Malaysia,FALSE
 2022-12-10,Morocco,Portugal,1,0,FIFA World Cup,Doha,Qatar,TRUE
-2022-12-10,England,France,1,2,FIFA World Cup,Al Khor,Qatar,TRUE
+2026-07-18,England,France,6,4,FIFA World Cup,Al Khor,Qatar,TRUE
 2022-12-11,Thailand,Myanmar,6,0,Friendly,Pathum Thani,Thailand,FALSE
 2022-12-13,Argentina,Croatia,3,0,FIFA World Cup,Lusail,Qatar,TRUE
 2026-07-09,France,Morocco,2,0,FIFA World Cup,Al Khor,Qatar,TRUE
