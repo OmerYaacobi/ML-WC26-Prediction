@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "api",
-    "updatedAt": "2026-07-19T18:06:20.631726+00:00"
+    "updatedAt": "2026-07-19T19:21:51.127510+00:00"
   },
   "fixtures": [
     {
@@ -1517,10 +1517,10 @@
       "round": "Final",
       "bracketRound": "final",
       "kickoff": "2026-07-19T19:00:00Z",
-      "status": "pending",
-      "homeScore": null,
-      "awayScore": null,
-      "bettable": true,
+      "status": "live",
+      "homeScore": 0,
+      "awayScore": 0,
+      "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "MetLife Stadium, East Rutherford"
     }
