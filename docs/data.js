@@ -3,27 +3,27 @@ const GLOBAL_BASE_XG = 2.482;
 const TEAM_RATINGS = {
   "Mexico": {
     "att": 0.485,
-    "def": 0.997,
+    "def": 1.0,
     "squad": 75.4
   },
   "South Africa": {
     "att": 0.107,
-    "def": 1.356,
+    "def": 1.358,
     "squad": 64.8
   },
   "South Korea": {
     "att": 0.5,
-    "def": 1.024,
+    "def": 1.026,
     "squad": 76.5
   },
   "Czechia": {
     "att": 0.507,
-    "def": 1.078,
+    "def": 1.08,
     "squad": 77.5
   },
   "Canada": {
     "att": 0.443,
-    "def": 1.075,
+    "def": 1.077,
     "squad": 75.1
   },
   "Bosnia and Herzegovina": {
@@ -33,27 +33,27 @@ const TEAM_RATINGS = {
   },
   "Qatar": {
     "att": 0.362,
-    "def": 1.273,
+    "def": 1.274,
     "squad": 73.0
   },
   "Switzerland": {
     "att": 0.571,
-    "def": 0.927,
+    "def": 0.929,
     "squad": 79.5
   },
   "Brazil": {
     "att": 0.871,
-    "def": 0.734,
+    "def": 0.737,
     "squad": 85.2
   },
   "Morocco": {
     "att": 0.626,
-    "def": 0.867,
+    "def": 0.87,
     "squad": 79.9
   },
   "Haiti": {
     "att": 0.197,
-    "def": 1.482,
+    "def": 1.483,
     "squad": 64.6
   },
   "Scotland": {
@@ -63,27 +63,27 @@ const TEAM_RATINGS = {
   },
   "United States": {
     "att": 0.673,
-    "def": 1.004,
+    "def": 1.006,
     "squad": 79.5
   },
   "Paraguay": {
     "att": 0.282,
-    "def": 1.174,
+    "def": 1.176,
     "squad": 73.5
   },
   "Australia": {
     "att": 0.32,
-    "def": 1.147,
+    "def": 1.15,
     "squad": 70.9
   },
   "Turkey": {
     "att": 0.631,
-    "def": 0.998,
+    "def": 0.999,
     "squad": 80.3
   },
   "Germany": {
     "att": 0.869,
-    "def": 0.839,
+    "def": 0.84,
     "squad": 85.2
   },
   "Curacao": {
@@ -93,22 +93,22 @@ const TEAM_RATINGS = {
   },
   "Ivory Coast": {
     "att": 0.62,
-    "def": 0.953,
+    "def": 0.955,
     "squad": 78.5
   },
   "Ecuador": {
     "att": 0.452,
-    "def": 0.945,
+    "def": 0.948,
     "squad": 78.3
   },
   "Netherlands": {
     "att": 0.908,
-    "def": 0.865,
+    "def": 0.866,
     "squad": 83.5
   },
   "Japan": {
     "att": 0.671,
-    "def": 1.001,
+    "def": 1.003,
     "squad": 77.1
   },
   "Sweden": {
@@ -118,22 +118,22 @@ const TEAM_RATINGS = {
   },
   "Tunisia": {
     "att": 0.307,
-    "def": 1.294,
+    "def": 1.295,
     "squad": 72.1
   },
   "Belgium": {
     "att": 0.747,
-    "def": 0.887,
+    "def": 0.888,
     "squad": 82.9
   },
   "Egypt": {
     "att": 0.487,
-    "def": 1.019,
+    "def": 1.021,
     "squad": 76.7
   },
   "Iran": {
     "att": 0.432,
-    "def": 1.128,
+    "def": 1.13,
     "squad": 72.3
   },
   "New Zealand": {
@@ -142,33 +142,33 @@ const TEAM_RATINGS = {
     "squad": 71.0
   },
   "Spain": {
-    "att": 0.864,
+    "att": 0.847,
     "def": 0.644,
     "squad": 86.2
   },
   "Cape Verde": {
     "att": 0.298,
-    "def": 1.118,
+    "def": 1.121,
     "squad": 71.9
   },
   "Saudi Arabia": {
     "att": 0.31,
-    "def": 1.193,
+    "def": 1.194,
     "squad": 73.0
   },
   "Uruguay": {
     "att": 0.488,
-    "def": 0.94,
+    "def": 0.942,
     "squad": 79.0
   },
   "France": {
     "att": 0.94,
-    "def": 0.905,
+    "def": 0.906,
     "squad": 86.1
   },
   "Senegal": {
     "att": 0.713,
-    "def": 0.968,
+    "def": 0.97,
     "squad": 79.4
   },
   "Iraq": {
@@ -178,22 +178,22 @@ const TEAM_RATINGS = {
   },
   "Norway": {
     "att": 0.692,
-    "def": 0.986,
+    "def": 0.987,
     "squad": 80.1
   },
   "Argentina": {
-    "att": 0.775,
-    "def": 0.79,
+    "att": 0.76,
+    "def": 0.785,
     "squad": 83.8
   },
   "Algeria": {
     "att": 0.605,
-    "def": 1.078,
+    "def": 1.079,
     "squad": 78.1
   },
   "Austria": {
     "att": 0.616,
-    "def": 1.105,
+    "def": 1.106,
     "squad": 78.5
   },
   "Jordan": {
@@ -203,22 +203,22 @@ const TEAM_RATINGS = {
   },
   "Portugal": {
     "att": 0.759,
-    "def": 0.736,
+    "def": 0.739,
     "squad": 85.3
   },
   "DR Congo": {
     "att": 0.473,
-    "def": 1.018,
+    "def": 1.021,
     "squad": 76.2
   },
   "Uzbekistan": {
     "att": 0.466,
-    "def": 1.153,
+    "def": 1.154,
     "squad": 75.5
   },
   "Colombia": {
     "att": 0.547,
-    "def": 0.892,
+    "def": 0.896,
     "squad": 78.2
   },
   "England": {
@@ -228,17 +228,17 @@ const TEAM_RATINGS = {
   },
   "Croatia": {
     "att": 0.646,
-    "def": 0.994,
+    "def": 0.995,
     "squad": 81.0
   },
   "Ghana": {
     "att": 0.35,
-    "def": 1.096,
+    "def": 1.098,
     "squad": 74.5
   },
   "Panama": {
     "att": 0.26,
-    "def": 1.263,
+    "def": 1.265,
     "squad": 70.4
   }
 };

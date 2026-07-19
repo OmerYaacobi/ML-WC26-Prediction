@@ -1503,6 +1503,22 @@
       "bettable": false,
       "league": "International - FIFA World Cup",
       "venue": "Hard Rock Stadium, Miami Gardens"
+    },
+    {
+      "id": 53452537,
+      "matchNo": 104,
+      "home": "Spain",
+      "away": "Argentina",
+      "stage": "knockout",
+      "round": "Final",
+      "bracketRound": "final",
+      "kickoff": "2026-07-19T19:00:00Z",
+      "status": "settled",
+      "homeScore": 1,
+      "awayScore": 0,
+      "bettable": false,
+      "league": "International - FIFA World Cup",
+      "venue": "MetLife Stadium, East Rutherford"
     }
   ]
 }

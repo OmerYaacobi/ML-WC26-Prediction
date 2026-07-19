@@ -316,7 +316,6 @@ const WC26_BRACKET_MATCHES = [
     "venue": "MetLife Stadium, East Rutherford",
     "tag": "Final",
     "home": "Spain",
-    "away": "Argentina",
-    "id": 53452537
+    "away": "Argentina"
   }
 ];
