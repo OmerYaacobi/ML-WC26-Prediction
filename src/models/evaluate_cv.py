@@ -4,6 +4,7 @@ import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import KFold
 from src.models.poisson_engine import PoissonPredictionEngine
+from src.utils.team_names import canonical_team
 
 class MarketCrossValidator:
     def __init__(self):
@@ -65,23 +66,30 @@ class MarketCrossValidator:
             raw_matches = json.load(f)
 
         valid_matches = []
+        skipped = []
         for match in raw_matches:
-            home = match.get("home")
-            away = match.get("away")
+            home = canonical_team(match.get("home"))
+            away = canonical_team(match.get("away"))
             markets = match.get("bookmakers", {}).get("Bet365", [])
-            
-            if home in self.team_features.index and away in self.team_features.index:
-                bookie_xg_h, bookie_xg_a = self.decode_bet365_target(markets)
-                if bookie_xg_h is not None:
-                    valid_matches.append({
-                        "home": home,
-                        "away": away,
-                        "bookie_xg_h": bookie_xg_h,
-                        "bookie_xg_a": bookie_xg_a
-                    })
+
+            if home not in self.team_features.index or away not in self.team_features.index:
+                skipped.append((home, away))
+                continue
+            bookie_xg_h, bookie_xg_a = self.decode_bet365_target(markets)
+            if bookie_xg_h is not None:
+                valid_matches.append({
+                    "home": home,
+                    "away": away,
+                    "bookie_xg_h": bookie_xg_h,
+                    "bookie_xg_a": bookie_xg_a,
+                })
 
         match_df = pd.DataFrame(valid_matches)
-        
+        print(f"📋 Group matches with both teams mapped: {len(valid_matches)}")
+        if skipped:
+            missing = sorted({name for pair in skipped for name in pair if name not in self.team_features.index})
+            print(f"⚠️  Skipped {len(skipped)} matches. Unmapped teams: {', '.join(missing)}")
+
         # Initialize K-Fold (6 groups)
         kf = KFold(n_splits=6, shuffle=True, random_state=42)
         

@@ -2,22 +2,11 @@ import json
 import pandas as pd
 from pathlib import Path
 
-# Bookmaker / API spellings → model team names (docs/data.js keys)
-ODDS_TEAM_ALIASES = {
-    "USA": "United States",
-    "Korea Republic": "South Korea",
-    "Türkiye": "Turkey",
-    "Turkiye": "Turkey",
-    "Curaçao": "Curacao",
-    "Czech Republic": "Czechia",
-    "Cote d'Ivoire": "Ivory Coast",
-    "Congo DR": "DR Congo",
-    "Bosnia-Herzegovina": "Bosnia and Herzegovina",
-}
+from src.utils.team_names import canonical_team
 
 
 def _map_odds_team(name: str) -> str:
-    return ODDS_TEAM_ALIASES.get(str(name), str(name))
+    return canonical_team(name)
 
 
 class MarketOddsLoader:

@@ -7,12 +7,13 @@ from sklearn.model_selection import KFold
 from src.data_layers.history_loader import HistoryDataLoader
 from src.data_layers.squad_loader import SquadDataLoader
 from src.data_layers.market_loader import MarketOddsLoader
+from src.utils.team_names import canonical_team
 
 # Keep in sync with pipeline.py and poisson_engine.py defaults
-DEFAULT_W_HIST = 0.200
-DEFAULT_W_SQUAD = 0.430
-DEFAULT_W_MARKET = 0.330
-DEFAULT_BASE_XG = 2.571
+DEFAULT_W_HIST = 0.077
+DEFAULT_W_SQUAD = 0.481
+DEFAULT_W_MARKET = 0.050
+DEFAULT_BASE_XG = 2.323
 
 
 class HyperparameterOptimizer:
@@ -130,15 +131,23 @@ class HyperparameterOptimizer:
 
         team_names = set(self.master_df["team"])
         targets = []
+        skipped = []
         for match in raw_matches:
-            home = match.get("home")
-            away = match.get("away")
+            home = canonical_team(match.get("home"))
+            away = canonical_team(match.get("away"))
             markets = match.get("bookmakers", {}).get("Bet365", [])
 
-            if home in team_names and away in team_names:
-                xg_h, xg_a = self.decode_bet365_target(markets)
-                if xg_h is not None:
-                    targets.append({"home": home, "away": away, "xg_h": xg_h, "xg_a": xg_a})
+            if home not in team_names or away not in team_names:
+                skipped.append((home, away))
+                continue
+            xg_h, xg_a = self.decode_bet365_target(markets)
+            if xg_h is not None:
+                targets.append({"home": home, "away": away, "xg_h": xg_h, "xg_a": xg_a})
+        if skipped:
+            missing = sorted({name for pair in skipped for name in pair if name not in team_names})
+            print(f"⚠️  Skipped {len(skipped)} odds matches. Unmapped teams: {', '.join(missing)}")
+        else:
+            print(f"✅ All {len(targets)} odds matches mapped onto model team names")
         return targets
 
     def _match_errors(self, blended_features, base_xg, matches):
