@@ -1,5 +1,15 @@
 """Official 2026 World Cup group draw — shared by web app, fetch scripts, and CLI."""
 
+import sys
+from pathlib import Path
+
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(_PROJECT_ROOT))
+
+from src.utils.team_names import TEAM_ALIASES as API_TEAM_ALIASES
+from src.utils.team_names import canonical_team
+
 GROUPS = {
     "Group A": ["Mexico", "South Africa", "South Korea", "Czechia"],
     "Group B": ["Canada", "Bosnia and Herzegovina", "Qatar", "Switzerland"],
@@ -15,26 +25,8 @@ GROUPS = {
     "Group L": ["England", "Croatia", "Ghana", "Panama"],
 }
 
-# odds-api.io / bookmaker spellings → internal model names (docs/data.js keys)
-API_TEAM_ALIASES = {
-    "Türkiye": "Turkey",
-    "Turkiye": "Turkey",
-    "Turkey": "Turkey",
-    "Curaçao": "Curacao",
-    "Curacao": "Curacao",
-    "USA": "United States",
-    "United States": "United States",
-    "Korea Republic": "South Korea",
-    "South Korea": "South Korea",
-    "Czech Republic": "Czechia",
-    "Czechia": "Czechia",
-    "Cote d'Ivoire": "Ivory Coast",
-    "Ivory Coast": "Ivory Coast",
-    "Congo DR": "DR Congo",
-    "DR Congo": "DR Congo",
-    "Bosnia-Herzegovina": "Bosnia and Herzegovina",
-    "Bosnia and Herzegovina": "Bosnia and Herzegovina",
-}
+# odds-api.io / bookmaker spellings → internal model names (docs/data.js keys).
+# Single source of truth: src/utils/team_names.py (includes IR Iran → Iran).
 
 TEAM_TO_GROUP = {team: group for group, teams in GROUPS.items() for team in teams}
 ALL_TEAMS = set(TEAM_TO_GROUP)
@@ -56,8 +48,7 @@ KNOCKOUT_MARKERS = (
 def normalize_team(name: str) -> str | None:
     if not name:
         return None
-    clean = name.strip()
-    mapped = API_TEAM_ALIASES.get(clean, clean)
+    mapped = API_TEAM_ALIASES.get(name.strip(), name.strip())
     return mapped if mapped in ALL_TEAMS else None
 
 
@@ -78,12 +69,8 @@ def to_csv_team(name: str) -> str:
     return CSV_TEAM_NAMES.get(name, name)
 
 
-# results.csv spellings → internal model names
-CSV_TO_MODEL = {v: k for k, v in CSV_TEAM_NAMES.items()}
-
-
 def from_csv_team(name: str) -> str:
-    return CSV_TO_MODEL.get(name, name)
+    return canonical_team(name)
 
 
 def is_world_cup_league(league_name: str) -> bool:

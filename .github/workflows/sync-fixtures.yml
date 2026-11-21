@@ -1,9 +1,8 @@
 name: Sync WC26 fixtures
 
+# The 5-minute cron was committing on nearly every run (~1,700 commits since
+# July) and burning the odds-api.io quota. Refresh is manual from here on.
 on:
-  schedule:
-    # Staggered minutes — GitHub often skips */5 at :00/:30
-    - cron: "1,6,11,16,21,26,31,36,41,46,51,56 * * * *"
   workflow_dispatch:
 
 permissions:

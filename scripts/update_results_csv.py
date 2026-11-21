@@ -1,6 +1,8 @@
 """Update FIFA World Cup rows in data/raw/results.csv when scores arrive.
 
-Matches by home/away team (kickoff dates often differ from schedule placeholders).
+Matches by home/away team and tournament year. Kickoff dates often differ from
+schedule placeholders, but the year has to match — otherwise a 2026 result
+overwrites an earlier World Cup meeting of the same teams.
 For a full sync + model rebuild (group + knockout), run:
 
     python scripts/sync_group_results.py

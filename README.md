@@ -53,12 +53,12 @@ Each team gets an **attack strength** and **defense weakness** score, blended fr
 
 | Parameter | Value |
 |-----------|-------|
-| History weight | 0.205 |
-| Squad weight | 0.432 |
-| Market power | 0.334 |
-| `GLOBAL_BASE_XG` | 2.482 |
+| History weight | 0.077 |
+| Squad weight | 0.481 |
+| Market power | 0.050 |
+| `GLOBAL_BASE_XG` | 2.323 |
 
-Validated against Bet365 correct-score odds: **±0.307 goals MAE** (6-fold cross-validation).
+Validated against Bet365 correct-score odds: **±0.264 goals MAE** (6-fold cross-validation on 72 group matches).
 
 ---
 
@@ -135,7 +135,7 @@ The Match Centre no longer invents arbitrary pairings. **Group-stage fixtures** 
 | **Real kickoff times** | `GET /v3/events` returns `date`, `status`, and `scores` per match |
 | **Finished scores** | When `status` is `settled`, `scores.periods.ft` has the full-time result |
 | **Betting lock** | Bets only accepted on `pending` fixtures before kickoff |
-| **Auto refresh** | GitHub Action `.github/workflows/sync-fixtures.yml` (every 30 min) |
+| **Auto refresh** | GitHub Action `.github/workflows/sync-fixtures.yml` (manual `workflow_dispatch` only; the 5-minute schedule is disabled) |
 
 ### Refresh locally
 
