@@ -4,10 +4,9 @@ from scipy.stats import poisson
 class PoissonPredictionEngine:
     def __init__(self):
         # Per-team baseline λ before attack/defense/squad modifiers (sum ≈ match total xG).
-        # Recalibrated on all 72 WC26 group games after syncing results into team ratings:
-        #   actual 2.99 gpg (215 goals) → base = target / mean(unit λ at base 1) ≈ 2.482.
-        # Previous 2.571 was MD1-only; full-group ratings pull model xG to ~3.09 at that base.
-        self.GLOBAL_BASE_XG = 2.482
+        # Recalibrated by optimize_weights.py on all 72 group matches after the
+        # results.csv repair and the shared team-name aliases.
+        self.GLOBAL_BASE_XG = 2.323
 
     def calculate_match_probabilities(self, team_a_stats, team_b_stats):
         """

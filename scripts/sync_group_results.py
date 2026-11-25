@@ -258,6 +258,11 @@ def _wc26_pairs(rows: list[dict]) -> set[tuple[str, str]]:
     return pairs
 
 
+def _match_year(date_str: str) -> str:
+    """Tournament edition. Same teams meet across World Cups; the year keeps them apart."""
+    return str(date_str or "")[:4]
+
+
 def update_results_csv(settled: dict[tuple[str, str], dict]) -> tuple[int, int]:
     if not RESULTS_PATH.exists() or not settled:
         return 0, 0
@@ -271,6 +276,11 @@ def update_results_csv(settled: dict[tuple[str, str], dict]) -> tuple[int, int]:
             continue
         match = lookup_settled(settled, row["home_team"], row["away_team"])
         if not match:
+            continue
+        # Key is teams + year, not teams alone. A 2026 score must not overwrite
+        # Croatia vs England 2018 (or any other earlier World Cup) just because
+        # the two sides meet again. Dates inside one edition still drift.
+        if _match_year(row.get("date")) != _match_year(match.get("date")):
             continue
         new_hs, new_as = str(match["home_score"]), str(match["away_score"])
         old_hs, old_as = str(row.get("home_score", "")), str(row.get("away_score", ""))

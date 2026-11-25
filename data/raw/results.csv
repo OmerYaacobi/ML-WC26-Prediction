@@ -1489,14 +1489,14 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1930-06-22,Italy,Spain,2,3,Friendly,Bologna,Italy,FALSE
 1930-06-27,Estonia,Latvia,1,1,Friendly,Tallinn,Estonia,FALSE
 1930-07-06,Sweden,Norway,6,3,Nordic Championship,Stockholm,Sweden,FALSE
-2026-07-07,Belgium,United States,4,1,FIFA World Cup,Montevideo,Uruguay,TRUE
+1930-07-13,Belgium,United States,0,3,FIFA World Cup,Montevideo,Uruguay,TRUE
 1930-07-13,France,Mexico,4,1,FIFA World Cup,Montevideo,Uruguay,TRUE
 1930-07-14,Brazil,Yugoslavia,1,2,FIFA World Cup,Montevideo,Uruguay,TRUE
 1930-07-14,Peru,Romania,1,3,FIFA World Cup,Montevideo,Uruguay,TRUE
 1930-07-15,Argentina,France,1,0,FIFA World Cup,Montevideo,Uruguay,TRUE
 1930-07-16,Chile,Mexico,3,0,FIFA World Cup,Montevideo,Uruguay,TRUE
 1930-07-17,Bolivia,Yugoslavia,0,4,FIFA World Cup,Montevideo,Uruguay,TRUE
-2026-06-13,Paraguay,United States,1,4,FIFA World Cup,Montevideo,Uruguay,TRUE
+1930-07-17,Paraguay,United States,0,3,FIFA World Cup,Montevideo,Uruguay,TRUE
 1930-07-18,Estonia,Sweden,1,5,Friendly,Tallinn,Estonia,FALSE
 1930-07-18,Uruguay,Peru,1,0,FIFA World Cup,Montevideo,Uruguay,FALSE
 1930-07-19,Argentina,Mexico,6,3,FIFA World Cup,Montevideo,Uruguay,TRUE
@@ -3411,7 +3411,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1950-07-02,Mexico,Switzerland,1,2,FIFA World Cup,Porto Alegre,Brazil,TRUE
 1950-07-08,South Africa,Australia,1,2,Friendly,Port Elizabeth,South Africa,FALSE
 1950-07-09,Brazil,Sweden,7,1,FIFA World Cup,Rio de Janeiro,Brazil,FALSE
-2026-06-27,Spain,Uruguay,1,0,FIFA World Cup,São Paulo,Brazil,TRUE
+1950-07-09,Spain,Uruguay,2,2,FIFA World Cup,São Paulo,Brazil,TRUE
 1950-07-11,Madagascar,Réunion,2,3,Friendly,Antananarivo,Madagascar,FALSE
 1950-07-11,Madagascar,Mauritius,1,5,Friendly,Antananarivo,Madagascar,FALSE
 1950-07-13,Brazil,Spain,6,1,FIFA World Cup,Rio de Janeiro,Brazil,FALSE
@@ -4699,7 +4699,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1958-06-08,Austria,Brazil,0,3,FIFA World Cup,Uddevalla,Sweden,TRUE
 1958-06-08,Czechoslovakia,Northern Ireland,0,1,FIFA World Cup,Halmstad,Sweden,TRUE
 1958-06-08,England,Russia,2,2,FIFA World Cup,Gothenburg,Sweden,TRUE
-2026-07-04,France,Paraguay,1,0,FIFA World Cup,Norrköping,Sweden,TRUE
+1958-06-08,France,Paraguay,7,3,FIFA World Cup,Norrköping,Sweden,TRUE
 1958-06-08,Hungary,Wales,1,1,FIFA World Cup,Sandviken,Sweden,TRUE
 1958-06-08,Scotland,Yugoslavia,1,1,FIFA World Cup,Västerås,Sweden,TRUE
 1958-06-08,Sweden,Mexico,3,0,FIFA World Cup,Solna,Sweden,FALSE
@@ -5508,7 +5508,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1962-05-31,England,Hungary,1,2,FIFA World Cup,Rancagua,Chile,TRUE
 1962-05-31,Germany,Italy,0,0,FIFA World Cup,Santiago,Chile,TRUE
 1962-05-31,Russia,Yugoslavia,2,0,FIFA World Cup,Arica,Chile,TRUE
-2026-07-15,Argentina,England,2,1,FIFA World Cup,Rancagua,Chile,TRUE
+1962-06-02,Argentina,England,1,3,FIFA World Cup,Rancagua,Chile,TRUE
 1962-06-02,Brazil,Czechoslovakia,0,0,FIFA World Cup,Viña del Mar,Chile,TRUE
 1962-06-02,Chile,Italy,2,0,FIFA World Cup,Santiago,Chile,FALSE
 1962-06-02,New Zealand,New Caledonia,4,1,Friendly,Christchurch,New Zealand,FALSE
@@ -6699,7 +6699,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1966-07-12,Brazil,Bulgaria,2,0,FIFA World Cup,Liverpool,England,TRUE
 1966-07-12,Germany,Switzerland,5,0,FIFA World Cup,Sheffield,England,TRUE
 1966-07-12,North Korea,Russia,0,3,FIFA World Cup,Middlesbrough,England,TRUE
-2026-07-19,Argentina,Spain,0,0,FIFA World Cup,Birmingham,England,TRUE
+1966-07-13,Argentina,Spain,2,1,FIFA World Cup,Birmingham,England,TRUE
 1966-07-13,Chile,Italy,0,2,FIFA World Cup,Sunderland,England,TRUE
 1966-07-13,France,Mexico,1,1,FIFA World Cup,London,England,TRUE
 1966-07-13,Hungary,Portugal,1,3,FIFA World Cup,Manchester,England,TRUE
@@ -6709,19 +6709,19 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1966-07-15,Spain,Switzerland,2,1,FIFA World Cup,Sheffield,England,TRUE
 1966-07-16,Argentina,Germany,0,0,FIFA World Cup,Birmingham,England,TRUE
 1966-07-16,Bulgaria,Portugal,0,3,FIFA World Cup,Manchester,England,TRUE
-2026-07-06,England,Mexico,3,2,FIFA World Cup,London,England,FALSE
+1966-07-16,England,Mexico,2,0,FIFA World Cup,London,England,FALSE
 1966-07-16,Italy,Russia,0,1,FIFA World Cup,Sunderland,England,TRUE
 1966-07-18,Sudan,Uganda,2,1,Friendly,Addis Ababa,Ethiopia,TRUE
-2026-07-12,Argentina,Switzerland,1,1,FIFA World Cup,Sheffield,England,TRUE
+1966-07-19,Argentina,Switzerland,2,0,FIFA World Cup,Sheffield,England,TRUE
 1966-07-19,Brazil,Portugal,1,3,FIFA World Cup,Liverpool,England,TRUE
 1966-07-19,Italy,North Korea,0,1,FIFA World Cup,Middlesbrough,England,TRUE
 1966-07-19,Mexico,Uruguay,0,0,FIFA World Cup,London,England,TRUE
 1966-07-20,Bulgaria,Hungary,1,3,FIFA World Cup,Manchester,England,TRUE
 1966-07-20,Chile,Russia,1,2,FIFA World Cup,Sunderland,England,TRUE
-2026-07-18,England,France,6,4,FIFA World Cup,London,England,FALSE
+1966-07-20,England,France,2,0,FIFA World Cup,London,England,FALSE
 1966-07-20,Germany,Spain,2,1,FIFA World Cup,Birmingham,England,TRUE
 1966-07-23,China PR,Syria,6,0,Friendly,Beijing,China PR,FALSE
-2026-07-15,England,Argentina,1,2,FIFA World Cup,London,England,FALSE
+1966-07-23,England,Argentina,1,0,FIFA World Cup,London,England,FALSE
 1966-07-23,Germany,Uruguay,4,0,FIFA World Cup,Sheffield,England,TRUE
 1966-07-23,Hungary,Russia,1,2,FIFA World Cup,Sunderland,England,TRUE
 1966-07-23,North Korea,Portugal,3,5,FIFA World Cup,Liverpool,England,TRUE
@@ -9777,12 +9777,12 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1974-06-15,Uruguay,Netherlands,0,2,FIFA World Cup,Hanover,Germany,TRUE
 1974-06-18,Chile,German DR,1,1,FIFA World Cup,Berlin,Germany,TRUE
 1974-06-18,Germany,Australia,3,0,FIFA World Cup,Hamburg,Germany,FALSE
-2026-06-24,Scotland,Brazil,0,3,FIFA World Cup,Frankfurt am Main,Germany,TRUE
+1974-06-18,Scotland,Brazil,0,0,FIFA World Cup,Frankfurt am Main,Germany,TRUE
 1974-06-18,Yugoslavia,DR Congo,9,0,FIFA World Cup,Gelsenkirchen,Germany,TRUE
 1974-06-19,Argentina,Italy,1,1,FIFA World Cup,Stuttgart,Germany,TRUE
 1974-06-19,Bulgaria,Uruguay,1,1,FIFA World Cup,Hanover,Germany,TRUE
 1974-06-19,Haiti,Poland,0,7,FIFA World Cup,Munich,Germany,TRUE
-2026-06-20,Netherlands,Sweden,5,1,FIFA World Cup,Dortmund,Germany,TRUE
+1974-06-19,Netherlands,Sweden,0,0,FIFA World Cup,Dortmund,Germany,TRUE
 1974-06-22,Australia,Chile,0,0,FIFA World Cup,Berlin,Germany,TRUE
 1974-06-22,DR Congo,Brazil,0,3,FIFA World Cup,Gelsenkirchen,Germany,TRUE
 1974-06-22,Germany,German DR,0,1,FIFA World Cup,Hamburg,Germany,FALSE
@@ -11384,7 +11384,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1978-06-02,Argentina,Hungary,2,1,FIFA World Cup,Buenos Aires,Argentina,FALSE
 1978-06-02,France,Italy,1,2,FIFA World Cup,Mar del Plata,Argentina,TRUE
 1978-06-02,Mexico,Tunisia,1,3,FIFA World Cup,Rosario,Argentina,TRUE
-2026-07-02,Austria,Spain,0,3,FIFA World Cup,Buenos Aires,Argentina,TRUE
+1978-06-03,Austria,Spain,2,1,FIFA World Cup,Buenos Aires,Argentina,TRUE
 1978-06-03,Brazil,Sweden,1,1,FIFA World Cup,Mar del Plata,Argentina,TRUE
 1978-06-03,Iran,Netherlands,0,3,FIFA World Cup,Mendoza,Argentina,TRUE
 1978-06-03,Peru,Scotland,3,1,FIFA World Cup,Córdoba,Argentina,TRUE
@@ -13305,14 +13305,14 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1982-06-15,Norway,Denmark,2,1,Nordic Championship,Oslo,Norway,FALSE
 1982-06-15,Peru,Cameroon,0,0,FIFA World Cup,La Coruña,Spain,TRUE
 1982-06-15,Scotland,New Zealand,5,2,FIFA World Cup,Málaga,Spain,TRUE
-2026-07-18,England,France,6,4,FIFA World Cup,Bilbao,Spain,TRUE
+1982-06-16,England,France,3,1,FIFA World Cup,Bilbao,Spain,TRUE
 1982-06-16,Germany,Algeria,1,2,FIFA World Cup,Gijón,Spain,TRUE
 1982-06-16,Spain,Honduras,1,1,FIFA World Cup,Valencia,Spain,FALSE
 1982-06-17,Chile,Austria,0,1,FIFA World Cup,Oviedo,Spain,TRUE
 1982-06-17,Czechoslovakia,Kuwait,1,1,FIFA World Cup,Valladolid,Spain,TRUE
 1982-06-17,Yugoslavia,Northern Ireland,0,0,FIFA World Cup,Zaragoza,Spain,TRUE
 1982-06-18,Argentina,Hungary,4,1,FIFA World Cup,Alicante,Spain,TRUE
-2026-06-24,Brazil,Scotland,3,0,FIFA World Cup,Seville,Spain,TRUE
+1982-06-18,Brazil,Scotland,4,1,FIFA World Cup,Seville,Spain,TRUE
 1982-06-18,Italy,Peru,1,1,FIFA World Cup,Vigo,Spain,TRUE
 1982-06-19,Belgium,El Salvador,1,0,FIFA World Cup,Elche,Spain,TRUE
 1982-06-19,Poland,Cameroon,0,0,FIFA World Cup,La Coruña,Spain,TRUE
@@ -13320,7 +13320,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1982-06-20,England,Czechoslovakia,2,0,FIFA World Cup,Bilbao,Spain,TRUE
 1982-06-20,Germany,Chile,4,1,FIFA World Cup,Gijón,Spain,TRUE
 1982-06-20,Spain,Yugoslavia,2,1,FIFA World Cup,Valencia,Spain,FALSE
-2026-06-28,Algeria,Austria,3,3,FIFA World Cup,Oviedo,Spain,TRUE
+1982-06-21,Algeria,Austria,0,2,FIFA World Cup,Oviedo,Spain,TRUE
 1982-06-21,France,Kuwait,4,1,FIFA World Cup,Valladolid,Spain,TRUE
 1982-06-21,Honduras,Northern Ireland,1,1,FIFA World Cup,Zaragoza,Spain,TRUE
 1982-06-22,Belgium,Hungary,1,1,FIFA World Cup,Elche,Spain,TRUE
@@ -15372,9 +15372,9 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1986-06-21,Brazil,France,1,1,FIFA World Cup,Guadalajara,Mexico,TRUE
 1986-06-21,Malawi,Zambia,0,2,Friendly,Blantyre,Malawi,FALSE
 1986-06-21,Mexico,Germany,0,0,FIFA World Cup,Monterrey,Mexico,FALSE
-2026-07-15,Argentina,England,2,1,FIFA World Cup,Mexico City,Mexico,TRUE
+1986-06-22,Argentina,England,2,1,FIFA World Cup,Mexico City,Mexico,TRUE
 1986-06-22,Malawi,Zambia,0,1,Friendly,Lilongwe,Malawi,FALSE
-2026-07-10,Spain,Belgium,2,1,FIFA World Cup,Puebla,Mexico,TRUE
+1986-06-22,Spain,Belgium,1,1,FIFA World Cup,Puebla,Mexico,TRUE
 1986-06-25,Argentina,Belgium,2,0,FIFA World Cup,Mexico City,Mexico,TRUE
 1986-06-25,France,Germany,0,2,FIFA World Cup,Guadalajara,Mexico,TRUE
 1986-06-28,France,Belgium,4,2,FIFA World Cup,Puebla,Mexico,TRUE
@@ -17335,7 +17335,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1990-06-12,Belgium,South Korea,2,0,FIFA World Cup,Verona,Italy,TRUE
 1990-06-12,Netherlands,Egypt,1,1,FIFA World Cup,Palermo,Italy,TRUE
 1990-06-13,Argentina,Russia,2,0,FIFA World Cup,Naples,Italy,TRUE
-2026-06-27,Uruguay,Spain,0,1,FIFA World Cup,Udine,Italy,TRUE
+1990-06-13,Uruguay,Spain,0,0,FIFA World Cup,Udine,Italy,TRUE
 1990-06-14,Cameroon,Romania,2,1,FIFA World Cup,Bari,Italy,TRUE
 1990-06-14,Italy,United States,1,0,FIFA World Cup,Rome,Italy,FALSE
 1990-06-14,Yugoslavia,Colombia,1,0,FIFA World Cup,Bologna,Italy,TRUE
@@ -17353,9 +17353,9 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1990-06-19,Germany,Colombia,1,1,FIFA World Cup,Milan,Italy,TRUE
 1990-06-19,Italy,Czechoslovakia,2,0,FIFA World Cup,Rome,Italy,FALSE
 1990-06-19,Yugoslavia,United Arab Emirates,4,1,FIFA World Cup,Bologna,Italy,TRUE
-2026-06-24,Brazil,Scotland,3,0,FIFA World Cup,Turin,Italy,TRUE
+1990-06-20,Brazil,Scotland,1,0,FIFA World Cup,Turin,Italy,TRUE
 1990-06-20,Sweden,Costa Rica,1,2,FIFA World Cup,Genoa,Italy,TRUE
-2026-07-10,Belgium,Spain,1,2,FIFA World Cup,Verona,Italy,TRUE
+1990-06-21,Belgium,Spain,1,2,FIFA World Cup,Verona,Italy,TRUE
 1990-06-21,England,Egypt,1,0,FIFA World Cup,Cagliari,Italy,TRUE
 1990-06-21,Republic of Ireland,Netherlands,1,1,FIFA World Cup,Palermo,Italy,TRUE
 1990-06-21,South Korea,Uruguay,0,1,FIFA World Cup,Udine,Italy,TRUE
@@ -19789,7 +19789,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1994-06-25,Saudi Arabia,Morocco,2,1,FIFA World Cup,East Rutherford,United States,TRUE
 1994-06-26,Bulgaria,Greece,4,0,FIFA World Cup,Chicago,United States,TRUE
 1994-06-26,Latvia,Georgia,1,3,Friendly,Riga,Latvia,FALSE
-2026-07-07,Switzerland,Colombia,0,0,FIFA World Cup,Palo Alto,United States,TRUE
+1994-06-26,Switzerland,Colombia,0,2,FIFA World Cup,Palo Alto,United States,TRUE
 1994-06-26,United States,Romania,0,1,FIFA World Cup,Pasadena,United States,FALSE
 1994-06-27,Bolivia,Spain,1,3,FIFA World Cup,Chicago,United States,TRUE
 1994-06-27,Germany,South Korea,3,2,FIFA World Cup,Dallas,United States,TRUE
@@ -19798,7 +19798,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1994-06-28,Italy,Mexico,1,1,FIFA World Cup,"Washington, D.C.",United States,TRUE
 1994-06-28,Russia,Cameroon,6,1,FIFA World Cup,Palo Alto,United States,TRUE
 1994-06-29,Belgium,Saudi Arabia,0,1,FIFA World Cup,"Washington, D.C.",United States,TRUE
-2026-06-30,Morocco,Netherlands,1,1,FIFA World Cup,Orlando,United States,TRUE
+1994-06-29,Morocco,Netherlands,1,2,FIFA World Cup,Orlando,United States,TRUE
 1994-06-30,Argentina,Bulgaria,0,2,FIFA World Cup,Dallas,United States,TRUE
 1994-06-30,Greece,Nigeria,0,2,FIFA World Cup,Foxborough,United States,TRUE
 1994-07-01,Botswana,Namibia,0,1,Friendly,Gaborone,Botswana,FALSE
@@ -22823,14 +22823,14 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1998-06-06,Switzerland,Serbia,1,1,Friendly,Basel,Switzerland,FALSE
 1998-06-06,Tunisia,Wales,4,0,Friendly,Tunis,Tunisia,FALSE
 1998-06-07,Belarus,Lithuania,5,0,Friendly,Minsk,Belarus,FALSE
-2026-06-24,Brazil,Scotland,3,0,FIFA World Cup,Saint-Denis,France,TRUE
+1998-06-10,Brazil,Scotland,2,1,FIFA World Cup,Saint-Denis,France,TRUE
 1998-06-10,Morocco,Norway,2,2,FIFA World Cup,Montpellier,France,TRUE
 1998-06-11,Cameroon,Austria,1,1,FIFA World Cup,Toulouse,France,TRUE
 1998-06-11,Italy,Chile,2,2,FIFA World Cup,Bordeaux,France,TRUE
 1998-06-12,France,South Africa,3,0,FIFA World Cup,Marseille,France,FALSE
 1998-06-12,Paraguay,Bulgaria,0,0,FIFA World Cup,Montpellier,France,TRUE
 1998-06-12,Saudi Arabia,Denmark,0,1,FIFA World Cup,Lens,France,TRUE
-2026-06-19,South Korea,Mexico,0,1,FIFA World Cup,Lyon,France,TRUE
+1998-06-13,South Korea,Mexico,1,3,FIFA World Cup,Lyon,France,TRUE
 1998-06-13,Netherlands,Belgium,0,0,FIFA World Cup,Saint-Denis,France,TRUE
 1998-06-13,Seychelles,Kenya,0,1,Friendly,Victoria,Seychelles,FALSE
 1998-06-13,Spain,Nigeria,2,3,FIFA World Cup,Nantes,France,TRUE
@@ -22840,7 +22840,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1998-06-15,England,Tunisia,2,0,FIFA World Cup,Marseille,France,TRUE
 1998-06-15,Germany,United States,2,0,FIFA World Cup,Paris,France,TRUE
 1998-06-15,Romania,Colombia,1,0,FIFA World Cup,Lyon,France,TRUE
-2026-06-13,Brazil,Morocco,1,1,FIFA World Cup,Nantes,France,TRUE
+1998-06-16,Brazil,Morocco,3,0,FIFA World Cup,Nantes,France,TRUE
 1998-06-16,Scotland,Norway,1,1,FIFA World Cup,Bordeaux,France,TRUE
 1998-06-17,Chile,Austria,1,1,FIFA World Cup,Saint-Étienne,France,TRUE
 1998-06-17,Italy,Cameroon,3,0,FIFA World Cup,Montpellier,France,TRUE
@@ -22857,10 +22857,10 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1998-06-22,Colombia,Tunisia,1,0,FIFA World Cup,Montpellier,France,TRUE
 1998-06-22,Estonia,Andorra,2,1,Friendly,Kuressaare,Estonia,FALSE
 1998-06-22,Romania,England,2,1,FIFA World Cup,Toulouse,France,TRUE
-2026-07-05,Brazil,Norway,1,2,FIFA World Cup,Marseille,France,TRUE
+1998-06-23,Brazil,Norway,1,2,FIFA World Cup,Marseille,France,TRUE
 1998-06-23,Chile,Cameroon,1,1,FIFA World Cup,Nantes,France,TRUE
 1998-06-23,Italy,Austria,2,1,FIFA World Cup,Saint-Denis,France,TRUE
-2026-06-19,Scotland,Morocco,0,1,FIFA World Cup,Saint-Étienne,France,TRUE
+1998-06-23,Scotland,Morocco,0,3,FIFA World Cup,Saint-Étienne,France,TRUE
 1998-06-24,Andorra,Azerbaijan,0,0,Friendly,Viljandi,Estonia,TRUE
 1998-06-24,France,Denmark,2,1,FIFA World Cup,Lyon,France,FALSE
 1998-06-24,Nigeria,Paraguay,1,3,FIFA World Cup,Toulouse,France,TRUE
@@ -22881,12 +22881,12 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 1998-06-27,Italy,Norway,1,0,FIFA World Cup,Marseille,France,TRUE
 1998-06-27,Thailand,China PR,0,3,Friendly,Bangkok,Thailand,FALSE
 1998-06-28,Estonia,Lithuania,0,0,Baltic Cup,Viljandi,Estonia,FALSE
-2026-07-04,France,Paraguay,1,0,FIFA World Cup,Lens,France,FALSE
+1998-06-28,France,Paraguay,1,0,FIFA World Cup,Lens,France,FALSE
 1998-06-28,Nigeria,Denmark,1,4,FIFA World Cup,Saint-Denis,France,TRUE
 1998-06-29,Germany,Mexico,2,1,FIFA World Cup,Montpellier,France,TRUE
 1998-06-29,Lithuania,Andorra,4,0,Friendly,Karksi-Nuia,Estonia,TRUE
 1998-06-29,Netherlands,Serbia,2,1,FIFA World Cup,Toulouse,France,TRUE
-2026-07-15,Argentina,England,2,1,FIFA World Cup,Saint-Étienne,France,TRUE
+1998-06-30,Argentina,England,2,2,FIFA World Cup,Saint-Étienne,France,TRUE
 1998-06-30,Romania,Croatia,0,1,FIFA World Cup,Bordeaux,France,TRUE
 1998-07-02,Oman,Syria,1,2,Friendly,Muscat,Oman,FALSE
 1998-07-03,Brazil,Denmark,3,2,FIFA World Cup,Nantes,France,TRUE
@@ -26435,7 +26435,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2002-05-26,Denmark,Tunisia,2,1,Friendly,Wakayama,Japan,TRUE
 2002-05-26,South Korea,France,2,3,Friendly,Suwon,South Korea,FALSE
 2002-05-30,Kuwait,Iran,1,3,Friendly,Kuwait City,Kuwait,FALSE
-2026-06-16,France,Senegal,3,1,FIFA World Cup,Seoul,South Korea,TRUE
+2002-05-31,France,Senegal,0,1,FIFA World Cup,Seoul,South Korea,TRUE
 2002-06-01,Germany,Saudi Arabia,8,0,FIFA World Cup,Sapporo,Japan,TRUE
 2002-06-01,Republic of Ireland,Cameroon,1,1,FIFA World Cup,Niigata,Japan,TRUE
 2002-06-01,Uruguay,Denmark,1,2,FIFA World Cup,Ulsan,South Korea,TRUE
@@ -26457,7 +26457,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2002-06-06,France,Uruguay,0,0,FIFA World Cup,Busan,South Korea,TRUE
 2002-06-06,Saint Martin,Anguilla,2,1,Friendly,Marigot,Saint Martin,FALSE
 2002-06-07,Andorra,Armenia,0,2,Friendly,Sant Julià de Lòria,Andorra,FALSE
-2026-07-15,Argentina,England,2,1,FIFA World Cup,Sapporo,Japan,TRUE
+2002-06-07,Argentina,England,0,1,FIFA World Cup,Sapporo,Japan,TRUE
 2002-06-07,Spain,Paraguay,3,1,FIFA World Cup,Jeonju,South Korea,TRUE
 2002-06-07,Sweden,Nigeria,2,1,FIFA World Cup,Kobe,Japan,TRUE
 2002-06-08,Brazil,China PR,4,0,FIFA World Cup,Seogwipo,South Korea,TRUE
@@ -26467,7 +26467,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2002-06-09,Costa Rica,Turkey,1,1,FIFA World Cup,Incheon,South Korea,TRUE
 2002-06-09,Japan,Russia,1,0,FIFA World Cup,Yokohama,Japan,FALSE
 2002-06-09,Malawi,Botswana,1,0,Friendly,Blantyre,Malawi,FALSE
-2026-07-01,Mexico,Ecuador,2,0,FIFA World Cup,Rifu,Japan,TRUE
+2002-06-09,Mexico,Ecuador,2,1,FIFA World Cup,Rifu,Japan,TRUE
 2002-06-10,South Korea,United States,1,1,FIFA World Cup,Daegu,South Korea,FALSE
 2002-06-10,Portugal,Poland,4,0,FIFA World Cup,Jeonju,South Korea,TRUE
 2002-06-10,Tunisia,Belgium,1,1,FIFA World Cup,Ōita,Japan,TRUE
@@ -26484,11 +26484,11 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2002-06-13,Mexico,Italy,1,1,FIFA World Cup,Ōita,Japan,TRUE
 2002-06-13,Turkey,China PR,3,0,FIFA World Cup,Seoul,South Korea,TRUE
 2002-06-14,Belgium,Russia,3,2,FIFA World Cup,Fukuroi,Japan,TRUE
-2026-06-21,Japan,Tunisia,4,0,FIFA World Cup,Osaka,Japan,FALSE
+2002-06-14,Japan,Tunisia,2,0,FIFA World Cup,Osaka,Japan,FALSE
 2002-06-14,South Korea,Portugal,1,0,FIFA World Cup,Incheon,South Korea,FALSE
 2002-06-14,Poland,United States,3,1,FIFA World Cup,Daejeon,South Korea,TRUE
 2002-06-15,Denmark,England,0,3,FIFA World Cup,Niigata,Japan,TRUE
-2026-06-29,Germany,Paraguay,1,1,FIFA World Cup,Seogwipo,South Korea,TRUE
+2002-06-15,Germany,Paraguay,1,0,FIFA World Cup,Seogwipo,South Korea,TRUE
 2002-06-16,Spain,Republic of Ireland,1,1,FIFA World Cup,Suwon,South Korea,TRUE
 2002-06-16,Sweden,Senegal,1,2,FIFA World Cup,Ōita,Japan,TRUE
 2002-06-17,Brazil,Belgium,2,0,FIFA World Cup,Kobe,Japan,TRUE
@@ -30069,7 +30069,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2006-06-19,Spain,Tunisia,3,1,FIFA World Cup,Stuttgart,Germany,TRUE
 2006-06-19,Togo,Switzerland,0,2,FIFA World Cup,Dortmund,Germany,TRUE
 2006-06-20,Costa Rica,Poland,1,2,FIFA World Cup,Hanover,Germany,TRUE
-2026-06-25,Germany,Ecuador,1,2,FIFA World Cup,Berlin,Germany,FALSE
+2006-06-20,Germany,Ecuador,3,0,FIFA World Cup,Berlin,Germany,FALSE
 2006-06-20,Paraguay,Trinidad and Tobago,2,0,FIFA World Cup,Kaiserslautern,Germany,TRUE
 2006-06-20,Sweden,England,2,2,FIFA World Cup,Cologne,Germany,TRUE
 2006-06-21,Iran,Angola,1,1,FIFA World Cup,Leipzig,Germany,TRUE
@@ -30079,8 +30079,8 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2006-06-22,Croatia,Australia,2,2,FIFA World Cup,Stuttgart,Germany,TRUE
 2006-06-22,Czech Republic,Italy,0,2,FIFA World Cup,Hamburg,Germany,TRUE
 2006-06-22,Ghana,United States,2,1,FIFA World Cup,Nuremberg,Germany,TRUE
-2026-06-29,Japan,Brazil,1,2,FIFA World Cup,Dortmund,Germany,TRUE
-2026-06-21,Saudi Arabia,Spain,0,4,FIFA World Cup,Kaiserslautern,Germany,TRUE
+2006-06-22,Japan,Brazil,1,4,FIFA World Cup,Dortmund,Germany,TRUE
+2006-06-23,Saudi Arabia,Spain,0,1,FIFA World Cup,Kaiserslautern,Germany,TRUE
 2006-06-23,Switzerland,South Korea,2,0,FIFA World Cup,Hanover,Germany,TRUE
 2006-06-23,Togo,France,0,2,FIFA World Cup,Cologne,Germany,TRUE
 2006-06-23,Ukraine,Tunisia,1,0,FIFA World Cup,Berlin,Germany,TRUE
@@ -30096,7 +30096,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2006-06-26,Mauritius,Tanzania,1,2,Friendly,Victoria,Seychelles,TRUE
 2006-06-26,Switzerland,Ukraine,0,0,FIFA World Cup,Cologne,Germany,TRUE
 2006-06-27,Brazil,Ghana,3,0,FIFA World Cup,Dortmund,Germany,TRUE
-2026-07-14,Spain,France,2,0,FIFA World Cup,Hanover,Germany,TRUE
+2006-06-27,Spain,France,1,3,FIFA World Cup,Hanover,Germany,TRUE
 2006-06-28,Seychelles,Mauritius,2,1,Friendly,Victoria,Seychelles,FALSE
 2006-06-30,Germany,Argentina,1,1,FIFA World Cup,Berlin,Germany,FALSE
 2006-06-30,Italy,Ukraine,3,0,FIFA World Cup,Hamburg,Germany,TRUE
@@ -33863,7 +33863,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2010-06-07,Tanzania,Brazil,1,5,Friendly,Dar es Salaam,Tanzania,FALSE
 2010-06-08,Mozambique,Portugal,0,3,Friendly,Johannesburg,South Africa,TRUE
 2010-06-08,Spain,Poland,6,0,Friendly,Murcia,Spain,FALSE
-2026-06-11,South Africa,Mexico,0,2,FIFA World Cup,Johannesburg,South Africa,FALSE
+2010-06-11,South Africa,Mexico,1,1,FIFA World Cup,Johannesburg,South Africa,FALSE
 2010-06-11,Uruguay,France,0,0,FIFA World Cup,Cape Town,South Africa,TRUE
 2010-06-12,Argentina,Nigeria,1,0,FIFA World Cup,Johannesburg,South Africa,TRUE
 2010-06-12,England,United States,1,1,FIFA World Cup,Rustenburg,South Africa,TRUE
@@ -33890,7 +33890,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2010-06-19,Cameroon,Denmark,1,2,FIFA World Cup,Pretoria,South Africa,TRUE
 2010-06-19,Estonia,Latvia,0,0,Baltic Cup,Kaunas,Lithuania,TRUE
 2010-06-19,Ghana,Australia,1,1,FIFA World Cup,Rustenburg,South Africa,TRUE
-2026-06-14,Netherlands,Japan,2,2,FIFA World Cup,Durban,South Africa,TRUE
+2010-06-19,Netherlands,Japan,1,0,FIFA World Cup,Durban,South Africa,TRUE
 2010-06-19,Niger,Chad,1,1,Friendly,Niamey,Niger,FALSE
 2010-06-19,Northern Mariana Islands,Guam,1,1,Friendly,Susupe,Northern Mariana Islands,FALSE
 2010-06-20,Brazil,Ivory Coast,3,1,FIFA World Cup,Johannesburg,South Africa,TRUE
@@ -33925,7 +33925,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2010-06-28,Brazil,Chile,3,0,FIFA World Cup,Johannesburg,South Africa,TRUE
 2010-06-28,Netherlands,Slovakia,2,1,FIFA World Cup,Durban,South Africa,TRUE
 2010-06-29,Paraguay,Japan,0,0,FIFA World Cup,Pretoria,South Africa,TRUE
-2026-07-06,Spain,Portugal,1,0,FIFA World Cup,Cape Town,South Africa,TRUE
+2010-06-29,Spain,Portugal,1,0,FIFA World Cup,Cape Town,South Africa,TRUE
 2010-07-01,Chad,Togo,2,2,African Cup of Nations qualification,N'Djamena,Chad,FALSE
 2010-07-01,Tunisia,Botswana,0,1,African Cup of Nations qualification,Tunis,Tunisia,FALSE
 2010-07-02,Netherlands,Brazil,2,1,FIFA World Cup,Port Elizabeth,South Africa,TRUE
@@ -37919,8 +37919,8 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2014-06-29,Netherlands,Mexico,2,1,FIFA World Cup,Fortaleza,Brazil,TRUE
 2014-06-30,France,Nigeria,2,0,FIFA World Cup,Brasília,Brazil,TRUE
 2014-06-30,Germany,Algeria,2,1,FIFA World Cup,Porto Alegre,Brazil,TRUE
-2026-07-12,Argentina,Switzerland,1,1,FIFA World Cup,São Paulo,Brazil,TRUE
-2026-07-07,Belgium,United States,4,1,FIFA World Cup,Salvador,Brazil,TRUE
+2014-07-01,Argentina,Switzerland,1,0,FIFA World Cup,São Paulo,Brazil,TRUE
+2014-07-01,Belgium,United States,2,1,FIFA World Cup,Salvador,Brazil,TRUE
 2014-07-02,Vietnam,Myanmar,6,0,Friendly,Thủ Dầu Một,Vietnam,FALSE
 2014-07-04,Brazil,Colombia,2,1,FIFA World Cup,Fortaleza,Brazil,FALSE
 2014-07-04,France,Germany,0,1,FIFA World Cup,Rio de Janeiro,Brazil,TRUE
@@ -41641,7 +41641,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2018-06-14,Russia,Saudi Arabia,5,0,FIFA World Cup,Moscow,Russia,FALSE
 2018-06-15,Egypt,Uruguay,0,1,FIFA World Cup,Ekaterinburg,Russia,TRUE
 2018-06-15,Morocco,Iran,0,1,FIFA World Cup,Saint Petersburg,Russia,TRUE
-2026-07-06,Portugal,Spain,0,1,FIFA World Cup,Sochi,Russia,TRUE
+2018-06-15,Portugal,Spain,3,3,FIFA World Cup,Sochi,Russia,TRUE
 2018-06-16,France,Australia,2,1,FIFA World Cup,Kazan,Russia,TRUE
 2018-06-16,Argentina,Iceland,1,1,FIFA World Cup,Moscow,Russia,TRUE
 2018-06-16,Peru,Denmark,0,1,FIFA World Cup,Saransk,Russia,TRUE
@@ -41656,7 +41656,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2018-06-19,Poland,Senegal,1,2,FIFA World Cup,Moscow,Russia,TRUE
 2018-06-19,Russia,Egypt,3,1,FIFA World Cup,Saint Petersburg,Russia,FALSE
 2018-06-20,Portugal,Morocco,1,0,FIFA World Cup,Moscow,Russia,TRUE
-2026-06-15,Uruguay,Saudi Arabia,1,1,FIFA World Cup,Rostov-on-Don,Russia,TRUE
+2018-06-20,Uruguay,Saudi Arabia,1,0,FIFA World Cup,Rostov-on-Don,Russia,TRUE
 2018-06-20,Iran,Spain,0,1,FIFA World Cup,Kazan,Russia,TRUE
 2018-06-21,Denmark,Australia,1,1,FIFA World Cup,Samara,Russia,TRUE
 2018-06-21,France,Peru,1,0,FIFA World Cup,Ekaterinburg,Russia,TRUE
@@ -41665,9 +41665,9 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2018-06-22,Nigeria,Iceland,2,0,FIFA World Cup,Volgograd,Russia,TRUE
 2018-06-22,Serbia,Switzerland,1,2,FIFA World Cup,Kaliningrad,Russia,TRUE
 2018-06-23,Belgium,Tunisia,5,2,FIFA World Cup,Moscow,Russia,TRUE
-2026-06-19,South Korea,Mexico,0,1,FIFA World Cup,Rostov-on-Don,Russia,TRUE
+2018-06-23,South Korea,Mexico,1,2,FIFA World Cup,Rostov-on-Don,Russia,TRUE
 2018-06-23,Germany,Sweden,2,1,FIFA World Cup,Sochi,Russia,TRUE
-2026-06-27,England,Panama,2,0,FIFA World Cup,Nizhny Novgorod,Russia,TRUE
+2018-06-24,England,Panama,6,1,FIFA World Cup,Nizhny Novgorod,Russia,TRUE
 2018-06-24,Japan,Senegal,2,2,FIFA World Cup,Ekaterinburg,Russia,TRUE
 2018-06-24,Poland,Colombia,0,3,FIFA World Cup,Kazan,Russia,TRUE
 2018-06-25,Russia,Uruguay,0,3,FIFA World Cup,Samara,Russia,FALSE
@@ -41700,7 +41700,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2018-07-07,Sweden,England,0,2,FIFA World Cup,Samara,Russia,TRUE
 2018-07-07,Russia,Croatia,2,2,FIFA World Cup,Sochi,Russia,FALSE
 2018-07-10,France,Belgium,1,0,FIFA World Cup,Saint Petersburg,Russia,TRUE
-2026-06-17,Croatia,England,2,4,FIFA World Cup,Moscow,Russia,TRUE
+2018-07-11,Croatia,England,2,1,FIFA World Cup,Moscow,Russia,TRUE
 2018-07-14,Belgium,England,2,0,FIFA World Cup,Saint Petersburg,Russia,TRUE
 2018-07-15,France,Croatia,4,2,FIFA World Cup,Moscow,Russia,TRUE
 2018-07-22,Liberia,Sierra Leone,0,0,Friendly,Monrovia,Liberia,FALSE
@@ -45758,7 +45758,7 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2022-12-01,Japan,Spain,2,1,FIFA World Cup,Al Rayyan,Qatar,TRUE
 2022-12-01,Costa Rica,Germany,2,4,FIFA World Cup,Al Khor,Qatar,TRUE
 2022-12-01,Croatia,Belgium,0,0,FIFA World Cup,Al Rayyan,Qatar,TRUE
-2026-07-04,Canada,Morocco,0,3,FIFA World Cup,Doha,Qatar,TRUE
+2022-12-01,Canada,Morocco,1,2,FIFA World Cup,Doha,Qatar,TRUE
 2022-12-02,Serbia,Switzerland,2,3,FIFA World Cup,Doha,Qatar,TRUE
 2022-12-02,Cameroon,Brazil,1,0,FIFA World Cup,Lusail,Qatar,TRUE
 2022-12-02,Ghana,Uruguay,0,2,FIFA World Cup,Al Wakrah,Qatar,TRUE
@@ -45775,10 +45775,10 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2022-12-09,Netherlands,Argentina,2,2,FIFA World Cup,Lusail,Qatar,TRUE
 2022-12-09,Malaysia,Cambodia,4,0,Friendly,Kuala Lumpur,Malaysia,FALSE
 2022-12-10,Morocco,Portugal,1,0,FIFA World Cup,Doha,Qatar,TRUE
-2026-07-18,England,France,6,4,FIFA World Cup,Al Khor,Qatar,TRUE
+2022-12-10,England,France,1,2,FIFA World Cup,Al Khor,Qatar,TRUE
 2022-12-11,Thailand,Myanmar,6,0,Friendly,Pathum Thani,Thailand,FALSE
 2022-12-13,Argentina,Croatia,3,0,FIFA World Cup,Lusail,Qatar,TRUE
-2026-07-09,France,Morocco,2,0,FIFA World Cup,Al Khor,Qatar,TRUE
+2022-12-14,France,Morocco,2,0,FIFA World Cup,Al Khor,Qatar,TRUE
 2022-12-14,Malaysia,Maldives,3,0,Friendly,Kuala Lumpur,Malaysia,FALSE
 2022-12-14,Thailand,Taiwan,0,1,Friendly,Pathum Thani,Thailand,FALSE
 2022-12-14,Vietnam,Philippines,1,0,Friendly,Hanoi,Vietnam,FALSE
@@ -49306,87 +49306,106 @@ date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
 2026-06-03,Poland,Nigeria,2,2,Friendly,Warsaw,Poland,FALSE
 2026-06-03,Philippines,Guam,5,1,Friendly,Manila,Philippines,FALSE
 2026-06-11,Mexico,South Africa,2,0,FIFA World Cup,Mexico City,Mexico,FALSE
-2026-06-12,South Korea,Czech Republic,2,1,FIFA World Cup,Zapopan,Mexico,TRUE
+2026-06-11,South Korea,Czech Republic,2,1,FIFA World Cup,Zapopan,Mexico,TRUE
 2026-06-12,Canada,Bosnia and Herzegovina,1,1,FIFA World Cup,Toronto,Canada,FALSE
-2026-06-13,United States,Paraguay,4,1,FIFA World Cup,Inglewood,United States,FALSE
-2026-06-13,Qatar,Switzerland,1,1,FIFA World Cup,Santa Clara,United States,TRUE
+2026-06-12,United States,Paraguay,4,1,FIFA World Cup,Inglewood,United States,FALSE
+2026-06-13,Australia,Turkey,2,0,FIFA World Cup,Vancouver,Canada,TRUE
 2026-06-13,Brazil,Morocco,1,1,FIFA World Cup,East Rutherford,United States,TRUE
-2026-06-14,Haiti,Scotland,0,1,FIFA World Cup,Foxborough,United States,TRUE
-2026-06-14,Australia,Turkey,2,0,FIFA World Cup,Vancouver,Canada,TRUE
+2026-06-13,Haiti,Scotland,0,1,FIFA World Cup,Foxborough,United States,TRUE
+2026-06-13,Qatar,Switzerland,1,1,FIFA World Cup,Santa Clara,United States,TRUE
 2026-06-14,Germany,Curaçao,7,1,FIFA World Cup,Houston,United States,TRUE
 2026-06-14,Ivory Coast,Ecuador,1,0,FIFA World Cup,Philadelphia,United States,TRUE
 2026-06-14,Netherlands,Japan,2,2,FIFA World Cup,Arlington,United States,TRUE
-2026-06-15,Sweden,Tunisia,5,1,FIFA World Cup,Guadalupe,Mexico,TRUE
+2026-06-14,Sweden,Tunisia,5,1,FIFA World Cup,Guadalupe,Mexico,TRUE
 2026-06-15,Belgium,Egypt,1,1,FIFA World Cup,Seattle,United States,TRUE
-2026-06-16,Iran,New Zealand,2,2,FIFA World Cup,Inglewood,United States,TRUE
-2026-06-15,Spain,Cape Verde,0,0,FIFA World Cup,Atlanta,United States,TRUE
+2026-06-15,Iran,New Zealand,2,2,FIFA World Cup,Inglewood,United States,TRUE
 2026-06-15,Saudi Arabia,Uruguay,1,1,FIFA World Cup,Miami Gardens,United States,TRUE
+2026-06-15,Spain,Cape Verde,0,0,FIFA World Cup,Atlanta,United States,TRUE
+2026-06-16,Argentina,Algeria,3,0,FIFA World Cup,Kansas City,United States,TRUE
+2026-06-16,Austria,Jordan,3,1,FIFA World Cup,Santa Clara,United States,TRUE
 2026-06-16,France,Senegal,3,1,FIFA World Cup,East Rutherford,United States,TRUE
 2026-06-16,Iraq,Norway,1,4,FIFA World Cup,Foxborough,United States,TRUE
-2026-06-17,Argentina,Algeria,3,0,FIFA World Cup,Kansas City,United States,TRUE
-2026-06-17,Austria,Jordan,3,1,FIFA World Cup,Santa Clara,United States,TRUE
-2026-06-17,Portugal,DR Congo,1,1,FIFA World Cup,Houston,United States,TRUE
-2026-06-18,Uzbekistan,Colombia,1,3,FIFA World Cup,Mexico City,Mexico,TRUE
 2026-06-17,England,Croatia,4,2,FIFA World Cup,Arlington,United States,TRUE
 2026-06-17,Ghana,Panama,1,0,FIFA World Cup,Toronto,Canada,TRUE
-2026-06-18,Czech Republic,South Africa,1,1,FIFA World Cup,Atlanta,United States,TRUE
-2026-06-19,Mexico,South Korea,1,0,FIFA World Cup,Zapopan,Mexico,FALSE
-2026-06-18,Switzerland,Bosnia and Herzegovina,4,1,FIFA World Cup,Inglewood,United States,TRUE
+2026-06-17,Portugal,DR Congo,1,1,FIFA World Cup,Houston,United States,TRUE
+2026-06-17,Uzbekistan,Colombia,1,3,FIFA World Cup,Mexico City,Mexico,TRUE
 2026-06-18,Canada,Qatar,6,0,FIFA World Cup,Vancouver,Canada,FALSE
+2026-06-18,Czech Republic,South Africa,1,1,FIFA World Cup,Atlanta,United States,TRUE
+2026-06-18,Mexico,South Korea,1,0,FIFA World Cup,Zapopan,Mexico,FALSE
+2026-06-18,Switzerland,Bosnia and Herzegovina,4,1,FIFA World Cup,Inglewood,United States,TRUE
+2026-06-19,Brazil,Haiti,3,0,FIFA World Cup,Philadelphia,United States,TRUE
 2026-06-19,Scotland,Morocco,0,1,FIFA World Cup,Foxborough,United States,TRUE
-2026-06-20,Brazil,Haiti,3,0,FIFA World Cup,Philadelphia,United States,TRUE
+2026-06-19,Turkey,Paraguay,0,1,FIFA World Cup,Santa Clara,United States,TRUE
 2026-06-19,United States,Australia,2,0,FIFA World Cup,Seattle,United States,FALSE
-2026-06-20,Turkey,Paraguay,0,1,FIFA World Cup,Santa Clara,United States,TRUE
+2026-06-20,Ecuador,Curaçao,0,0,FIFA World Cup,Kansas City,United States,TRUE
 2026-06-20,Germany,Ivory Coast,2,1,FIFA World Cup,Toronto,Canada,TRUE
-2026-06-21,Ecuador,Curaçao,0,0,FIFA World Cup,Kansas City,United States,TRUE
 2026-06-20,Netherlands,Sweden,5,1,FIFA World Cup,Houston,United States,TRUE
-2026-06-21,Tunisia,Japan,0,4,FIFA World Cup,Guadalupe,Mexico,TRUE
+2026-06-20,Tunisia,Japan,0,4,FIFA World Cup,Guadalupe,Mexico,TRUE
 2026-06-21,Belgium,Iran,0,0,FIFA World Cup,Inglewood,United States,TRUE
-2026-06-22,New Zealand,Egypt,1,3,FIFA World Cup,Vancouver,Canada,TRUE
+2026-06-21,New Zealand,Egypt,1,3,FIFA World Cup,Vancouver,Canada,TRUE
 2026-06-21,Spain,Saudi Arabia,4,0,FIFA World Cup,Atlanta,United States,TRUE
 2026-06-21,Uruguay,Cape Verde,2,2,FIFA World Cup,Miami Gardens,United States,TRUE
-2026-06-22,France,Iraq,3,0,FIFA World Cup,Philadelphia,United States,TRUE
-2026-06-23,Norway,Senegal,3,2,FIFA World Cup,East Rutherford,United States,TRUE
 2026-06-22,Argentina,Austria,2,0,FIFA World Cup,Arlington,United States,TRUE
-2026-06-23,Jordan,Algeria,1,2,FIFA World Cup,Santa Clara,United States,TRUE
-2026-06-23,Portugal,Uzbekistan,5,0,FIFA World Cup,Houston,United States,TRUE
-2026-06-24,Colombia,DR Congo,1,0,FIFA World Cup,Zapopan,Mexico,TRUE
+2026-06-22,France,Iraq,3,0,FIFA World Cup,Philadelphia,United States,TRUE
+2026-06-22,Jordan,Algeria,1,2,FIFA World Cup,Santa Clara,United States,TRUE
+2026-06-22,Norway,Senegal,3,2,FIFA World Cup,East Rutherford,United States,TRUE
+2026-06-23,Colombia,DR Congo,1,0,FIFA World Cup,Zapopan,Mexico,TRUE
 2026-06-23,England,Ghana,0,0,FIFA World Cup,Foxborough,United States,TRUE
 2026-06-23,Panama,Croatia,0,1,FIFA World Cup,Toronto,Canada,TRUE
-2026-06-24,Mexico,Czech Republic,3,0,FIFA World Cup,Mexico City,Mexico,FALSE
-2026-06-25,South Africa,South Korea,1,0,FIFA World Cup,Guadalupe,Mexico,TRUE
-2026-06-24,Canada,Switzerland,1,2,FIFA World Cup,Vancouver,Canada,FALSE
+2026-06-23,Portugal,Uzbekistan,5,0,FIFA World Cup,Houston,United States,TRUE
 2026-06-24,Bosnia and Herzegovina,Qatar,3,1,FIFA World Cup,Seattle,United States,TRUE
-2026-06-24,Scotland,Brazil,0,3,FIFA World Cup,Miami Gardens,United States,TRUE
+2026-06-24,Canada,Switzerland,1,2,FIFA World Cup,Vancouver,Canada,FALSE
+2026-06-24,Mexico,Czech Republic,3,0,FIFA World Cup,Mexico City,Mexico,FALSE
 2026-06-24,Morocco,Haiti,4,2,FIFA World Cup,Atlanta,United States,TRUE
-2026-06-25,United States,Turkey,2,3,FIFA World Cup,Inglewood,United States,FALSE
-2026-06-26,Paraguay,Australia,0,0,FIFA World Cup,Santa Clara,United States,TRUE
+2026-06-24,Scotland,Brazil,0,3,FIFA World Cup,Miami Gardens,United States,TRUE
+2026-06-24,South Africa,South Korea,1,0,FIFA World Cup,Guadalupe,Mexico,TRUE
 2026-06-25,Curaçao,Ivory Coast,0,2,FIFA World Cup,Philadelphia,United States,TRUE
 2026-06-25,Ecuador,Germany,2,1,FIFA World Cup,East Rutherford,United States,TRUE
 2026-06-25,Japan,Sweden,1,1,FIFA World Cup,Arlington,United States,TRUE
+2026-06-25,Paraguay,Australia,0,0,FIFA World Cup,Santa Clara,United States,TRUE
 2026-06-25,Tunisia,Netherlands,1,3,FIFA World Cup,Kansas City,United States,TRUE
-2026-06-27,Egypt,Iran,1,1,FIFA World Cup,Seattle,United States,TRUE
-2026-06-27,New Zealand,Belgium,1,5,FIFA World Cup,Vancouver,Canada,TRUE
-2026-06-27,Cape Verde,Saudi Arabia,0,0,FIFA World Cup,Houston,United States,TRUE
-2026-06-27,Uruguay,Spain,0,1,FIFA World Cup,Zapopan,Mexico,TRUE
+2026-06-25,United States,Turkey,2,3,FIFA World Cup,Inglewood,United States,FALSE
+2026-06-26,Cape Verde,Saudi Arabia,0,0,FIFA World Cup,Houston,United States,TRUE
+2026-06-26,Egypt,Iran,1,1,FIFA World Cup,Seattle,United States,TRUE
+2026-06-26,New Zealand,Belgium,1,5,FIFA World Cup,Vancouver,Canada,TRUE
 2026-06-26,Norway,France,1,4,FIFA World Cup,Foxborough,United States,TRUE
 2026-06-26,Senegal,Iraq,5,0,FIFA World Cup,Toronto,Canada,TRUE
-2026-06-28,Algeria,Austria,3,3,FIFA World Cup,Kansas City,United States,TRUE
-2026-06-28,Jordan,Argentina,1,3,FIFA World Cup,Arlington,United States,TRUE
+2026-06-26,Uruguay,Spain,0,1,FIFA World Cup,Zapopan,Mexico,TRUE
+2026-06-27,Algeria,Austria,3,3,FIFA World Cup,Kansas City,United States,TRUE
 2026-06-27,Colombia,Portugal,0,0,FIFA World Cup,Miami Gardens,United States,TRUE
-2026-06-27,DR Congo,Uzbekistan,3,1,FIFA World Cup,Atlanta,United States,TRUE
-2026-06-27,Panama,England,0,2,FIFA World Cup,East Rutherford,United States,TRUE
 2026-06-27,Croatia,Ghana,2,1,FIFA World Cup,Philadelphia,United States,TRUE
-2026-06-28,South Africa,Canada,0,1,FIFA World Cup,,,True
-2026-06-30,Ivory Coast,Norway,1,2,FIFA World Cup,,,True
-2026-06-30,France,Sweden,3,0,FIFA World Cup,,,True
-2026-07-01,England,DR Congo,2,1,FIFA World Cup,,,True
-2026-07-01,Belgium,Senegal,2,2,FIFA World Cup,,,True
-2026-07-02,United States,Bosnia and Herzegovina,2,0,FIFA World Cup,,,True
-2026-07-02,Portugal,Croatia,2,1,FIFA World Cup,,,True
-2026-07-03,Switzerland,Algeria,2,0,FIFA World Cup,,,True
-2026-07-03,Australia,Egypt,1,1,FIFA World Cup,,,True
-2026-07-03,Argentina,Cape Verde,1,1,FIFA World Cup,,,True
-2026-07-04,Colombia,Ghana,1,0,FIFA World Cup,,,True
-2026-07-07,Argentina,Egypt,3,2,FIFA World Cup,,,True
-2026-07-11,Norway,England,1,1,FIFA World Cup,,,True
+2026-06-27,DR Congo,Uzbekistan,3,1,FIFA World Cup,Atlanta,United States,TRUE
+2026-06-27,Jordan,Argentina,1,3,FIFA World Cup,Arlington,United States,TRUE
+2026-06-27,Panama,England,0,2,FIFA World Cup,East Rutherford,United States,TRUE
+2026-06-28,South Africa,Canada,0,1,FIFA World Cup,Inglewood,United States,TRUE
+2026-06-29,Brazil,Japan,2,1,FIFA World Cup,Houston,United States,TRUE
+2026-06-29,Germany,Paraguay,1,1,FIFA World Cup,Foxborough,United States,TRUE
+2026-06-29,Netherlands,Morocco,1,1,FIFA World Cup,Guadalupe,Mexico,TRUE
+2026-06-30,France,Sweden,3,0,FIFA World Cup,East Rutherford,United States,TRUE
+2026-06-30,Ivory Coast,Norway,1,2,FIFA World Cup,Arlington,United States,TRUE
+2026-06-30,Mexico,Ecuador,2,0,FIFA World Cup,Mexico City,Mexico,FALSE
+2026-07-01,Belgium,Senegal,3,2,FIFA World Cup,Seattle,United States,TRUE
+2026-07-01,England,DR Congo,2,1,FIFA World Cup,Atlanta,United States,TRUE
+2026-07-01,United States,Bosnia and Herzegovina,2,0,FIFA World Cup,Santa Clara,United States,FALSE
+2026-07-02,Portugal,Croatia,2,1,FIFA World Cup,Toronto,Canada,TRUE
+2026-07-02,Spain,Austria,3,0,FIFA World Cup,Inglewood,United States,TRUE
+2026-07-02,Switzerland,Algeria,2,0,FIFA World Cup,Vancouver,Canada,TRUE
+2026-07-03,Argentina,Cape Verde,3,2,FIFA World Cup,Miami Gardens,United States,TRUE
+2026-07-03,Australia,Egypt,1,1,FIFA World Cup,Arlington,United States,TRUE
+2026-07-03,Colombia,Ghana,1,0,FIFA World Cup,Kansas City,United States,TRUE
+2026-07-04,Canada,Morocco,0,3,FIFA World Cup,Houston,United States,TRUE
+2026-07-04,Paraguay,France,0,1,FIFA World Cup,Philadelphia,United States,TRUE
+2026-07-05,Brazil,Norway,1,2,FIFA World Cup,East Rutherford,United States,TRUE
+2026-07-05,Mexico,England,2,3,FIFA World Cup,Mexico City,Mexico,FALSE
+2026-07-06,Portugal,Spain,0,1,FIFA World Cup,Dallas,United States,TRUE
+2026-07-06,United States,Belgium,1,4,FIFA World Cup,Seattle,United States,FALSE
+2026-07-07,Argentina,Egypt,3,2,FIFA World Cup,Atlanta,United States,TRUE
+2026-07-07,Switzerland,Colombia,0,0,FIFA World Cup,Vancouver,Canada,TRUE
+2026-07-09,France,Morocco,2,0,FIFA World Cup,Foxborough,United States,TRUE
+2026-07-10,Spain,Belgium,2,1,FIFA World Cup,Inglewood,United States,TRUE
+2026-07-11,Argentina,Switzerland,3,1,FIFA World Cup,Kansas City,United States,TRUE
+2026-07-11,Norway,England,1,2,FIFA World Cup,Miami Gardens,United States,TRUE
+2026-07-14,France,Spain,0,2,FIFA World Cup,Arlington,United States,TRUE
+2026-07-15,England,Argentina,1,2,FIFA World Cup,Atlanta,United States,TRUE
+2026-07-18,France,England,4,6,FIFA World Cup,Miami Gardens,United States,TRUE
+2026-07-19,Spain,Argentina,1,0,FIFA World Cup,East Rutherford,United States,TRUE

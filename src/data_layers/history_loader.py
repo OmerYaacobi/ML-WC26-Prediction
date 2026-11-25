@@ -1,26 +1,16 @@
 import pandas as pd
 from pathlib import Path
 
+from src.utils.team_names import canonical_team
+
 # WC26 tournament games are up-weighted vs a typical 2022+ international.
 WC26_GROUP_WEIGHT = 8.0
 WC26_KNOCKOUT_WEIGHT = 12.0
 WC26_KNOCKOUT_START = "2026-06-28"
 
-# results.csv spellings → model team names (must match squad_loader / wc26_groups)
-CSV_TO_MODEL = {
-    "Curaçao": "Curacao",
-    "Czech Republic": "Czechia",
-    "Turkey": "Turkey",
-    "United States": "United States",
-    "South Korea": "South Korea",
-    "Ivory Coast": "Ivory Coast",
-    "DR Congo": "DR Congo",
-    "Bosnia and Herzegovina": "Bosnia and Herzegovina",
-}
-
 
 def _map_team(name: str) -> str:
-    return CSV_TO_MODEL.get(str(name), str(name))
+    return canonical_team(name)
 
 
 def _row_weight(row) -> float:
